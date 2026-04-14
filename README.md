@@ -20,3 +20,9 @@ Este repositorio documenta el diseño, simulación e implementación de un siste
 * **Simulación y Análisis:** Matlab / Simulink.
 
 ---
+## 👥 Collaborators
+- **[Agustín Torres](https://github.com/aguscsc)**  
+- **[Ignacio Cerda](https://github.com/LovesCharlie)**  
+- **[Leví Sojos](https://github.com/gadivalr)**  
+
+---

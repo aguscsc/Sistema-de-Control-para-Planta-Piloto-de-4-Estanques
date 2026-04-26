@@ -1,0 +1,71 @@
+\section{Modelación de la planta}
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=0.95\textwidth]{img/planta_4_estanques_P&ID.png}
+  \end{center}
+  \caption{P\&ID de la planta de 4 estanques}\label{fig:p&id}
+\end{figure}
+
+\clearpage
+
+\subsection{Parámetros del Sistema}
+
+Para el desarrollo del modelo fenomenológico y las posteriores estrategias de control, se definen los parámetros físicos de la planta de 4 estanques. Los valores presentados en la Tabla \ref{tab:parametros} corresponden a las dimensiones físicas de los depósitos, las características de los actuadores y las constantes operativas del controlador ControlLogix.
+
+Es imperativo destacar que el correcto levantamiento de estos parámetros es fundamental, ya que el algoritmo de prealimentación (Feed-Forward) invierte el modelo físico basándose estrictamente en estas magnitudes.
+
+\begin{table}[ht]
+    \centering
+    \caption{Parámetros físicos y operativos de la Planta de 4 Estanques}
+    \label{tab:parametros}
+    \renewcommand{\arraystretch}{1.2} % Mejora el espaciado de las filas
+    \begin{tabular}{llcc}
+        \hline
+        \textbf{Símbolo} & \textbf{Descripción} & \textbf{Valor} & \textbf{Unidad} \\
+        \hline
+        $A_1, A_3$ & Área transversal de los estanques impares & X.XX & $cm^2$ \\
+        $A_2, A_4$ & Área transversal de los estanques pares & X.XX & $cm^2$ \\
+        $a_1, a_3$ & Área del orificioo de descarga (estanques impares) & X.XX & $cm^2$ \\
+        $a_2, a_4$ & Área del orificio de descarga (estanques pares) & X.XX & $cm^2$ \\
+        $k_1$ & Ganancia de la Bomba 1 (Variador 1) & X.XX & $(cm^3/s)/Hz$ \\
+        $k_2$ & Ganancia de la Bomba 2 (Variador 2) & X.XX & $(cm^3/s)/Hz$ \\
+        $\gamma_1$ & Fracción de flujo de la válvula de 3 vías (Bomba 1) & X.XX & Adimensional \\
+        $\gamma_2$ & Fracción de flujo de la válvula de 3 vías (Bomba 2) & X.XX & Adimensional \\
+        $g$ & Aceleración de la gravedad & 981 & $cm/s^2$ \\
+        $T_s$ & Tiempo de muestreo & X.XX & $ms$ \\
+        \hline
+    \end{tabular}
+\end{table}
+    \subsection{Balance de Masas} % Ecuaciones diferenciales
+
+El modelo fenomenológico de la planta se obtiene aplicando el principio de conservación de masa para cada depósito. La variación de volumen en el tiempo ($\frac{dV}{dt} = A \frac{dh}{dt}$) es igual a la suma de los caudales que ingresan menos los caudales que salen. 
+
+Utilizando la Ley de Torricelli para modelar la descarga por gravedad a través de los orificios, la dinámica no lineal del sistema de cuatro estanques queda descrita por el siguiente conjunto de Ecuaciones Diferenciales Ordinarias (EDO):
+
+\begin{align}
+    A_1 \frac{dh_1}{dt} &= -a_1 \sqrt{2g h_1} + a_3 \sqrt{2g h_3} + \gamma_1 k_1 f_1 \label{eq:edo_h1} \\
+    A_2 \frac{dh_2}{dt} &= -a_2 \sqrt{2g h_2} + a_4 \sqrt{2g h_4} + \gamma_2 k_2 f_2 \label{eq:edo_h2} \\
+    A_3 \frac{dh_3}{dt} &= -a_3 \sqrt{2g h_3} + (1-\gamma_2) k_2 f_2 \label{eq:edo_h3} \\
+    A_4 \frac{dh_4}{dt} &= -a_4 \sqrt{2g h_4} + (1-\gamma_1) k_1 f_1 \label{eq:edo_h4}
+\end{align}
+
+Donde la variable $h_i$ representa el nivel del estanque $i$, y $f_j$ corresponde a la señal de control aplicada a la bomba $j$. Los términos proporcionales a $\gamma$ y $(1-\gamma)$ reflejan la división del caudal en las válvulas.
+    \subsection{Discretización} % Euler
+
+Para implementar las estrategias de control y realizar simulaciones computacionales, es necesario transformar el modelo continuo a su equivalente en tiempo discreto. Dado que los tiempos de muestreo ($T_s$) típicamente utilizados en la automatización de procesos industriales son pequeños en comparación con la constante de tiempo dominante de los estanques, el método de integración de Euler hacia adelante resulta suficiente y computacionalmente eficiente para el autómata.
+
+Aproximando la derivada del nivel como la tasa de cambio entre dos instantes de muestreo consecutivos:
+\begin{equation}
+    \frac{dh(t)}{dt} \approx \frac{h[k+1] - h[k]}{T_s}
+\end{equation}
+
+Reemplazando esta aproximación en el balance de masas, se obtiene el sistema de ecuaciones en diferencias que predice el nivel en el instante futuro $[k+1]$ basándose en el estado actual $[k]$ y la acción de control actual $u[k]$:
+
+\begin{align}
+    h_1[k+1] &= h_1[k] + \frac{T_s}{A_1} \left( -a_1 \sqrt{2g h_1[k]} + a_3 \sqrt{2g h_3[k]} + \gamma_1 k_1 u_1[k] \right) \label{eq:disc_h1} \\
+    h_2[k+1] &= h_2[k] + \frac{T_s}{A_2} \left( -a_2 \sqrt{2g h_2[k]} + a_4 \sqrt{2g h_4[k]} + \gamma_2 k_2 u_2[k] \right) \label{eq:disc_h2} \\
+    h_3[k+1] &= h_3[k] + \frac{T_s}{A_3} \left( -a_3 \sqrt{2g h_3[k]} + (1-\gamma_2) k_2 u_2[k] \right) \label{eq:disc_h3} \\
+    h_4[k+1] &= h_4[k] + \frac{T_s}{A_4} \left( -a_4 \sqrt{2g h_4[k]} + (1-\gamma_1) k_1 u_1[k] \right) \label{eq:disc_h4}
+\end{align}
+
+Estas ecuaciones discretas son la base tanto para la simulación de la planta en software externo como para la posterior deducción de los algoritmos de control digital implementados en el PLC.

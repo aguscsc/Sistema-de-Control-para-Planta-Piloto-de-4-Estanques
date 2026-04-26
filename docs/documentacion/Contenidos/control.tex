@@ -1,0 +1,14 @@
+\section{Diseño del Sistema de Control}
+
+La arquitectura de control base seleccionada para cada línea de los depósitos corresponde a un esquema en Cascada. Esta topología se justifica teóricamente por la existencia de dos dinámicas temporales claramente separadas: la dinámica rápida del actuador y la tubería (flujo), y la dinámica lenta de acumulación de masa (nivel del estanque).
+
+El esquema se compone de dos lazos anidados:
+\begin{itemize}
+    \item \textbf{Lazo Interno (Esclavo - FIC):} Su objetivo es controlar el caudal inyectado al sistema. Posee una dinámica rápida y su función principal es rechazar las perturbaciones locales del actuador (como variaciones en la presión de la línea, desgaste mecánico de la bomba o histéresis) antes de que afecten a la variable principal. Al sintonizar este lazo, el conjunto actuador-tubería se linealiza desde la perspectiva del controlador maestro.
+    \item \textbf{Lazo Externo (Maestro - LIC):} Su objetivo es controlar el nivel del estanque ($h_i$). Su salida de control no ataca directamente al variador de frecuencia, sino que establece el *Setpoint* dinámico ($SP_{flujo}$) que el lazo esclavo debe seguir.
+\end{itemize}
+
+Matemáticamente, la señal de control final $u(t)$ enviada al variador de frecuencia es calculada por el algoritmo discreto del FIC, cuyo error se define como $e_{flujo}[k] = LIC_{out}[k] - FIT[k]$. Esta separación de dinámicas permite utilizar sintonías más agresivas en el control de nivel sin comprometer la estabilidad ante imperfecciones mecánicas.
+    \subsection{Control en Cascada} % LIC -> FIC
+    \subsection{Lógica de Selección (Override)} % Bloques TY
+    \subsection{Feed-Forward (Prealimentación)} % G_h y G_w

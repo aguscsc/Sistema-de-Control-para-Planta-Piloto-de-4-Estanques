@@ -1,0 +1,47 @@
+% Definición de grupos personalizados
+\renewcommand{\nomgroup}[1]{%
+\par\vspace{1em}
+\ifthenelse{\equal{#1}{A}}{\item[\textbf{Matrices}]}{ \ifthenelse{\equal{#1}{B}}{\item[\textbf{Vectores}]}{
+\ifthenelse{\equal{#1}{C}}{\item[\textbf{Escalares}]}{
+}}}
+}
+
+
+\nomenclature[A]{$\mathbf{A}$}{matriz de parámetros de dimensión $n \times n$}
+\nomenclature[A]{$\mathbf{T}_{abc-\alpha\beta 0}$}{matriz de transformación de ejes $abc$ a $\alpha \beta 0$, dimensión $3 \times 3$}
+\nomenclature[A]{$\mathbf{H(s)}$}{matriz de transferencia. $\mathbf{H(s}) = \mathbf{C}(s \mathrm{I} - \mathbf{A})^{-1} \mathbf{B} + \mathbf{D}$}
+\nomenclature[A]{$\mathbf{\widehat{H}(s)}$}{matriz de transferencia inversa. $\mathbf{\widehat{H}(s)} = \mathbf{H^{-1}(s)}$}
+\nomenclature[A]{$\mathbf{L(s)}$}{matriz de transferencia en L.D.}
+\nomenclature[A]{$\Phi(t)$}{matriz de transición}
+\nomenclature[A]{$\text{Adj}\{\mathbf{P}\}$}{matriz adjunta de la matriz $\mathbf{P}$}
+\nomenclature[A]{$\text{diag}\{x_1,\dots\}$}{matriz diagonal compuesta por los valores $x_1, x_2, \dots$}
+\nomenclature[A]{$\vec{\mathbf{X}}$}{matriz compuesta por elementos $\vec{\mathbf{x}}_{i,j}$ que son fasores}
+
+
+\nomenclature[B]{$\mathbf{x}$}{vector de $n$ variables de estados, $\mathbf{x} = [x_1 \; x_2 \; \cdots \; x_n]^T$}
+\nomenclature[B]{$\widehat{\mathbf{x}}$}{vector de $n$ variables de estados, $\widehat{\mathbf{x}} = [\widehat{x}_1 \; \widehat{x}_2 \; \cdots \; \widehat{x}_n]^T$ (estimación de $\mathbf{x}$)}
+\nomenclature[B]{$\mathbf{x}^{abc}$}{vector de tres variables de estados, $\mathbf{x}^{abc} = [x^a \; x^b \; x^b]^T$ (ejes estacionarios $abc$)}
+\nomenclature[B]{$\mathbf{x_o}$}{vector de estados en el punto de operación, $\mathbf{x_o} = [x_{1o} \; x_{2o} \; \cdots \; x_{no}]^T$}
+\nomenclature[B]{$\Delta \mathbf{x}$}{variación del vector de estados $\mathbf{x}$ en torno a $\mathbf{x_o}$, $\Delta \mathbf{x} = [\Delta x_1 \; \Delta x_2 \; \cdots \; \Delta x_n]^T$}
+\nomenclature[B]{$\mathbf{x(s)}$}{Laplace de $\mathbf{x}$, $\mathbf{x}(s) = [x_1(s) \; x_2(s) \; \cdots \; x_n(s)]^T$}
+\nomenclature[B]{$\mathbf{v}_k$}{k-ésimo vector propio de $\mathbf{A}$}
+\nomenclature[B]{$\mathbf{c}_k$}{k-ésima fila de la matriz $\mathbf{C}$}
+\nomenclature[B]{$\mathbf{b}_k$}{k-ésima columna de la matriz $\mathbf{B}$}
+\nomenclature[B]{$\vec{\mathbf{x}}$}{vector de fasores, $\vec{\mathbf{x}} = [\vec{\mathbf{x}}_1 \; \vec{\mathbf{x}}_2 \; \cdots \; \vec{\mathbf{x}}_n]^T$}
+
+
+\nomenclature[C]{$x_k$}{k-ésima variable de estado}
+\nomenclature[C]{$dx_k/dt = \dot{x}_k$}{derivada de la k-ésima variable de estado}
+\nomenclature[C]{$a_k$}{k-ésimo coeficiente del polinomio característico de $\mathbf{A}$}
+\nomenclature[C]{$\uplambda_k$}{k-ésimo valor propio de $\mathbf{A}$}
+\nomenclature[C]{$l(s)$}{función de transferencia en L.D.}
+\nomenclature[C]{$h_{ij}(s)$}{elemento $ij$ de la matriz $\mathbf{H}(s)$}
+
+\nomenclature[C]{$u(t)$}{entrada escalón}
+\nomenclature[C]{$r(t)$}{entrada rampa}
+\nomenclature[C]{$\delta$}{banda de asentamiento}
+\nomenclature[C]{$t_s$}{tiempo de asentamiento}
+\nomenclature[C]{$f(t)$}{función en el tiempo continuo}
+\nomenclature[C]{$f(k)$}{función en el tiempo discreto (también escrita $f(kT)$, con $T$ el tiempo de muestreo)}
+\nomenclature[C]{$f(s)$}{función en el plano de Laplace}
+

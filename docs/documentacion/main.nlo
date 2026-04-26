@@ -1,0 +1,32 @@
+\nomenclatureentry{A$\mathbf{A}$@[{$\mathbf{A}$}]\begingroup matriz de parámetros de dimensión $n \times n$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\mathbf{T}_{abc-\alpha\beta 0}$@[{$\mathbf{T}_{abc-\alpha\beta 0}$}]\begingroup matriz de transformación de ejes $abc$ a $\alpha \beta 0$, dimensión $3 \times 3$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\mathbf{H(s)}$@[{$\mathbf{H(s)}$}]\begingroup matriz de transferencia. $\mathbf{H(s}) = \mathbf{C}(s \mathrm{I} - \mathbf{A})^{-1} \mathbf{B} + \mathbf{D}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\mathbf{\widehat{H}(s)}$@[{$\mathbf{\widehat{H}(s)}$}]\begingroup matriz de transferencia inversa. $\mathbf{\widehat{H}(s)} = \mathbf{H^{-1}(s)}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\mathbf{L(s)}$@[{$\mathbf{L(s)}$}]\begingroup matriz de transferencia en L.D.\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\Phi(t)$@[{$\Phi(t)$}]\begingroup matriz de transición\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\text{Adj}\{\mathbf{P}\}$@[{$\text{Adj}\{\mathbf{P}\}$}]\begingroup matriz adjunta de la matriz $\mathbf{P}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\text{diag}\{x_1,\dots\}$@[{$\text{diag}\{x_1,\dots\}$}]\begingroup matriz diagonal compuesta por los valores $x_1, x_2, \dots$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{A$\vec{\mathbf{X}}$@[{$\vec{\mathbf{X}}$}]\begingroup matriz compuesta por elementos $\vec{\mathbf{x}}_{i,j}$ que son fasores\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{x}$@[{$\mathbf{x}$}]\begingroup vector de $n$ variables de estados, $\mathbf{x} = [x_1 \; x_2 \; \cdots \; x_n]^T$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\widehat{\mathbf{x}}$@[{$\widehat{\mathbf{x}}$}]\begingroup vector de $n$ variables de estados, $\widehat{\mathbf{x}} = [\widehat{x}_1 \; \widehat{x}_2 \; \cdots \; \widehat{x}_n]^T$ (estimación de $\mathbf{x}$)\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{x}^{abc}$@[{$\mathbf{x}^{abc}$}]\begingroup vector de tres variables de estados, $\mathbf{x}^{abc} = [x^a \; x^b \; x^b]^T$ (ejes estacionarios $abc$)\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{x_o}$@[{$\mathbf{x_o}$}]\begingroup vector de estados en el punto de operación, $\mathbf{x_o} = [x_{1o} \; x_{2o} \; \cdots \; x_{no}]^T$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\Delta \mathbf{x}$@[{$\Delta \mathbf{x}$}]\begingroup variación del vector de estados $\mathbf{x}$ en torno a $\mathbf{x_o}$, $\Delta \mathbf{x} = [\Delta x_1 \; \Delta x_2 \; \cdots \; \Delta x_n]^T$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{x(s)}$@[{$\mathbf{x(s)}$}]\begingroup Laplace de $\mathbf{x}$, $\mathbf{x}(s) = [x_1(s) \; x_2(s) \; \cdots \; x_n(s)]^T$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{v}_k$@[{$\mathbf{v}_k$}]\begingroup k-ésimo vector propio de $\mathbf{A}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{c}_k$@[{$\mathbf{c}_k$}]\begingroup k-ésima fila de la matriz $\mathbf{C}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\mathbf{b}_k$@[{$\mathbf{b}_k$}]\begingroup k-ésima columna de la matriz $\mathbf{B}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{B$\vec{\mathbf{x}}$@[{$\vec{\mathbf{x}}$}]\begingroup vector de fasores, $\vec{\mathbf{x}} = [\vec{\mathbf{x}}_1 \; \vec{\mathbf{x}}_2 \; \cdots \; \vec{\mathbf{x}}_n]^T$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$x_k$@[{$x_k$}]\begingroup k-ésima variable de estado\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$dx_k/dt = \dot{x}_k$@[{$dx_k/dt = \dot{x}_k$}]\begingroup derivada de la k-ésima variable de estado\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$a_k$@[{$a_k$}]\begingroup k-ésimo coeficiente del polinomio característico de $\mathbf{A}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$\uplambda_k$@[{$\uplambda_k$}]\begingroup k-ésimo valor propio de $\mathbf{A}$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$l(s)$@[{$l(s)$}]\begingroup función de transferencia en L.D.\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$h_{ij}(s)$@[{$h_{ij}(s)$}]\begingroup elemento $ij$ de la matriz $\mathbf{H}(s)$\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$u(t)$@[{$u(t)$}]\begingroup entrada escalón\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$r(t)$@[{$r(t)$}]\begingroup entrada rampa\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$\delta$@[{$\delta$}]\begingroup banda de asentamiento\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$t_s$@[{$t_s$}]\begingroup tiempo de asentamiento\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$f(t)$@[{$f(t)$}]\begingroup función en el tiempo continuo\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$f(k)$@[{$f(k)$}]\begingroup función en el tiempo discreto (también escrita $f(kT)$, con $T$ el tiempo de muestreo)\nomeqref {0}|nompageref}{1}
+\nomenclatureentry{C$f(s)$@[{$f(s)$}]\begingroup función en el plano de Laplace\nomeqref {0}|nompageref}{1}

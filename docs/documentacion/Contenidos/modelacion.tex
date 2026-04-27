@@ -36,6 +36,7 @@ Es imperativo destacar que el correcto levantamiento de estos parámetros es fun
         \hline
     \end{tabular}
 \end{table}
+\clearpage
     \subsection{Balance de Masas} % Ecuaciones diferenciales
 
 El modelo fenomenológico de la planta se obtiene aplicando el principio de conservación de masa para cada depósito. La variación de volumen en el tiempo ($\frac{dV}{dt} = A \frac{dh}{dt}$) es igual a la suma de los caudales que ingresan menos los caudales que salen. 
@@ -50,6 +51,7 @@ Utilizando la Ley de Torricelli para modelar la descarga por gravedad a través 
 \end{align}
 
 Donde la variable $h_i$ representa el nivel del estanque $i$, y $f_j$ corresponde a la señal de control aplicada a la bomba $j$. Los términos proporcionales a $\gamma$ y $(1-\gamma)$ reflejan la división del caudal en las válvulas.
+\clearpage
     \subsection{Discretización} % Euler
 
 Para implementar las estrategias de control y realizar simulaciones computacionales, es necesario transformar el modelo continuo a su equivalente en tiempo discreto. Dado que los tiempos de muestreo ($T_s$) típicamente utilizados en la automatización de procesos industriales son pequeños en comparación con la constante de tiempo dominante de los estanques, el método de integración de Euler hacia adelante resulta suficiente y computacionalmente eficiente para el autómata.
@@ -69,3 +71,4 @@ Reemplazando esta aproximación en el balance de masas, se obtiene el sistema de
 \end{align}
 
 Estas ecuaciones discretas son la base tanto para la simulación de la planta en software externo como para la posterior deducción de los algoritmos de control digital implementados en el PLC.
+\clearpage

@@ -1,5 +1,7 @@
 \section{Diseño del Sistema de Control}
 
+    \subsection{Control en Cascada} % LIC -> FIC
+
 La arquitectura de control base seleccionada para cada línea de los depósitos corresponde a un esquema en Cascada. Esta topología se justifica teóricamente por la existencia de dos dinámicas temporales claramente separadas: la dinámica rápida del actuador y la tubería (flujo), y la dinámica lenta de acumulación de masa (nivel del estanque).
 
 El esquema se compone de dos lazos anidados:
@@ -9,6 +11,104 @@ El esquema se compone de dos lazos anidados:
 \end{itemize}
 
 Matemáticamente, la señal de control final $u(t)$ enviada al variador de frecuencia es calculada por el algoritmo discreto del FIC, cuyo error se define como $e_{flujo}[k] = LIC_{out}[k] - FIT[k]$. Esta separación de dinámicas permite utilizar sintonías más agresivas en el control de nivel sin comprometer la estabilidad ante imperfecciones mecánicas.
-    \subsection{Control en Cascada} % LIC -> FIC
     \subsection{Lógica de Selección (Override)} % Bloques TY
+    Como el sistema es sub-actuado ya que cuenta con 4 salidas pero sólo 2 actuadores, no es posible controlar los estanque $1$ y $4$ o $2$ y $3$.
+
+    Es por esto que se implementa un algoritmo de selección entre las señales al actuador, esto se desglosa en la siguiente tabla:
+
+    $$\begin{bmatrix}
+    >: \text{Flujo mayor}\\
+    <: \text{Flujo menor}\\
+  e: \text{Mayor error}
+    \end{bmatrix}$$
+\clearpage
     \subsection{Feed-Forward (Prealimentación)} % G_h y G_w
+
+
+El control retroalimentado (Feedback) tradicional posee una limitación inherente: requiere que exista un error en la variable de proceso para poder actuar. Para compensar esta inercia, se implementa una arquitectura de prealimentación o \textit{Feedforward} (FF), la cual mide las variables de entrada al sistema e inyecta una acción de control antes de que la variable controlada se vea afectada.
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=0.95\textwidth]{img/ff.png}
+  \end{center}
+  \caption{}\label{fig:ff}
+\end{figure}
+\subsubsection{Obtención Matemática: Compensación de Perturbaciones}
+
+Considérese un sistema donde la salida $y(z^{-1})$ se ve afectada tanto por la acción de control $u_z$ a través de la planta $G_p(z^{-1})$ y el actuador $G_a(z^{-1})$, como por una perturbación medible $W(z^{-1})$ a través de su propia dinámica $G_w(z^{-1})$. La ecuación en el dominio $Z$ es:
+\[
+  Y(z^{-1}) =G_p(z^{-1}) \left[ (u_{z}(z^{-1}) + h_{h}(z^{-1})) G_a(z^{-1}) + W(z^{-1}) G_w(z^{-1}) \right]
+\]
+\[
+Y(z^{-1}) = G_p(z^{-1})\left[ (u_{z}(z^{-1}) + W(z^{-1})G_h(z^{-1})) G_a(z^{-1})  + W(z^{-1}) G_w(z^{-1})\right]
+\]
+\[ 
+  Y(z^{-1}) = G_p(z^{-1})\left[u_z(z^{-1})G_a(z^{-1})G_p(z^{-1}) + W(z^{-1})G_h(z^{-1})G_a(z^{-1}) + W(z^{-1})G_w(z^{-1})\right]  
+\]
+
+\begin{equation}
+  Y(z^{-1}) = \underbrace{(Sp - Pv)G_c(z^{-1})G_a(z^{-1})G_p(z^{-1})}_{\text{PID}} + \underbrace{W(z^{-1})G_h(z^{-1})G_a(z^{-1})G_p(z^{-1}) + W(z^{-1})G_w(z^{-1})G_p(z^{-1})}_{\text{Feed-Forward}}  
+  \label{eq:ff2}
+\end{equation}
+
+\clearpage
+
+
+El objetivo del compensador de perturbaciones es lograr una invariancia perfecta, es decir, que el efecto de $W(z^{-1})$ sobre $Y(z^{-1})$ sea nulo ($Y(z^{-1}) = 0$ asumiendo $u_{z}=0$). Igualando a cero la contribución de la perturbación, se despeja la acción de control anticipatoria:
+\[
+  0 = W(z^{-1})G_h(z^{-1})G_a(z^{-1})G_p(z^{-1}) + W(z^{-1})G_w(z^{-1})G_p(z^{-1}) 
+\]
+
+\begin{equation}
+  G_h(z^{-1}) = -\frac{G_w(z^{-1})}{G_a(z^{-1})} 
+  \label{eq:G_w}
+\end{equation}
+Definiendo el bloque compensador como $
+  G_h(z^{-1}) = -\frac{G_w(z^{-1})}{G_a(z^{-1})} 
+$, se logra la cancelación algebraica de la perturbación entrante.
+
+\subsubsection{Obtención Matemática: Seguimiento de Referencia (Setpoint)}
+Se puede aplicar un raciocinio idéntico para mejorar el seguimiento de la referencia ($SP$). En lugar de esperar a que el integrador del PID acumule la energía necesaria para alcanzar el nivel deseado, se puede pre-calcular el esfuerzo de control exacto. 
+
+Es fundamental destacar que \textbf{no se invierte la dinámica completa de la planta} (lo cual requeriría la derivada de la referencia y generaría un esfuerzo de control irrealizable). En su lugar, el Feedforward de Setpoint invierte únicamente la \textbf{ganancia estática} del proceso. 
+
+En sistemas con dinámicas complejas como el de los 4 estanques, esta ganancia estática contiene la principal no linealidad del sistema (la fuga parabólica de Torricelli). Al inyectar una señal de prealimentación que es la inversa exacta de esta no linealidad ($G_{sp} = G_{estatico}^{-1}$), se logran dos objetivos simultáneos:
+
+\begin{enumerate}
+    \item Proporcionar al actuador la energía base requerida para sostener el nivel del Setpoint deseado en estado estacionario.
+    \item Linealizar el sistema desde la perspectiva del lazo cerrado, permitiendo que el controlador PID solo deba encargarse de corregir las inercias transitorias dinámicas y los pequeños errores de modelación.
+\end{enumerate}
+
+\clearpage
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{img/ff_sp.png}
+  \end{center}
+  \caption{}\label{fig:ffsp}
+\end{figure}
+
+Ignorando la perturbación y la acción del controlador temporalmente, se busca que la salida alcance la referencia ($Y(z^{-1}) = SP(z^{-1})$) utilizando exclusivamente una acción precalculada $U_{FF\_SP}(z^{-1})$:
+
+\begin{align}
+    SP(z^{-1}) &= U_{FF\_SP}(z^{-1}) G_a(z^{-1}) G_p(z^{-1}) \\
+    U_{FF\_SP}(z^{-1}) &= SP(z^{-1}) \frac{1}{G_a(z^{-1}) G_p(z^{-1})}
+\end{align}
+
+Definiendo este segundo bloque como $G_{sp}(z^{-1}) = \frac{1}{G_a(z^{-1}) G_p(z^{-1})}$, se establece un control de \textit{2 Grados de Libertad}, donde el Feedforward proporciona el esfuerzo base y el PID se encarga únicamente de corregir errores dinámicos y no linealidades residuales no modeladas.
+
+\clearpage
+\subsubsection{Aplicación a las Ecuaciones de Diferencias de la Planta}
+Para aplicar esta teoría lineal a los estanques no lineales, evaluamos la derivada del balance de masas en estado estacionario ($\frac{dh}{dt} = 0$). Tomando como ejemplo el Estanque 1 (que sufre la perturbación de caudal del Estanque 3), la Ecuación \ref{eq:edo_h1} se iguala a cero.
+
+Forzando que en estado estacionario el nivel alcance el Setpoint ($h_1 = SP_1$), y despejando la acción de control de la bomba ($u_1$), obtenemos la ley de control Feedforward pura (sin considerar aún la acción del PID):
+\begin{align}
+    0 &= -a_1 \sqrt{2g \cdot SP_1} + a_3 \sqrt{2g \cdot h_3} + \gamma_1 k_1 u_1 \nonumber \\
+    \gamma_1 k_1 u_1 &= a_1 \sqrt{2g \cdot SP_1} - a_3 \sqrt{2g \cdot h_3} \nonumber \\
+    u_1 &= \underbrace{\frac{a_1 \sqrt{2g \cdot SP_1}}{\gamma_1 k_1}}_{\text{Término } G_h \text{ (Referencia)}} - \underbrace{\frac{a_3 \sqrt{2g \cdot h_3}}{\gamma_1 k_1}}_{\text{Término } C_w \text{ (Perturbación)}}
+\end{align}
+
+Al integrar esto con el algoritmo digital dentro del PLC, la señal de control total en el instante discreto $[k]$ resulta en la suma de prealimentación y el control retroalimentado:
+\begin{equation}
+    u_{total}[k] = u_{PID}[k] + \frac{a_1 \sqrt{2g \cdot SP_1[k]}}{\gamma_1 k_1} - \frac{a_3 \sqrt{2g \cdot h_3[k]}}{\gamma_1 k_1}
+\end{equation}

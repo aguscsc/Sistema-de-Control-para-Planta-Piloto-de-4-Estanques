@@ -1,0 +1,25 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Modelación de la planta}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.}Parámetros del Sistema}{2}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Balance de Masas}{3}{subsection.0.2}%
+\contentsline {subsection}{\numberline {3.}Discretización}{3}{subsection.0.3}%
+\contentsline {section}{\numberline {2}Diseño del Sistema de Control}{5}{section.2}%
+\contentsline {subsection}{\numberline {1.}Control en Cascada}{5}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Lógica de Selección (Override)}{5}{subsection.0.2}%
+\contentsline {subsection}{\numberline {3.}Feed-Forward (Prealimentación)}{6}{subsection.0.3}%
+\contentsline {subsubsection}{\numberline {3.1}Obtención Matemática: Compensación de Perturbaciones}{6}{subsubsection.0.3.1}%
+\contentsline {subsubsection}{\numberline {3.2}Obtención Matemática: Seguimiento de Referencia (Setpoint)}{7}{subsubsection.0.3.2}%
+\contentsline {subsubsection}{\numberline {3.3}Aplicación a las Ecuaciones de Diferencias de la Planta}{8}{subsubsection.0.3.3}%
+\contentsline {subsection}{\numberline {4.}Arquitecturas de Inyección del Feedforward en Cascada}{9}{subsection.0.4}%
+\contentsline {subsubsection}{\numberline {4.1}Arquitectura 1: Inyección en el Setpoint del Lazo Esclavo}{9}{subsubsection.0.4.1}%
+\contentsline {subsubsection}{\numberline {4.2}Arquitectura 2: Inyección a la Salida del Lazo Esclavo}{9}{subsubsection.0.4.2}%
+\contentsline {subsubsection}{\numberline {4.3}Solución Híbrida: Doble Inyección (Feedforward Coordinado)}{10}{subsubsection.0.4.3}%
+\contentsline {subsection}{\numberline {5.}Selección de Arquitectura Feedforward en Cascada}{11}{subsection.0.5}%
+\contentsline {section}{\numberline {3}Implementación y Automatización}{12}{section.3}%
+\contentsline {subsection}{\numberline {1.}Instrumentación}{12}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Programación en Texto Estructurado}{12}{subsection.0.2}%
+\contentsline {subsection}{\numberline {3.}Configuración de Red y Adquisición (OPC)}{12}{subsection.0.3}%
+\contentsline {section}{\numberline {4}Diseño de la Interfaz (HMI)}{12}{section.4}%
+\contentsline {subsection}{\numberline {1.}Filosofía de Diseño ISA-101}{12}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Jerarquía de Alarmas y Eventos}{12}{subsection.0.2}%
+\contentsline {section}{Bibliografía}{13}{subsection.0.2}%

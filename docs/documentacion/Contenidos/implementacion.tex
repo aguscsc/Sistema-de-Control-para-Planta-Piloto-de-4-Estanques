@@ -1,4 +1,24 @@
 \section{Implementación y Automatización}
 \subsection{Instrumentación}
+\subsubsection{Obtención Experimental de la Ganancia de la Bomba ($k_i$)}
+
+En el desarrollo del modelo matemático, se asume que el caudal inyectado al sistema ($q_i$) es directamente proporcional a la señal de control enviada al variador de frecuencia ($u_i$). Esta relación se modela mediante la ganancia estática del actuador:
+\begin{equation}
+    q_i = k_i \cdot u_i
+\end{equation}
+
+Donde $k_i$ posee unidades de $\left[ \frac{\text{Caudal}}{\text{Esfuerzo}} \right]$ (por ejemplo, $\frac{L/min}{\text{Hz}}$ o $\frac{cm^3/s}{\%}$).
+
+Para obtener este parámetro empíricamente en la planta física, se debe levantar una \textbf{curva de calibración de estado estacionario} operando el sistema en lazo abierto. El procedimiento estándar es el siguiente:
+
+\begin{enumerate}
+    \item \textbf{Modo Manual:} Se debe asegurar que el controlador de la bomba (FIC) se encuentre en modo manual, deshabilitando cualquier acción de control PID o Feedforward.
+    \item \textbf{Inyección de Escalones:} Se aplican diferentes niveles de esfuerzo de control escalonados a la bomba, cubriendo su rango de operación normal (por ejemplo, $u = 20\%, 40\%, 60\%, 80\%$).
+    \item \textbf{Registro de Estado Estacionario:} Para cada nivel de esfuerzo, se espera a que la dinámica de la tubería se estabilice y se registra el valor de caudal entregado por el transmisor de flujo (\textit{FIT}).
+    \item \textbf{Regresión Lineal:} Se grafica el Caudal medido ($y$) versus el Esfuerzo de control ($x$). En la región lineal de operación de la bomba, los puntos formarán una recta. La constante $k_i$ corresponde a la pendiente de esta recta:
+    \begin{equation}
+        k_i = \frac{\Delta q}{\Delta u} = \frac{q_B - q_A}{u_B - u_A}
+    \end{equation}
+\end{enumerate}
     \subsection{Programación en Texto Estructurado}
     \subsection{Configuración de Red y Adquisición (OPC)}

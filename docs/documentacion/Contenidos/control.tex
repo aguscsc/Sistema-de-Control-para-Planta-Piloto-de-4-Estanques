@@ -67,12 +67,14 @@ Definiendo el bloque compensador como $
   G_h(z^{-1}) = -\frac{G_w(z^{-1})}{G_a(z^{-1})} 
 $, se logra la cancelación algebraica de la perturbación entrante.
 
-\subsubsection{Obtención Matemática: Seguimiento de Referencia (Setpoint)}
-Se puede aplicar un raciocinio idéntico para mejorar el seguimiento de la referencia ($SP$). En lugar de esperar a que el integrador del PID acumule la energía necesaria para alcanzar el nivel deseado, se puede pre-calcular el esfuerzo de control exacto. 
+\subsubsection{Obtención Matemática: Compensación Estática de No Linealidad}
+Si bien con el esquema anterior se neutraliza el efecto de la perturbación sobre el sistema, aún se debe considerar su naturaleza no lineal dada por las descargas por gravedad en cada estanque.
 
-Es fundamental destacar que \textbf{no se invierte la dinámica completa de la planta} (lo cual requeriría la derivada de la referencia y generaría un esfuerzo de control irrealizable). En su lugar, el Feedforward de Setpoint invierte únicamente la \textbf{ganancia estática} del proceso. 
+Se puede aplicar un raciocinio idéntico para mejorar el seguimiento de la referencia ($SP$). En lugar de esperar a que el integrador del PID acumule la energía necesaria para alcanzar el nivel deseado, se puede pre-calcular el esfuerzo de control exacto (alimentando el sp al feeedforward), o corregir la no linealidad en cada valor de nivel (alimentar el pv al feedforward). 
 
-En sistemas con dinámicas complejas como el de los 4 estanques, esta ganancia estática contiene la principal no linealidad del sistema (la fuga parabólica de Torricelli). Al inyectar una señal de prealimentación que es la inversa exacta de esta no linealidad ($G_{sp} = G_{estatico}^{-1}$), se logran dos objetivos simultáneos:
+Es fundamental destacar que \textbf{no se invierte la dinámica completa de la planta} (lo cual requeriría la derivada de la referencia y generaría un esfuerzo de control irrealizable). En su lugar, el Feedforward en este caso invierte únicamente la \textbf{ganancia estática} del proceso. 
+
+En sistemas con dinámicas complejas como el de los 4 estanques, esta ganancia estática contiene la principal no linealidad del sistema (la fuga de Torricelli). Al inyectar una señal de prealimentación que es la inversa exacta de esta no linealidad ($G_{sp} = G_{estatico}^{-1}$), se logran dos objetivos simultáneos:
 
 \begin{enumerate}
     \item Proporcionar al actuador la energía base requerida para sostener el nivel del Setpoint deseado en estado estacionario.
@@ -84,7 +86,8 @@ En sistemas con dinámicas complejas como el de los 4 estanques, esta ganancia e
   \begin{center}
     \includegraphics[width=0.8\textwidth]{img/ff_sp.png}
   \end{center}
-  \caption{}\label{fig:ffsp}
+  \caption{Feedforward de compensación (PV y SP)}
+  \label{fig:ffsp}
 \end{figure}
 
 Ignorando la perturbación y la acción del controlador temporalmente, se busca que la salida alcance la referencia ($Y(z^{-1}) = SP(z^{-1})$) utilizando exclusivamente una acción precalculada $U_{FF\_SP}(z^{-1})$:
@@ -95,6 +98,28 @@ Ignorando la perturbación y la acción del controlador temporalmente, se busca 
 \end{align}
 
 Definiendo este segundo bloque como $G_{sp}(z^{-1}) = \frac{1}{G_a(z^{-1}) G_p(z^{-1})}$, se establece un control de \textit{2 Grados de Libertad}, donde el Feedforward proporciona el esfuerzo base y el PID se encarga únicamente de corregir errores dinámicos y no linealidades residuales no modeladas.
+\clearpage
+\subsubsection{SP vs PV}
+
+Para tomar una decisión de diseño justificada, el ingeniero debe balancear la precisión matemática contra la robustez física de los actuadores y la facilidad de sintonía figura \ref{fig:ffsp}.
+
+\vspace{3mm}
+\noindent\textbf{Enfoque A: Linealización por Realimentación (Usar PV)}
+\begin{itemize}
+    \item[\textcolor{green!60!black}{\textbf{+}}] \textbf{Linealidad Perfecta:} La no linealidad (parábola) se cancela en absolutamente todo momento, sin importar si el estanque se está llenando, vaciando o está en equilibrio.
+    \item[\textcolor{green!60!black}{\textbf{+}}] \textbf{Independencia del Punto de Operación:} Un solo conjunto de ganancias PID funcionará exactamente igual de bien con el estanque a 10 cm que a 40 cm.
+    \item[\textcolor{red}{\textbf{--}}] \textbf{Sensibilidad al Ruido (Inyección de Oleaje):} Este es su mayor defecto físico. El sensor de nivel real ($LIT$) siempre tiene ruido debido al oleaje del agua y turbulencias. Al meter la $PV$ en la ecuación, ese ruido entra directo al cálculo de la raíz cuadrada y se envía como órdenes erráticas de voltaje al variador de frecuencia, desgastando mecánicamente la bomba (\textit{chattering}).
+    \item[\textcolor{red}{\textbf{--}}] \textbf{Sintonía Compleja:} Al cancelar la fuga de agua matemáticamente, el estanque se comporta como un integrador puro. Los sistemas integradores son inherentemente más inestables y difíciles de sintonizar (suelen requerir acción derivativa cuidadosa o un PI muy conservador para no oscilar).
+\end{itemize}
+
+\vspace{3mm}
+\noindent\textbf{Enfoque B: Control de 2 Grados de Libertad (Usar SP)}
+\begin{itemize}
+    \item[\textcolor{green!60!black}{\textbf{+}}] \textbf{Inmunidad al Ruido Analógico:} El Setpoint ($SP$) es una variable matemática pura y limpia generada por el software. Al usarla en el cálculo, la señal base enviada a la bomba es perfectamente estable, prolongando la vida útil del actuador.
+    \item[\textcolor{green!60!black}{\textbf{+}}] \textbf{Sintonía Dócil (Autorregulación):} Como no se cancela la dinámica natural del estanque, el sistema sigue siendo autorregulado (un sistema de primer orden tradicional). Es extremadamente fácil y seguro sintonizar un controlador PI para este tipo de plantas.
+    \item[\textcolor{red}{\textbf{--}}] \textbf{Error en el Transitorio:} La compensación de la no linealidad solo es matemáticamente perfecta cuando el sistema alcanza el estado estacionario ($PV = SP$). Durante el llenado o vaciado, el PID debe trabajar un poco más para compensar la diferencia.
+    \item[\textcolor{red}{\textbf{--}}] \textbf{Golpe al Actuador (Derivada del Escalón):} Si el operador introduce un cambio de $SP$ muy grande, la ecuación calculará una demanda de energía instantánea masiva. \textbf{Solución obligatoria:} Se debe implementar un filtro de Setpoint (una rampa de aceleración en la HMI o en el PLC) para suavizar la transición del operador.
+\end{itemize}
 
 \subsubsection{Aplicación a las Ecuaciones de Diferencias de la Planta}
 Para aplicar esta teoría lineal a los estanques no lineales, evaluamos la derivada del balance de masas en estado estacionario ($\frac{dh}{dt} = 0$). Tomando como ejemplo el Estanque 1 (que sufre la perturbación de caudal del Estanque 3), la Ecuación \ref{eq:edo_h1} se iguala a cero.
@@ -117,7 +142,7 @@ Al integrar esto con el algoritmo digital dentro del PLC, la señal de control t
 Al implementar la estrategia de prealimentación junto con un control en cascada (LIC $\rightarrow$ FIC) en Texto Estructurado, existen dos topologías matemáticas válidas para inyectar el Feedforward. La elección depende de si se prioriza la robustez del lazo o la velocidad de rechazo de la perturbación.
 
 \subsubsection{Arquitectura 1: Inyección en el Setpoint del Lazo Esclavo}
-En este enfoque, el Feedforward se suma a la salida del controlador maestro (LIC). Dado que el Setpoint del lazo de flujo (FIC) debe estar en unidades de caudal ($cm^3/s$ o $L/min$), la ecuación de prealimentación \textbf{no debe incluir la ganancia de la bomba ($k_1$)}. 
+En este enfoque, el Feedforward se suma a la salida del controlador maestro (LIC). Dado que el Setpoint del lazo de flujo (FIC) debe estar en unidades de caudal ($m^3/s$ o $L/min$), la ecuación de prealimentación \textbf{no debe incluir la ganancia de la bomba ($k_1$)}. 
 
 La secuencia de cálculo discreto en el instante $[k]$ es:
 \begin{align}
@@ -168,7 +193,7 @@ La secuencia de cálculo discreto para la doble inyección en el instante $[k]$ 
 
 ---
 
-\textbf{Análisis de Dinámica:} Al momento de ocurrir la perturbación, $u_{FF}[k]$ altera el variador de frecuencia en el mismo ciclo de \textit{Scan}, garantizando un rechazo inmediato. Físicamente, el flujo $FIT_1$ cambia drásticamente. Sin embargo, como el término $Q_{FF}[k]$ fue sumado al $SP_{FIC}$, la ecuación del error ($e_{FIC}$) evalúa esta alza de flujo como el seguimiento exitoso de su nueva referencia. El lazo esclavo se mantiene estable y la cascada no se rompe..
+\textbf{Análisis de Dinámica:} Al momento de ocurrir la perturbación, $u_{FF}[k]$ altera el variador de frecuencia en el mismo ciclo de \textit{Scan}, garantizando un rechazo inmediato. Físicamente, el flujo $FIT_1$ cambia drásticamente. Sin embargo, como el término $Q_{FF}[k]$ fue sumado al $SP_{FIC}$, la ecuación del error ($e_{FIC}$) evalúa esta alza de flujo como el seguimiento exitoso de su nueva referencia. El lazo esclavo se mantiene estable y la cascada no se rompe.
 
 
 \subsection{Selección de Arquitectura Feedforward en Cascada}
@@ -199,3 +224,4 @@ La elección entre inyectar la prealimentación en el Setpoint del esclavo (Arqu
         \item En la inyección a la salida, si el PID pide 40 Hz y el FF pide 20 Hz, la suma exige 60 Hz. Como el variador satura a 50 Hz, el sistema físico se limita, pero el PID interno no lo sabe y su integrador colapsa. Al inyectar en el Setpoint (Arquitectura 1), el FIC gestiona la saturación internamente y congela su integrador (\textit{Anti-Windup}) de forma natural.
     \end{itemize}
 \end{enumerate}
+\clearpage

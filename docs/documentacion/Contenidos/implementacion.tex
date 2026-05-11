@@ -1,5 +1,25 @@
 \section{Implementación y Automatización}
 \subsection{Instrumentación}
+\subsubsection{Sensor de Flujo Electromagnético (Endress+Hauser Promag)}
+Para la medición continua y precisa del caudal de agua que ingresa a los estanques, el sistema está equipado con flujómetros electromagnéticos de la serie Promag de Endress+Hauser (representados como FIT en el diagrama P\&ID). Estos instrumentos operan bajo la ley de inducción magnética de Faraday, lo que los hace ideales para líquidos conductivos y les otorga una alta resistencia a las perturbaciones físicas del fluido.
+
+En el contexto de la arquitectura de control de la planta, estos sensores cumplen un rol fundamental: proveen la Variable de Proceso (PV) de flujo en tiempo real, permitiendo el cierre de los lazos de control esclavos (FIC). La alta velocidad de respuesta de estos sensores es crítica para que el controlador pueda compensar las rápidas dinámicas de la tubería y mitigar las oscilaciones antes de que afecten el nivel de los estanques.
+
+\subsubsection{Controlador Lógico Programable (Allen-Bradley ControlLogix 1756-L81E)}
+El cerebro de la arquitectura de automatización recae en el controlador lógico programable ControlLogix 1756-L81E de Rockwell Automation. Este equipo pertenece a la familia de procesadores de alto desempeño 5580, diseñados específicamente para satisfacer los exigentes requerimientos de velocidad y capacidad en plantas industriales modernas.
+
+Sus características técnicas más relevantes para el proyecto incluyen:
+\begin{itemize}
+    \item \textbf{Memoria de Usuario (3 MB):} Capacidad robusta que permite la gestión de programas complejos en Texto Estructurado (ST), el procesamiento de los algoritmos de control PID discretos, estrategias de Feedforward y el almacenamiento de bases de datos de tags sin degradar el \textit{scan time} del procesador.
+    \item \textbf{Comunicaciones Integradas (1 Gbps):} Cuenta con un puerto EtherNet/IP embebido que facilita la transmisión de datos a alta velocidad. Esto es vital para garantizar la sincronización en tiempo real entre el PLC, la estación de supervisión HMI (FactoryTalk View) y el servidor OPC UA que enlaza con MATLAB para el análisis predictivo.
+\end{itemize}
+
+\subsubsection{Bomba Centrífuga y Actuación}
+La impulsión del fluido hacia el sistema interconectado de estanques se realiza mediante bombas centrífugas accionadas por Variadores de Frecuencia (VFD). Las bombas actúan como el elemento final de control de la planta, recibiendo la Variable de Control (CV) calculada por los algoritmos del PLC.
+
+Desde la perspectiva de la ingeniería de control, la caracterización dinámica de estas bombas revela un comportamiento altamente \textbf{no lineal}. Presentan una zona muerta operativa significativa (aproximadamente entre el 0\% y el 40\% de la señal de mando) y variaciones drásticas en su ganancia estática ($K$) dependiendo de la zona de operación (por ejemplo, comportándose de manera agresiva a caudales medios y perdiendo eficiencia a caudales altos). 
+
+Debido a estas fuertes no linealidades mecánicas e hidráulicas, se justifica plenamente la implementación de la topología de control en cascada. Se destinan lazos esclavos de flujo (FIC) acompañados de rutinas de "mapeo de salida" en el PLC, cuyo objetivo exclusivo es linealizar la respuesta de las bombas, garantizando así que los lazos maestros de nivel (LIC) operen sobre un sistema predecible y estable.
 \subsubsection{Obtención Experimental de la Ganancia de la Bomba ($k_i$)}
 
 En el desarrollo del modelo matemático, se asume que el caudal inyectado al sistema ($q_i$) es directamente proporcional a la señal de control enviada al variador de frecuencia ($u_i$). Esta relación se modela mediante la ganancia estática del actuador:
@@ -7,7 +27,7 @@ En el desarrollo del modelo matemático, se asume que el caudal inyectado al sis
     q_i = k_i \cdot u_i
 \end{equation}
 
-Donde $k_i$ posee unidades de $\left[ \frac{\text{Caudal}}{\text{Esfuerzo}} \right]$ (por ejemplo, $\frac{L/min}{\text{Hz}}$ o $\frac{cm^3/s}{\%}$).
+Donde $k_i$ posee unidades de $\left[ \frac{\text{Caudal}}{\text{Esfuerzo}} \right]$ (por ejemplo, $\frac{L/min}{\text{\%}}$ o $\frac{cm^3/s}{\%}$).
 
 Para obtener este parámetro empíricamente en la planta física, se debe levantar una \textbf{curva de calibración de estado estacionario} operando el sistema en lazo abierto. El procedimiento estándar es el siguiente:
 
@@ -20,5 +40,72 @@ Para obtener este parámetro empíricamente en la planta física, se debe levant
         k_i = \frac{\Delta q}{\Delta u} = \frac{q_B - q_A}{u_B - u_A}
     \end{equation}
 \end{enumerate}
-    \subsection{Programación en Texto Estructurado}
+\subsection{Programación en Texto Estructurado}
+El programa de texto estructurado se divide en 4 rutinas de lazos de control maestro para el nivel (LIC). Estos controladores calculan continuamente el flujo requerido para que cada estanque alcance su referencia (Setpoint). Dado que la planta cuenta con menos actuadores que variables a controlar, estos esfuerzos de control ingresan a un bloque selector. El selector enruta las señales "ganadoras" hacia los 2 lazos de control esclavos de flujo (FIC), los cuales finalmente determinan el esfuerzo de control hacia las bombas.
+
+\subsubsection{Consideraciones de Programación y Arquitectura} 
+Para garantizar la estabilidad del sistema, evitar integraciones erróneas y asegurar la integridad física de los actuadores, el código en Texto Estructurado incorpora las siguientes consideraciones lógicas:
+
+\begin{itemize}
+    \item \textbf{Setpoint Tracking (Transferencia Bumpless):} Se programó una lógica de seguimiento para asegurar que las transiciones entre modos de operación (Manual a Automático, o Local a Cascada) sean suaves y sin perturbaciones. Cuando un lazo está en modo manual o inactivo, su Setpoint se iguala a la Variable de Proceso (PV) actual, evitando saltos bruscos (bumps) en la señal de mando de la bomba al momento de conmutar.
+    
+    \item \textbf{Ajuste del Perdedor (Integral Tracking):} En una arquitectura con selectores, los lazos maestros cuyas señales no son seleccionadas (los "perdedores") sufren el riesgo de acumular error en su acción integral (\textit{Wind-up}), ya que su esfuerzo no está afectando a la planta. Para evitarlo, se implementó un seguimiento integral (\textit{External Reset Feedback}), donde el término integral de los lazos perdedores se reescribe constantemente basándose en la salida real del selector, manteniéndolos alineados y listos para tomar el control sin sobresaturación.
+    
+    \item \textbf{Saturación y Limitación de Tasa (Rate Limiting):} Para proteger las bombas y acoplar el controlador a la dinámica real del actuador, el algoritmo PID discreto (programado en su forma de velocidad/incremental) satura el incremento máximo permitido por ciclo ($\Delta u_{max}$). Esto previene cambios de potencia irreales (ej. superiores al $1\%/s$) y actúa como un Anti-Windup intrínseco.
+    
+    \item \textbf{Mapeo de Salida (Compensación de Zona Muerta):} Debido a la fuerte no linealidad del actuador físico, las rutinas de los lazos esclavos (FIC) incluyen una etapa de acondicionamiento o mapeo a tramos. Esto linealiza la respuesta de la bomba (compensando, por ejemplo, zonas muertas de $0-40\%$), permitiendo que el PID trabaje sobre un rango de operación predecible.
+    
+    \item \textbf{Compensación MIMO (Feedforward):} Al ser un sistema fuertemente acoplado, el código incluye bloques de cálculo matemático que suman ganancias de prealimentación (Feedforward) a la salida del controlador. Esto mitiga las perturbaciones medibles cruzadas (por ejemplo, el agua que cae por gravedad desde los estanques superiores) antes de que generen un error en el lazo de nivel inferior.
+    
+    \item \textbf{Determinismo del Tiempo de Muestreo ($T_m$):} La precisión del término integral y derivativo en el dominio discreto depende estrictamente del tiempo. Se programó un registro temporal para medir el \textit{scan time} exacto transcurrido entre cada ejecución de la tarea periódica, utilizando este diferencial real ($T_m$) en la ecuación del PID en lugar de una constante ideal.
+\end{itemize}
+\subsubsection{Discretización del Algoritmo PID}
+Para poder implementar los lazos de control PID en el entorno digital del PLC (ControlLogix), se debe discretizar la forma ideal del PID clásico en el tiempo continuo, cuya ecuación está dada por:
+
+\begin{equation}
+  \label{eq:pid_continuo}
+  u(t) = K_c \left( e(t) + \frac{1}{T_i} \int_{0}^{t} e(\tau) d\tau + T_d \frac{de(t)}{dt} \right) + u_{bias}
+\end{equation}
+
+Donde $u(t)$ es el esfuerzo de control, $e(t)$ es el error actual ($SP - PV$), $K_c$ es la ganancia proporcional, $T_i$ es el tiempo integral y $T_d$ es el tiempo derivativo. 
+Para llevar esta expresión al dominio discreto es posible aplicar aproximaciones, 3 de las cuales se muestras a continuació.
+
+\paragraph{1. Aproximación Rectangular hacia Adelante (Forward Euler)}
+En este método (explícito), la acción integral se aproxima calculando el área del rectángulo con base en el valor del error en el instante anterior $e[k-1]$. La ecuación de diferencias en su forma de velocidad resulta en:
+
+\begin{equation}
+  \label{eq:euler_adelante}
+  \Delta u[k] = K_c \left( \underbrace{\big(e[k] - e[k-1]\big)}_{\text{Proporcional}} + \underbrace{\frac{T_m}{T_i} e[k-1]}_{\text{Integral}} + \underbrace{\frac{T_d}{T_m} \big(e[k] - 2e[k-1] + e[k-2]\big)}_{\text{Derivativo}} \right)
+\end{equation}
+
+\paragraph{2. Aproximación Rectangular hacia Atrás (Backward Euler)}
+En este método (implícito), la acción integral calcula el área utilizando el valor del error en el instante actual $e[k]$. Esta es la topología recomendada para aplicaciones industriales debido a que preserva la estabilidad del semiplano izquierdo de $s$ al mapearlo dentro del círculo unitario en $z$. Su ecuación incremental es:
+
+\begin{equation}
+  \label{eq:euler_atras}
+  \Delta u[k] = K_c \left( \underbrace{\big(e[k] - e[k-1]\big)}_{\text{Proporcional}} + \underbrace{\frac{T_m}{T_i} e[k]}_{\text{Integral}} + \underbrace{\frac{T_d}{T_m} \big(e[k] - 2e[k-1] + e[k-2]\big)}_{\text{Derivativo}} \right)
+\end{equation}
+\paragraph{3. Aproximación Trapezoidal (Método de Tustin o Transformada Bilineal)}
+Este método aproxima la acción integral calculando el área de un trapecio formado por el valor del error actual $e[k]$ y el error en el instante anterior $e[k-1]$. Desde la perspectiva del análisis en el dominio digital, la transformada bilineal es considerada la aproximación más exacta, puesto que mapea de forma exacta todo el semiplano izquierdo estable del plano $s$ hacia el interior del círculo unitario en el plano $z$, preservando los márgenes de estabilidad originales del tiempo continuo. La ecuación de diferencias en su forma incremental resulta en:
+
+\begin{equation}
+  \label{eq:trapecio}
+  \Delta u[k] = K_c \left( \underbrace{\big(e[k] - e[k-1]\big)}_{\text{Proporcional}} + \underbrace{\frac{T_m}{2 T_i} \big(e[k] + e[k-1]\big)}_{\text{Integral}} + \underbrace{\frac{T_d}{T_m} \big(e[k] - 2e[k-1] + e[k-2]\big)}_{\text{Derivativo}} \right)
+\end{equation}
+ \clearpage
     \subsection{Configuración de Red y Adquisición (OPC)}
+\subsection{Configuración de Red y Adquisición de Datos (OPC UA)}
+
+La arquitectura de comunicaciones del proyecto se estructuró bajo un modelo Cliente-Servidor, garantizando la interoperabilidad en tiempo real entre el controlador lógico (Allen-Bradley ControlLogix 1756-L81E / Emulate), la estación de supervisión gráfica (HMI) y el entorno de análisis matemático (MATLAB/Simulink).
+
+\subsubsection{Capa de Red y Middleware}
+A nivel físico y de enlace, el intercambio de datos opera sobre el protocolo industrial \textbf{EtherNet/IP} (CIP sobre Ethernet estándar). Para la abstracción del hardware, se utilizó \textbf{FactoryTalk Linx} (anteriormente RSLinx Enterprise) como el proveedor principal de datos. La configuración clave en esta etapa consistió en la creación de un \textit{Shortcut} o ruta de comunicación, el cual enlaza lógicamente el programa de la HMI con la dirección de red del controlador, permitiendo a los displays gráficos leer y escribir variables sin necesidad de direccionar memoria física.
+
+\subsubsection{Integración mediante OPC UA (FactoryTalk Gateway)}
+Para lograr la integración de la planta con algoritmos de simulación e identificación ejecutados en MATLAB, se implementó el estándar \textbf{OPC UA (Open Platform Communications Unified Architecture)}. Al ser un entorno heterogéneo, se utilizó \textbf{FactoryTalk Gateway} operando como el Servidor OPC local. Este middleware abstrae los \textit{tags} nativos del procesador Logix y los expone como nodos en un espacio de direcciones estructurado.
+
+Desde la perspectiva técnica de la adquisición:
+\begin{itemize}
+    \item \textbf{El Servidor (FactoryTalk Gateway):} Se encarga de realizar el \textit{polling} (sondeo) continuo hacia la memoria del procesador mediante EtherNet/IP y encapsular los datos bajo los certificados de seguridad de OPC UA.
+    \item \textbf{Los Clientes (MATLAB/Simulink):} Utilizan bloques de lectura y escritura OPC UA (\textit{OPC Read / OPC Write}) para suscribirse a los nodos de interés (ej. \texttt{FIT\_01}, \texttt{LIT\_03}, \texttt{CV\_F1}). Esta suscripción basada en eventos asegura que el entorno matemático reciba los datos de la planta respetando las dinámicas de tiempo real y el \textit{scan time} del proceso, facilitando la futura implementación de estrategias avanzadas como el Control Predictivo Adaptativo (MPC).
+\end{itemize}

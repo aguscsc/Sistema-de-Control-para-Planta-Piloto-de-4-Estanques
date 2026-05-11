@@ -224,4 +224,7 @@ La elección entre inyectar la prealimentación en el Setpoint del esclavo (Arqu
         \item En la inyección a la salida, si el PID pide 40 Hz y el FF pide 20 Hz, la suma exige 60 Hz. Como el variador satura a 50 Hz, el sistema físico se limita, pero el PID interno no lo sabe y su integrador colapsa. Al inyectar en el Setpoint (Arquitectura 1), el FIC gestiona la saturación internamente y congela su integrador (\textit{Anti-Windup}) de forma natural.
     \end{itemize}
 \end{enumerate}
+
+Por esto, se utilzará la arquitectura 1, siendo esta más segura y simple de implementear, siguiendo la filosofía \textbf{KISS} (\textit{keep it simple, stupid}).
+
 \clearpage

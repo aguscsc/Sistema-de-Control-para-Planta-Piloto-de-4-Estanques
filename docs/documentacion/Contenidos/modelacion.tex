@@ -72,4 +72,179 @@ Reemplazando esta aproximación en el balance de masas, se obtiene el sistema de
 \end{align}
 
 Estas ecuaciones discretas son la base tanto para la simulación de la planta en software externo como para la posterior deducción de los algoritmos de control digital implementados en el PLC.
+
+\subsection{Modelo del Sistema}
+\subsubsection{Linealización}
+Tomando las ecuaciones \ref{eq:edo_h1}, \ref{eq:edo_h2}, \ref{eq:edo_h3} y \ref{eq:edo_h4}. Se aplica una aproximación de \textbf{Taylor} de primer orden, alrededor de los niveles en estado estacionario $(h_i^0, Q_{in}^0)$, definimos la función de descarga:
+
+\begin{equation}
+f(h_i) = a_i \sqrt{2g h_i} = a_i \sqrt{2g} \cdot h_i^{1/2}
+\label{eq:func_descarga}
+\end{equation}
+
+Aplicamos la expansión en Series de Taylor truncada al primer orden alrededor de $h_i^0$:
+
+\begin{equation}
+f(h_i) \approx f(h_i^0) + \left. \frac{df(h_i)}{dh_i} \right|_{h_i = h_i^0} (h_i - h_i^0)
+\label{eq:taylor_exp}
+\end{equation}
+
+Calculamos la primera derivada de la función con respecto a $h_i$:
+
+\begin{equation}
+\frac{df(h_i)}{dh_i} = a_i \sqrt{2g} \left( \frac{1}{2} h_i^{-1/2} \right) = \frac{a_i \sqrt{2g}}{2\sqrt{h_i}}
+\label{eq:derivada_f}
+\end{equation}
+
+Evaluando la derivada estrictamente en el punto de operación $h_i^0$ y reescribiendo algebraicamente para agrupar términos en la raíz:
+
+\begin{equation}
+\left. \frac{df(h_i)}{dh_i} \right|_{h_i = h_i^0} = \frac{a_i \sqrt{2g}}{\sqrt{4 h_i^0}} = a_i \sqrt{\frac{2g}{4 h_i^0}} = a_i \sqrt{\frac{g}{2 h_i^0}}
+\label{eq:derivada_eval}
+\end{equation}
+
+Sustituyendo \eqref{eq:derivada_eval} en \eqref{eq:taylor_exp}, la aproximación lineal del flujo de salida es:
+
+\begin{equation}
+Q_{out} \approx a_i \sqrt{2g h_i^0} + \left( a_i \sqrt{\frac{g}{2 h_i^0}} \right) (h_i - h_i^0)
+\label{eq:qout_aprox}
+\end{equation}
+
+\subsection{Variables de Desviación y Modelo LTI}
+Definimos las variables de desviación respecto al punto de equilibrio:
+\begin{align*}
+\Delta h_i(t) &= h_i(t) - h_i^0 \\
+\Delta Q_{in}(t) &= Q_{in}(t) - Q_{in}^0
+\end{align*}
+
+Reemplazando la aproximación \eqref{eq:qout_aprox} y las variables de desviación en la ecuación diferencial original \eqref{eq:edo_original}, y sabiendo que en estado estacionario $Q_{in}^0 = a_i \sqrt{2g h_i^0}$ (por lo que se anulan), obtenemos:
+
+\begin{equation}
+A_i \frac{d(\Delta h_i(t))}{dt} = \Delta Q_{in}(t) - \left( a_i \sqrt{\frac{g}{2 h_i^0}} \right) \Delta h_i(t)
+\label{eq:edo_desviacion}
+\end{equation}
+
+Dividiendo la expresión por el área del estanque $A_i$ para normalizar la derivada:
+
+\begin{equation}
+\frac{d(\Delta h_i(t))}{dt} = - \left( \frac{a_i}{A_i} \sqrt{\frac{g}{2 h_i^0}} \right) \Delta h_i(t) + \frac{1}{A_i} \Delta Q_{in}(t)
+\label{eq:edo_normalizada}
+\end{equation}
+
+\subsection{Definición de la Constante de Tiempo ($T_i$)}
+La ecuación \eqref{eq:edo_normalizada} corresponde a la forma canónica de un sistema lineal de primer orden LTI (Linear Time-Invariant):
+
+\begin{equation}
+\frac{dx(t)}{dt} = -\frac{1}{T} x(t) + K u(t)
+\label{eq:lti_canonica}
+\end{equation}
+
+Por inspección directa entre las ecuaciones \eqref{eq:edo_normalizada} y \eqref{eq:lti_canonica}, identificamos que el término recíproco de la constante de tiempo $T_i$ es:
+
+\begin{equation}
+\frac{1}{T_i} = \frac{a_i}{A_i} \sqrt{\frac{g}{2 h_i^0}}
+\label{eq:ti_inversa}
+\end{equation}
+
+Despejando $T_i$, obtenemos la expresión final documentada en el modelo de Johansson:
+
+\begin{equation}
+T_i = \frac{A_i}{a_i} \sqrt{\frac{2 h_i^0}{g}}
+\label{eq:ti_final}
+\end{equation}
+
+Esta deducción demuestra analíticamente que la inercia dinámica del sistema ($T_i$) no es constante, sino que depende de manera no lineal del nivel del líquido en el punto de operación $h_i^0$.
+
+\subsection{Matriz de Transferencia y Análisis de Ceros de Transmisión}
+
+Una vez obtenidas las constantes de tiempo ($T_i$) mediante la linealización de la Ley de Torricelli por Series de Taylor, es posible representar la dinámica completa de la Planta de Cuatro Estanques de Johansson en el dominio de la frecuencia. Este análisis revelará la influencia estructural de las válvulas de tres vías ($\gamma_1, \gamma_2$) sobre la naturaleza de la fase del sistema multivariable.
+
+\subsubsection{Representación en el Dominio de Laplace}
+Considerando que la planta física está construida con cilindros de dimensiones idénticas, se asume un área transversal uniforme tal que $A_1 = A_2 = A_3 = A_4 = A$. Bajo esta premisa, las razones de área se anulan ($\frac{A_i}{A_j} = 1$), simplificando el sistema de ecuaciones diferenciales a:
+
+\begin{align}
+\frac{dx_1}{dt} &= -\frac{1}{T_1} x_1 + \frac{1}{T_3} x_3 + \frac{\gamma_1 k_1}{A} u_1 \label{eq:dx1_dt_simp} \\
+\frac{dx_2}{dt} &= -\frac{1}{T_2} x_2 + \frac{1}{T_4} x_4 + \frac{\gamma_2 k_2}{A} u_2 \label{eq:dx2_dt_simp} \\
+\frac{dx_3}{dt} &= -\frac{1}{T_3} x_3 + \frac{(1-\gamma_2) k_2}{A} u_2 \label{eq:dx3_dt_simp} \\
+\frac{dx_4}{dt} &= -\frac{1}{T_4} x_4 + \frac{(1-\gamma_1) k_1}{A} u_1 \label{eq:dx4_dt_simp}
+\end{align}
+
+Aplicando la Transformada de Laplace bajo condiciones iniciales nulas, y resolviendo para los estanques superiores (3 y 4), obtenemos:
+
+\begin{align}
+X_3(s) &= \frac{(1-\gamma_2) k_2 T_3 / A}{1 + sT_3} U_2(s) \label{eq:X3_s} \\
+X_4(s) &= \frac{(1-\gamma_1) k_1 T_4 / A}{1 + sT_4} U_1(s) \label{eq:X4_s}
+\end{align}
+
+Sustituyendo \eqref{eq:X3_s} en la ecuación transformada del Estanque 1, y \eqref{eq:X4_s} en la del Estanque 2, se derivan las ecuaciones de los estanques maestros:
+
+\begin{align}
+X_1(s) &= \left( \frac{c_1 \gamma_1}{1 + sT_1} \right) U_1(s) + \left( \frac{c_1 (1-\gamma_2)}{(1+sT_1)(1+sT_3)} \right) U_2(s) \label{eq:X1_s} \\
+X_2(s) &= \left( \frac{c_2 (1-\gamma_1)}{(1+sT_2)(1+sT_4)} \right) U_1(s) + \left( \frac{c_2 \gamma_2}{1 + sT_2} \right) U_2(s) \label{eq:X2_s}
+\end{align}
+
+Donde $c_1 = \frac{T_1 k_1}{A}$ y $c_2 = \frac{T_2 k_2}{A}$.
+
+\subsubsection{Matriz de Transferencia $G(s)$}
+El sistema MIMO (Múltiples Entradas, Múltiples Salidas) se define matricialmente como $X(s) = G(s)U(s)$:
+
+\begin{equation}
+G(s) = \begin{bmatrix} 
+\frac{c_1 \gamma_1}{1 + sT_1} & \frac{c_1 (1-\gamma_2)}{(1+sT_1)(1+sT_3)} \\ 
+\frac{c_2 (1-\gamma_1)}{(1+sT_2)(1+sT_4)} & \frac{c_2 \gamma_2}{1 + sT_2} 
+\end{bmatrix}
+\label{eq:matriz_Gs}
+\end{equation}
+
+Se observa que la diagonal principal rige la dinámica directa (primer orden), mientras que la anti-diagonal gobierna el acoplamiento cruzado (segundo orden).
+
+\subsubsection{Cálculo de los Ceros de Transmisión Multivariables}
+En un sistema MIMO cuadrado ($2 \times 2$), los ceros de transmisión corresponden a las raíces del polinomio resultante de igualar el determinante de la matriz de transferencia a cero:
+
+\begin{equation}
+\det(G(s)) = G_{11}G_{22} - G_{12}G_{21} = 0
+\label{eq:det_Gs}
+\end{equation}
+
+Sustituyendo los elementos de la matriz y factorizando el término común $\frac{c_1 c_2}{(1+sT_1)(1+sT_2)}$:
+
+\begin{equation}
+\frac{c_1 c_2}{(1+sT_1)(1+sT_2)} \left[ \gamma_1 \gamma_2 - \frac{(1-\gamma_1)(1-\gamma_2)}{(1+sT_3)(1+sT_4)} \right] = 0
+\label{eq:ceros_factorizado}
+\end{equation}
+
+Para encontrar los ceros, igualamos el término entre corchetes a cero y multiplicamos por el denominador $(1+sT_3)(1+sT_4)$:
+
+\begin{equation}
+\gamma_1 \gamma_2 (1+sT_3)(1+sT_4) - (1-\gamma_1)(1-\gamma_2) = 0
+\label{eq:ecuacion_ceros}
+\end{equation}
+
+Expandiendo el producto de las constantes de tiempo y agrupando los coeficientes según el grado de $s$:
+
+\begin{equation}
+s^2 [\gamma_1 \gamma_2 T_3 T_4] + s [\gamma_1 \gamma_2 (T_3+T_4)] + (\gamma_1 + \gamma_2 - 1) = 0
+\label{eq:polinomio_caracteristico_ceros}
+\end{equation}
+\clearpage
+\subsubsection{Análisis de Estabilidad y Fase del Sistema}
+La Ecuación \eqref{eq:polinomio_caracteristico_ceros} es una cuadrática característica de los ceros del sistema. De acuerdo con el criterio de Routh-Hurwitz, para que las raíces se encuentren estrictamente en el Semiplano Izquierdo ($LHP$) de Laplace, todos los coeficientes del polinomio deben poseer el mismo signo positivo.
+
+Dado que $T_3, T_4 > 0$ y $\gamma_1, \gamma_2 \in (0, 1)$, los coeficientes de $s^2$ y $s$ son constitutivamente positivos. Por lo tanto, la ubicación de los ceros depende exclusivamente del término independiente:
+
+\textbf{Condición de Fase Mínima (Ceros LHP):}
+Para un comportamiento controlable sin respuesta inversa transitoria, se requiere:
+\begin{equation}
+\gamma_1 + \gamma_2 - 1 > 0 \implies \gamma_1 + \gamma_2 > 1
+\label{eq:condicion_fase_minima}
+\end{equation}
+Físicamente, esto indica que los flujos directos hacia los estanques inferiores dominan sobre el acoplamiento cruzado hacia los estanques superiores.
+
+\textbf{Condición de Fase No Mínima (Ceros RHP):}
+Bajo la configuración asignada al proyecto ($\gamma_1 = 0.455$, $\gamma_2 = 0.4195$), la suma resulta en $0.8745$.
+\begin{equation}
+\gamma_1 + \gamma_2 - 1 < 0 \implies \gamma_1 + \gamma_2 < 1
+\label{eq:condicion_fase_no_minima}
+\end{equation}
+Esta inecuación \eqref{eq:condicion_fase_no_minima} demuestra que el término independiente es negativo. Según Routh-Hurwitz, la alternancia de signos en el polinomio garantiza la existencia de al menos una raíz en el Semiplano Derecho ($RHP$). Este Cero de Transmisión de Semiplano Derecho provoca matemáticamente el fenómeno de subamortiguación inicial (Undershoot) o Respuesta Inversa, limitando severamente la aplicabilidad de controladores PID de alta ganancia.
 \clearpage

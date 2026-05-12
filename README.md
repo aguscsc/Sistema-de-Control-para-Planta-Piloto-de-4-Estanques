@@ -7,6 +7,9 @@
 ## Descripción General
 Este repositorio documenta el diseño, simulación e implementación de un sistema de control automático para una planta piloto de 4 estanques. El proyecto abarca desde el modelado matemático y la discretización de sistemas continuos, hasta la síntesis de algoritmos de control avanzado, llevando la teoría rigurosa hacia su aplicación directa en hardware industrial.
 
+## HMI 
+![HMI](pics/planta.gif)
+*Interfaz Humano Máquina diseñada bajo ISA 101*
 ## Arquitectura de Control y P&ID
 ![P&ID](pics/instrumentacion/planta_4_estanques_P&ID.png)
 *Diagrama de Instrumentación basado en la norma ISA-5.1, detallando los lazos de control de nivel (LIC) y flujo (FIC).*

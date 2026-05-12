@@ -1,0 +1,39 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Modelación de la planta}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.}Parámetros del Sistema}{2}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Balance de Masas}{3}{subsection.0.2}%
+\contentsline {subsection}{\numberline {3.}Discretización}{3}{subsection.0.3}%
+\contentsline {section}{\numberline {2}Diseño del Sistema de Control}{5}{section.2}%
+\contentsline {subsection}{\numberline {1.}Control en Cascada}{5}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Lógica de Selección (Override)}{5}{subsection.0.2}%
+\contentsline {subsection}{\numberline {3.}Feed-Forward (Prealimentación)}{6}{subsection.0.3}%
+\contentsline {subsubsection}{\numberline {3.1}Obtención Matemática: Compensación de Perturbaciones}{6}{subsubsection.0.3.1}%
+\contentsline {subsubsection}{\numberline {3.2}Obtención Matemática: Compensación Estática de No Linealidad}{7}{subsubsection.0.3.2}%
+\contentsline {subsubsection}{\numberline {3.3}SP vs PV}{9}{subsubsection.0.3.3}%
+\contentsline {subsubsection}{\numberline {3.4}Aplicación a las Ecuaciones de Diferencias de la Planta}{10}{subsubsection.0.3.4}%
+\contentsline {subsection}{\numberline {4.}Arquitecturas de Inyección del Feedforward en Cascada}{11}{subsection.0.4}%
+\contentsline {subsubsection}{\numberline {4.1}Arquitectura 1: Inyección en el Setpoint del Lazo Esclavo}{11}{subsubsection.0.4.1}%
+\contentsline {subsubsection}{\numberline {4.2}Arquitectura 2: Inyección a la Salida del Lazo Esclavo}{11}{subsubsection.0.4.2}%
+\contentsline {subsubsection}{\numberline {4.3}Solución Híbrida: Doble Inyección (Feedforward Coordinado)}{12}{subsubsection.0.4.3}%
+\contentsline {subsection}{\numberline {5.}Selección de Arquitectura Feedforward en Cascada}{13}{subsection.0.5}%
+\contentsline {section}{\numberline {3}Implementación y Automatización}{15}{section.3}%
+\contentsline {subsection}{\numberline {1.}Instrumentación}{15}{subsection.0.1}%
+\contentsline {subsubsection}{\numberline {1.1}Sensor de Flujo Electromagnético (Endress+Hauser Promag)}{15}{subsubsection.0.1.1}%
+\contentsline {subsubsection}{\numberline {1.2}Controlador Lógico Programable (Allen-Bradley ControlLogix 1756-L81E)}{15}{subsubsection.0.1.2}%
+\contentsline {subsubsection}{\numberline {1.3}Bomba Centrífuga y Actuación}{15}{subsubsection.0.1.3}%
+\contentsline {subsubsection}{\numberline {1.4}Obtención Experimental de la Ganancia de la Bomba ($k_i$)}{16}{subsubsection.0.1.4}%
+\contentsline {subsection}{\numberline {2.}Programación en Texto Estructurado}{17}{subsection.0.2}%
+\contentsline {subsubsection}{\numberline {2.1}Consideraciones de Programación y Arquitectura}{17}{subsubsection.0.2.1}%
+\contentsline {subsubsection}{\numberline {2.2}Discretización del Algoritmo PID}{18}{subsubsection.0.2.2}%
+\contentsline {paragraph}{1. Aproximación Rectangular hacia Adelante (Forward Euler)}{18}{equation.24}%
+\contentsline {paragraph}{2. Aproximación Rectangular hacia Atrás (Backward Euler)}{19}{equation.25}%
+\contentsline {paragraph}{3. Aproximación Trapezoidal (Método de Tustin o Transformada Bilineal)}{19}{equation.26}%
+\contentsline {subsubsection}{\numberline {2.3}Determinismo, Tiempo de Muestreo ($T_m$) y Scan Time}{20}{subsubsection.0.2.3}%
+\contentsline {subsection}{\numberline {3.}Configuración de Red y Adquisición de Datos (OPC UA)}{21}{subsection.0.3}%
+\contentsline {subsubsection}{\numberline {3.1}Capa de Red y Middleware}{21}{subsubsection.0.3.1}%
+\contentsline {subsubsection}{\numberline {3.2}Integración mediante OPC UA (FactoryTalk Gateway)}{21}{subsubsection.0.3.2}%
+\contentsline {section}{\numberline {4}Diseño de la Interfaz Hombre-Máquina (HMI)}{21}{section.4}%
+\contentsline {subsection}{\numberline {1.}Filosofía de Diseño ISA-101}{22}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}Jerarquía de Alarmas y Eventos}{22}{subsection.0.2}%
+\contentsline {subsubsection}{\numberline {2.1}Estados de Reconocimiento}{23}{subsubsection.0.2.1}%
+\contentsline {section}{Bibliografía}{24}{subsubsection.0.2.1}%

@@ -1,3 +1,39 @@
-\section{Diseño de la Interfaz (HMI)}
-    \subsection{Filosofía de Diseño ISA-101}
-    \subsection{Jerarquía de Alarmas y Eventos}
+\section{Diseño de la Interfaz Hombre-Máquina (HMI)}
+La supervisión y operación de la planta se centralizó en una interfaz gráfica desarrollada en \textit{FactoryTalk View Studio}. Para asegurar una operación segura, eficiente y libre de fatiga visual, el desarrollo de las pantallas se rigió estrictamente por el estándar internacional de HMI de Alto Desempeño (High-Performance HMI) y la normativa interna del laboratorio.
+
+\subsection{Filosofía de Diseño ISA-101}
+El diseño visual se fundamenta en los lineamientos de la norma \textbf{ANSI/ISA-101.01}, cuyo objetivo principal es maximizar la \textit{Conciencia Situacional} (Situational Awareness) del operador y reducir su carga cognitiva. Para lograr esto en el proyecto, se implementaron las siguientes directrices:
+
+\begin{itemize}
+    \item \textbf{Paleta de Colores Atenuada:} Se eliminaron los fondos oscuros o de colores saturados típicos de interfaces antiguas. En su lugar, el sinóptico de la planta utiliza un fondo gris neutro (escala de grises). Los equipos dinámicos (estanques, tuberías, bombas) se dibujaron con bajo contraste durante su operación normal.
+    \item \textbf{Uso Estratégico del Color:} Siguiendo la filosofía de "pantallas aburridas para procesos normales", colores llamativos como el rojo, amarillo o magenta fueron eliminados completamente de la paleta base y se reservaron \textbf{exclusivamente} para indicar condiciones anormales o estados de alarma. 
+    \item \textbf{Jerarquía Visual e Interactividad:} Se estableció una distinción clara entre variables de solo lectura (valores de transmisores) y variables de escritura (Setpoints o salidas manuales). Los elementos interactivos, como los selectores de modo (Auto/Manual o Local/Remoto) para las bombas, utilizan un efecto de relieve (\textit{Raised}) para indicar que son botones accionables, previniendo errores de operación.
+    \item \textbf{Navegación Eficiente:} Se implementó una estructura de pantallas por niveles (Nivel 1: Sinóptico general, Nivel 2: Tendencias detalladas y sintonización), accesible mediante un menú de navegación persistente con un máximo de 2 clics para alcanzar cualquier información crítica.
+\end{itemize}
+
+\subsection{Jerarquía de Alarmas y Eventos}
+El sistema de alarmas no solo notifica fallas, sino que guía la respuesta del operador. La configuración en el servidor de \textit{FactoryTalk Alarms and Events} se estructuró separando claramente los \textbf{Eventos} (acciones normales de registro, como el cambio de un Setpoint o el inicio del \textit{Data Logging}) de las \textbf{Alarmas} (condiciones físicas anormales que requieren intervención inmediata).
+
+Para las variables análogas críticas, particularmente el nivel de los 4 estanques ($LIT\_01$ a $LIT\_04$), se definió una matriz de alarmas basada en cuatro umbrales operativos, codificados visualmente según el estándar del proyecto:
+
+\begin{table}[h]
+\centering
+\caption{Jerarquía y Codificación Visual de Alarmas (Estándar UdeC / ISA-101)}
+\label{tab:alarmas}
+\begin{tabular}{|l|c|l|l|}
+\hline
+\textbf{Estado} & \textbf{Límite} & \textbf{Prioridad} & \textbf{Color Asociado (HMI)} \\ \hline
+Muy Alto & HH & Crítica & Rojo \\ \hline
+Alto & H & Advertencia & Amarillo \\ \hline
+Bajo & L & Advertencia & Amarillo \\ \hline
+Muy Bajo & LL & Crítica & Rojo \\ \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Estados de Reconocimiento}
+Para cumplir con la gestión del ciclo de vida de la alarma, la HMI representa dinámicamente el estado de reconocimiento por parte del operador:
+\begin{itemize}
+    \item \textbf{Alarma Activa No Reconocida:} El indicador del estanque y el banner de alarmas destellan (\textit{Blinking}) en el color correspondiente (Rojo/Amarillo), exigiendo la atención del usuario.
+    \item \textbf{Alarma Activa Reconocida (ACK):} Tras la confirmación del operador mediante el botón \textit{Acknowledge}, el destello cesa y el indicador se mantiene en color sólido mientras la condición de falla (ej. estanque rebalsando) persista físicamente en el PLC.
+    \item \textbf{Retorno a la Normalidad (RTN):} Una vez que la variable física regresa a su rango operativo seguro, la alarma se despeja de la lista activa y queda registrada en el sumario histórico en color Azul.
+\end{itemize}

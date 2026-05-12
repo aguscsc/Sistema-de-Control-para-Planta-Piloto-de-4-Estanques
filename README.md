@@ -7,7 +7,7 @@
 ## Descripción General
 Este repositorio documenta el diseño, simulación e implementación de un sistema de control automático para una planta piloto de 4 estanques. El proyecto abarca desde el modelado matemático y la discretización de sistemas continuos, hasta la síntesis de algoritmos de control avanzado, llevando la teoría rigurosa hacia su aplicación directa en hardware industrial.
 
-> 📄 **Desarrollo Matemático:** Para ver el desarrollo completo del sistema de control y modelación matemática del la planta favor referirse a **[Technical Engineering Report](docs/documentacion/main.pdf)**.
+📄 **Desarrollo Matemático:** Para ver el desarrollo completo del sistema de control y modelación matemática del la planta favor referirse a **[Reporte Técnico](docs/documentacion/main.pdf)**.
 
 ## HMI 
 ![HMI](pics/planta.gif)

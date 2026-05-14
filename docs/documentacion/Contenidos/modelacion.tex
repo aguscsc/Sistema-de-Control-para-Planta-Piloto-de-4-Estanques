@@ -25,8 +25,8 @@ Es imperativo destacar que el correcto levantamiento de estos parámetros es fun
         \hline
         $A_1, A_3$ & Área transversal de los estanques impares & 0.172 & $m^2$ \\
         $A_2, A_4$ & Área transversal de los estanques pares & 0.172 & $m^2$ \\
-        $a_1, a_3$ & Área del orificioo de descarga (estanques impares) & 0.172 & $m^2$ \\
-        $a_2, a_4$ & Área del orificio de descarga (estanques pares) & 0.172 & $m^2$ \\
+        $a_1, a_2$ & Área del orificio de descarga (estanques inferiores) & 0.001 & $m^2$ \\
+        $a_3, a_4$ & Área del orificio de descarga (estanques superiores) & 6.3347e-4 & $m^2$ \\
         $k_1$ & Ganancia de la Bomba 1 (Variador 1) & 0.003 & $(m^3/s)$ \\
         $k_2$ & Ganancia de la Bomba 2 (Variador 2) & 0.003 & $(m^3/s)$ \\
         $\gamma_1$ & Fracción de flujo de la válvula de 3 vías (Bomba 1) & 0.455 & Adimensional \\
@@ -82,14 +82,14 @@ f(h_i) = a_i \sqrt{2g h_i} = a_i \sqrt{2g} \cdot h_i^{1/2}
 \label{eq:func_descarga}
 \end{equation}
 
-Aplicamos la expansión en Series de Taylor truncada al primer orden alrededor de $h_i^0$:
+Se aplica la expansión en Series de Taylor truncada al primer orden alrededor de $h_i^0$:
 
 \begin{equation}
 f(h_i) \approx f(h_i^0) + \left. \frac{df(h_i)}{dh_i} \right|_{h_i = h_i^0} (h_i - h_i^0)
 \label{eq:taylor_exp}
 \end{equation}
 
-Calculamos la primera derivada de la función con respecto a $h_i$:
+Se calcula la primera derivada de la función con respecto a $h_i$:
 
 \begin{equation}
 \frac{df(h_i)}{dh_i} = a_i \sqrt{2g} \left( \frac{1}{2} h_i^{-1/2} \right) = \frac{a_i \sqrt{2g}}{2\sqrt{h_i}}
@@ -111,13 +111,13 @@ Q_{out} \approx a_i \sqrt{2g h_i^0} + \left( a_i \sqrt{\frac{g}{2 h_i^0}} \right
 \end{equation}
 
 \subsection{Variables de Desviación y Modelo LTI}
-Definimos las variables de desviación respecto al punto de equilibrio:
+Se definen las variables de desviación respecto al punto de equilibrio:
 \begin{align*}
 \Delta h_i(t) &= h_i(t) - h_i^0 \\
 \Delta Q_{in}(t) &= Q_{in}(t) - Q_{in}^0
 \end{align*}
 
-Reemplazando la aproximación \eqref{eq:qout_aprox} y las variables de desviación en la ecuación diferencial original \eqref{eq:edo_original}, y sabiendo que en estado estacionario $Q_{in}^0 = a_i \sqrt{2g h_i^0}$ (por lo que se anulan), obtenemos:
+Reemplazando la aproximación \eqref{eq:qout_aprox} y las variables de desviación en la ecuación diferencial original, y sabiendo que en estado estacionario $Q_{in}^0 = a_i \sqrt{2g h_i^0}$ (por lo que se anulan), se obtiene:
 
 \begin{equation}
 A_i \frac{d(\Delta h_i(t))}{dt} = \Delta Q_{in}(t) - \left( a_i \sqrt{\frac{g}{2 h_i^0}} \right) \Delta h_i(t)
@@ -139,14 +139,14 @@ La ecuación \eqref{eq:edo_normalizada} corresponde a la forma canónica de un s
 \label{eq:lti_canonica}
 \end{equation}
 
-Por inspección directa entre las ecuaciones \eqref{eq:edo_normalizada} y \eqref{eq:lti_canonica}, identificamos que el término recíproco de la constante de tiempo $T_i$ es:
+Por inspección directa entre las ecuaciones \eqref{eq:edo_normalizada} y \eqref{eq:lti_canonica}, se puede notar que el término recíproco de la constante de tiempo $T_i$ es:
 
 \begin{equation}
 \frac{1}{T_i} = \frac{a_i}{A_i} \sqrt{\frac{g}{2 h_i^0}}
 \label{eq:ti_inversa}
 \end{equation}
 
-Despejando $T_i$, obtenemos la expresión final documentada en el modelo de Johansson:
+Despejando $T_i$, aparece la expresión final documentada en el modelo de Johansson \cite{johansson2000}:
 
 \begin{equation}
 T_i = \frac{A_i}{a_i} \sqrt{\frac{2 h_i^0}{g}}
@@ -169,7 +169,7 @@ Considerando que la planta física está construida con cilindros de dimensiones
 \frac{dx_4}{dt} &= -\frac{1}{T_4} x_4 + \frac{(1-\gamma_1) k_1}{A} u_1 \label{eq:dx4_dt_simp}
 \end{align}
 
-Aplicando la Transformada de Laplace bajo condiciones iniciales nulas, y resolviendo para los estanques superiores (3 y 4), obtenemos:
+Aplicando la Transformada de Laplace bajo condiciones iniciales nulas, y resolviendo para los estanques superiores (3 y 4), se obtiene:
 
 \begin{align}
 X_3(s) &= \frac{(1-\gamma_2) k_2 T_3 / A}{1 + sT_3} U_2(s) \label{eq:X3_s} \\
@@ -213,7 +213,7 @@ Sustituyendo los elementos de la matriz y factorizando el término común $\frac
 \label{eq:ceros_factorizado}
 \end{equation}
 
-Para encontrar los ceros, igualamos el término entre corchetes a cero y multiplicamos por el denominador $(1+sT_3)(1+sT_4)$:
+Para encontrar los ceros, igualamos el término entre corchetes a cero y se multiplica por el denominador $(1+sT_3)(1+sT_4)$:
 
 \begin{equation}
 \gamma_1 \gamma_2 (1+sT_3)(1+sT_4) - (1-\gamma_1)(1-\gamma_2) = 0
@@ -247,4 +247,147 @@ Bajo la configuración asignada al proyecto ($\gamma_1 = 0.455$, $\gamma_2 = 0.4
 \label{eq:condicion_fase_no_minima}
 \end{equation}
 Esta inecuación \eqref{eq:condicion_fase_no_minima} demuestra que el término independiente es negativo. Según Routh-Hurwitz, la alternancia de signos en el polinomio garantiza la existencia de al menos una raíz en el Semiplano Derecho ($RHP$). Este Cero de Transmisión de Semiplano Derecho provoca matemáticamente el fenómeno de subamortiguación inicial (Undershoot) o Respuesta Inversa, limitando severamente la aplicabilidad de controladores PID de alta ganancia.
+\clearpage
+\subsection{Cálculo del Punto de Operación y Restricciones Estáticas}
+
+Para determinar la viabilidad de un punto de operación $(h_1^0, h_2^0)$ y calcular los esfuerzos de control requeridos $(u_1^0, u_2^0)$, se debe analizar el sistema en estado estacionario. 
+
+\subsubsection{Balance de Masa en Estado Estacionario}
+Con base en las ecuaciones diferenciales no lineales del sistema, en estado estacionario o de equilibrio, no hay acumulación de volumen en los estanques, por lo que las derivadas del nivel con respecto al tiempo se igualan a cero ($\frac{dh_i}{dt} = 0$). 
+
+Esto implica que el flujo volumétrico total que entra a cada estanque es exactamente igual al flujo que sale por gravedad (Ley de Torricelli):
+
+\begin{align}
+\text{Estanque 1:} \quad a_1 \sqrt{2g h_1^0} &= \gamma_1 k_1 u_1^0 + a_3 \sqrt{2g h_3^0} \label{eq:estatico_1} \\
+\text{Estanque 2:} \quad a_2 \sqrt{2g h_2^0} &= \gamma_2 k_2 u_2^0 + a_4 \sqrt{2g h_4^0} \label{eq:estatico_2} \\
+\text{Estanque 3:} \quad a_3 \sqrt{2g h_3^0} &= (1-\gamma_2) k_2 u_2^0 \label{eq:estatico_3} \\
+\text{Estanque 4:} \quad a_4 \sqrt{2g h_4^0} &= (1-\gamma_1) k_1 u_1^0 \label{eq:estatico_4}
+\end{align}
+
+\subsubsection{Reducción del Sistema por Sustitución}
+El objetivo es encontrar una relación directa entre los actuadores ($u_1, u_2$) y los niveles de los estanques maestros inferiores ($h_1, h_2$). 
+
+Observando las ecuaciones \eqref{eq:estatico_3} y \eqref{eq:estatico_4}, notamos que los términos de descarga de los estanques superiores ($a_3 \sqrt{2g h_3^0}$ y $a_4 \sqrt{2g h_4^0}$) dependen de manera directa y lineal de los comandos de las bombas cruzadas.
+
+Sustituyendo la ecuación \eqref{eq:estatico_3} en la ecuación \eqref{eq:estatico_1}:
+\begin{equation}
+a_1 \sqrt{2g h_1^0} = \gamma_1 k_1 u_1^0 + (1-\gamma_2) k_2 u_2^0
+\label{eq:reducida_1}
+\end{equation}
+
+Sustituyendo la ecuación \eqref{eq:estatico_4} en la ecuación \eqref{eq:estatico_2}:
+\begin{equation}
+a_2 \sqrt{2g h_2^0} = (1-\gamma_1) k_1 u_1^0 + \gamma_2 k_2 u_2^0
+\label{eq:reducida_2}
+\end{equation}
+
+\subsubsection{Representación Matricial (Matriz Estática)}
+Para simplificar la notación, definimos los "Flujos de Fuga Deseados" en los estanques inferiores como constantes dependientes de los Setpoints:
+\begin{align*}
+F_1 &= a_1 \sqrt{2g h_1^0} \\
+F_2 &= a_2 \sqrt{2g h_2^0}
+\end{align*}
+
+Reescribiendo las ecuaciones \eqref{eq:reducida_1} y \eqref{eq:reducida_2} en forma matricial, se obtiene la relación lineal que mapea los esfuerzos de control con los flujos de descarga en estado estacionario:
+
+\begin{equation}
+\begin{bmatrix} F_1 \\ F_2 \end{bmatrix} = 
+\underbrace{
+\begin{bmatrix} 
+\gamma_1 k_1 & (1-\gamma_2) k_2 \\ 
+(1-\gamma_1) k_1 & \gamma_2 k_2 
+\end{bmatrix}
+}_{M}
+\begin{bmatrix} u_1^0 \\ u_2^0 \end{bmatrix}
+\label{eq:matriz_estatica}
+\end{equation}
+
+Donde $M$ es la Matriz de Ganancia Estática del sistema.
+
+\subsubsection{Cálculo de Actuadores y Restricciones}
+Para encontrar los valores requeridos en las bombas para alcanzar un par de niveles $(h_1^0, h_2^0)$, se multiplica por la matriz inversa $M^{-1}$:
+
+\begin{equation}
+\begin{bmatrix} u_1^0 \\ u_2^0 \end{bmatrix} = M^{-1} \begin{bmatrix} F_1 \\ F_2 \end{bmatrix}
+\label{eq:calculo_bombas}
+\end{equation}
+
+Dado que los actuadores tienen restricciones físicas irreducibles ($0 \le u_i \le 1.0$), cualquier vector de flujos $\begin{bmatrix} F_1 & F_2 \end{bmatrix}^T$ que requiera valores de $u$ fuera de este rango se considera un punto de operación físicamente inalcanzable.
+
+
+\subsubsection{Ecuaciones Base según la Topología}
+Siguiendo la arquitectura física de la planta, se establece el origen del agua para cada estanque en estado estacionario:
+
+\begin{align}
+F_4 &= (1-\gamma_1) k_1 u_1 \quad \text{(El estanque 4 solo depende de la Bomba 1)} \label{eq:F4_u1} \\
+F_3 &= (1-\gamma_2) k_2 u_2 \quad \text{(El estanque 3 solo depende de la Bomba 2)} \label{eq:F3_u2} \\
+F_1 &= \gamma_1 k_1 u_1 + F_3 \quad \text{(El estanque 1 recibe de la Bomba 1 y del Estanque 3)} \label{eq:F1_dependencia} \\
+F_2 &= \gamma_2 k_2 u_2 + F_4 \quad \text{(El estanque 2 recibe de la Bomba 2 y del Estanque 4)} \label{eq:F2_dependencia}
+\end{align}
+
+\subsubsection{El Compromiso del Actuador 1}
+Al defininir un \textit{Setpoint} fijo para el Estanque 1, $F_1$ se convierte en una constante conocida. 
+
+Sustituyendo \eqref{eq:F3_u2} en \eqref{eq:F1_dependencia}, Se obtiene la ecuación fundamental que vincula a ambas bombas para satisfacer al Estanque 1:
+\begin{equation}
+F_1 = \gamma_1 k_1 u_1 + (1-\gamma_2) k_2 u_2
+\label{eq:vinculo_bombas}
+\end{equation}
+
+Despejando el esfuerzo de la Bomba 1 ($u_1$) necesario para mantener este nivel:
+\begin{equation}
+u_1 = \frac{F_1 - (1-\gamma_2) k_2 u_2}{\gamma_1 k_1}
+\label{eq:u1_despejado}
+\end{equation}
+
+\textit{Físicamente, esta ecuación demuestra que si la Bomba 2 ($u_2$) inyecta mucha agua al Estanque 3 (que luego cae al Estanque 1), la Bomba 1 ($u_1$) se ve obligada a reducir su esfuerzo para no sobrepasar el Setpoint $F_1$.}
+
+\subsubsection{Los Límites Físicos}
+Las bombas tienen límites físicos absolutos: no pueden operar a potencia negativa ni superar el 100\% de su capacidad. Por lo tanto:
+\begin{equation*}
+0 \le u_1 \le 1.0 \quad \text{(asumiendo $u_1$ normalizado entre 0 y 1)}
+\end{equation*}
+
+Aplicando este límite físico a nuestra ecuación \eqref{eq:u1_despejado}:
+\begin{equation}
+0 \le \frac{F_1 - (1-\gamma_2) k_2 u_2}{\gamma_1 k_1} \le 1.0
+\end{equation}
+
+Al despejar $u_2$ de esta inecuación doble, es evidente que la simple exigencia de mantener el Estanque 1 obliga a la Bomba 2 a operar dentro de un rango cerrado:
+
+\textbf{Límite por apagado de Bomba 1 ($u_1 \ge 0$):}
+\begin{equation}
+u_2 \le \frac{F_1}{(1-\gamma_2)k_2}
+\label{eq:u2_maximo}
+\end{equation}
+
+\textbf{Límite por saturación de Bomba 1 ($u_1 \le 1.0$):}
+\begin{equation}
+u_2 \ge \frac{F_1 - \gamma_1 k_1}{(1-\gamma_2)k_2}
+\label{eq:u2_minimo}
+\end{equation}
+
+\textit{Conclusión intermedia: Al fijar $h_1$, la Bomba 2 pierde su libertad total de [0 a 100\%] y queda atrapada entre estos dos valores.}
+
+\subsubsection{Repercusión en el Estanque 2 (El Rango Válido)}
+Finalmente, tomando la ecuación base \eqref{eq:F2_dependencia} y Sustituyendo $F_4$ usando \eqref{eq:F4_u1}:
+\begin{equation}
+F_2 = \gamma_2 k_2 u_2 + (1-\gamma_1) k_1 u_1
+\end{equation}
+
+Para ver la dependencia total, se sustituye $u_1$ usando la ecuación \eqref{eq:u1_despejado}:
+\begin{equation}
+F_2 = \gamma_2 k_2 u_2 + (1-\gamma_1) k_1 \left[ \frac{F_1 - (1-\gamma_2) k_2 u_2}{\gamma_1 k_1} \right]
+\end{equation}
+
+Simplificando los términos $k_1$ y agrupando lo que multiplica a $F_1$ y lo que multiplica a $u_2$:
+\begin{equation}
+F_2 = \left( \frac{1-\gamma_1}{\gamma_1} \right) F_1 + \left[ \frac{\gamma_1 \gamma_2 - (1-\gamma_1)(1-\gamma_2)}{\gamma_1} \right] k_2 u_2
+\end{equation}
+
+Reduciendo el término entre corchetes, se llega a la ecuación maestra de la planta:
+\begin{equation}
+F_2 = \underbrace{\left( \frac{1-\gamma_1}{\gamma_1} \right) F_1}_{\text{Constante impuesta por } h_1} + \underbrace{\left( \frac{\gamma_1 + \gamma_2 - 1}{\gamma_1} \right)}_{\text{Pendiente negativa}} k_2 u_2
+\label{eq:F2_final}
+\end{equation}
 \clearpage

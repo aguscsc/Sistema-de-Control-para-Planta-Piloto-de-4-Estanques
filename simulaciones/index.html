@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMI Predictivo - Planta 4 Estanques</title>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        /* Estilos basados en estándar HMI de Alto Desempeño (Gris, limpio) */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #d9d9d9; color: #333; margin: 0; padding: 20px; }
+        .dashboard { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .panel { background: #ececec; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 1px solid #ccc; }
+        .panel-left { flex: 1 1 500px; }
+        .panel-right { flex: 1 1 400px; display: flex; flex-direction: column; align-items: center; }
+        
+        h2 { color: #2c3e50; text-align: center; margin-top: 0; font-size: 1.2rem;}
+        
+        /* Controles */
+        .controls { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px;}
+        .slider-group { margin-bottom: 10px; }
+        input[type=range] { width: 100%; cursor: pointer; }
+        .sp-label { font-weight: bold; background-color: #fff200; padding: 2px 5px; border-radius: 3px; border: 1px solid #ccc; } /* SP en amarillo según UdeC */
+
+        /* Reporte */
+        .report { background: #2c3e50; color: white; padding: 15px; border-radius: 6px; font-family: 'Courier New', Courier, monospace; font-size: 14px; margin-top: 15px;}
+        .status-ok { color: #2ecc71; font-weight: bold; }
+        .status-warn { color: #f1c40f; font-weight: bold; }
+        .status-err { color: #e74c3c; font-weight: bold; }
+
+        /* Animación de Estanques (CSS SCADA) */
+        .plant-synoptic { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 60px; margin-top: 20px; position: relative;}
+        .tank-container { display: flex; flex-direction: column; align-items: center; }
+        .tank { width: 90px; height: 150px; background-color: #fff; border: 3px solid #7f8c8d; border-top: none; position: relative; overflow: hidden; border-radius: 0 0 5px 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1);}
+        .water { position: absolute; bottom: 0; width: 100%; background-color: #3498db; transition: height 1.5s ease-in-out, background-color 0.5s ease; }
+        .water.overflow { background-color: #e74c3c; } /* Rojo si rebalsa */
+        .tank-label { margin-top: 5px; font-size: 12px; font-weight: bold; }
+        .tank-val { font-family: monospace; font-size: 14px; margin-top: 2px; }
+        
+        /* Líneas de tubería simuladas */
+        .pipe-cross-1 { position: absolute; top: 120px; left: 60px; width: 100px; height: 3px; background: #7f8c8d; transform: rotate(30deg); z-index: 0;}
+        .pipe-cross-2 { position: absolute; top: 120px; right: 60px; width: 100px; height: 3px; background: #7f8c8d; transform: rotate(-30deg); z-index: 0;}
+
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="panel panel-left">
+        <h2>Panel de Operación y Restricciones Activas</h2>
+        
+        <div class="controls">
+            <div class="slider-group">
+                <label>SP Estanque 1: <span class="sp-label" id="val_h1">30</span> cm</label>
+                <input type="range" id="slider_h1" min="0" max="60" step="0.5" value="30">
+            </div>
+            <div class="slider-group">
+                <label>SP Estanque 2: <span class="sp-label" id="val_h2">25</span> cm</label>
+                <input type="range" id="slider_h2" min="0" max="60" step="0.5" value="25">
+            </div>
+        </div>
+
+        <div id="plot_div"></div>
+
+        <div class="report" id="report_div"></div>
+    </div>
+
+    <div class="panel panel-right">
+        <h2>Estanques </h2>
+        
+        <div class="plant-synoptic">
+            <div class="pipe-cross-1"></div>
+            <div class="pipe-cross-2"></div>
+            
+            <div class="tank-container">
+                <div class="tank"><div class="water" id="water_3"></div></div>
+                <div class="tank-label">Estanque 3 (Esclavo)</div>
+                <div class="tank-val" id="text_h3">0.0 cm</div>
+            </div>
+            <div class="tank-container">
+                <div class="tank"><div class="water" id="water_4"></div></div>
+                <div class="tank-label">Estanque 4 (Esclavo)</div>
+                <div class="tank-val" id="text_h4">0.0 cm</div>
+            </div>
+
+            <div class="tank-container" style="z-index: 1;">
+                <div class="tank"><div class="water" id="water_1"></div></div>
+                <div class="tank-label">Estanque 1 (Maestro)</div>
+                <div class="tank-val" id="text_h1">0.0 cm</div>
+            </div>
+            <div class="tank-container" style="z-index: 1;">
+                <div class="tank"><div class="water" id="water_2"></div></div>
+                <div class="tank-label">Estanque 2 (Maestro)</div>
+                <div class="tank-val" id="text_h2">0.0 cm</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- FÍSICA Y PARÁMETROS ---
+    const g = 9.81, a = 0.001, k = 0.003;
+    const a_sup = 6.3347e-4; // Área real de estanques superiores
+    const gamma1 = 0.455, gamma2 = 0.4195;
+    const U_MIN = 0.40, U_MAX = 1.00;
+    const H_MAX = 0.60; // 60 cm físicos
+
+    // --- MATRIZ INVERSA ---
+    const M11 = gamma1 * k, M12 = (1 - gamma2) * k;
+    const M21 = (1 - gamma1) * k, M22 = gamma2 * k;
+    const det = M11 * M22 - M12 * M21;
+    const I11 = M22 / det, I12 = -M12 / det;
+    const I21 = -M21 / det, I22 = M11 / det;
+
+    function calcF(h) { return a * Math.sqrt(2 * g * h); }
+    function calcH(F) { return F < 0 ? -1 : Math.pow(F, 2) / (2 * g * Math.pow(a, 2)); }
+
+    // Función para actualizar nivel de agua visual
+    function updateTankFill(tankId, textId, heightMeters) {
+        let waterDiv = document.getElementById(tankId);
+        let textDiv = document.getElementById(textId);
+        let cm = heightMeters * 100;
+        
+        // Capping visual at 100% fill (60 cm)
+        let fillPercent = (cm / (H_MAX * 100)) * 100;
+        if(fillPercent > 100) fillPercent = 100;
+        if(fillPercent < 0 || isNaN(fillPercent)) fillPercent = 0;
+
+        waterDiv.style.height = fillPercent + '%';
+        textDiv.innerText = cm.toFixed(1) + " cm";
+
+        // Alarma visual (Rojo si hay rebalse > 60cm)
+        if(cm > (H_MAX * 100)) {
+            waterDiv.classList.add('overflow');
+            textDiv.style.color = '#e74c3c';
+            textDiv.style.fontWeight = 'bold';
+            textDiv.innerText += " (¡REBALSE!)";
+        } else {
+            waterDiv.classList.remove('overflow');
+            textDiv.style.color = '#333';
+            textDiv.style.fontWeight = 'normal';
+        }
+    }
+
+    // Calcula límites dinámicos
+    function obtenerLimites(F1_sp, F2_sp) {
+        let F2_bounds = [
+            {val: (U_MIN - I11*F1_sp)/I12, coef: I12, isMin: true},
+            {val: (U_MAX - I11*F1_sp)/I12, coef: I12, isMin: false},
+            {val: (U_MIN - I21*F1_sp)/I22, coef: I22, isMin: true},
+            {val: (U_MAX - I21*F1_sp)/I22, coef: I22, isMin: false}
+        ];
+        let F2_min = 0, F2_max = Infinity;
+        F2_bounds.forEach(b => {
+            if (b.isMin) { b.coef>0 ? F2_min = Math.max(F2_min, b.val) : F2_max = Math.min(F2_max, b.val); } 
+            else { b.coef>0 ? F2_max = Math.min(F2_max, b.val) : F2_min = Math.max(F2_min, b.val); }
+        });
+
+        let F1_bounds = [
+            {val: (U_MIN - I12*F2_sp)/I11, coef: I11, isMin: true},
+            {val: (U_MAX - I12*F2_sp)/I11, coef: I11, isMin: false},
+            {val: (U_MIN - I22*F2_sp)/I21, coef: I21, isMin: true},
+            {val: (U_MAX - I22*F2_sp)/I21, coef: I21, isMin: false}
+        ];
+        let F1_min = 0, F1_max = Infinity;
+        F1_bounds.forEach(b => {
+            if (b.isMin) { b.coef>0 ? F1_min = Math.max(F1_min, b.val) : F1_max = Math.min(F1_max, b.val); } 
+            else { b.coef>0 ? F1_max = Math.min(F1_max, b.val) : F1_min = Math.max(F1_min, b.val); }
+        });
+
+        return {
+            h1_min: (F1_max >= F1_min && F1_min >= 0) ? calcH(F1_min) : 0,
+            h1_max: (F1_max >= F1_min && F1_max > 0) ? calcH(F1_max) : -1,
+            h2_min: (F2_max >= F2_min && F2_min >= 0) ? calcH(F2_min) : 0,
+            h2_max: (F2_max >= F2_min && F2_max > 0) ? calcH(F2_max) : -1
+        };
+    }
+
+    function generarPoligono(umin, umax) {
+        let h1_arr = [], h2_arr = []; let steps = 50;
+        for(let i=0; i<=steps; i++) { let u1 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*u1 + M12*umin)); h2_arr.push(calcH(M21*u1 + M22*umin)); }
+        for(let i=0; i<=steps; i++) { let u2 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*umax + M12*u2)); h2_arr.push(calcH(M21*umax + M22*u2)); }
+        for(let i=steps; i>=0; i--) { let u1 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*u1 + M12*umax)); h2_arr.push(calcH(M21*u1 + M22*umax)); }
+        for(let i=steps; i>=0; i--) { let u2 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*umin + M12*u2)); h2_arr.push(calcH(M21*umin + M22*u2)); }
+        return {x: h1_arr, y: h2_arr};
+    }
+
+    const polyReal = generarPoligono(U_MIN, U_MAX);
+
+    function actualizarSimulacion() {
+        let h1_sp = parseFloat(document.getElementById('slider_h1').value) / 100;
+        let h2_sp = parseFloat(document.getElementById('slider_h2').value) / 100;
+        
+        document.getElementById('val_h1').innerText = (h1_sp*100).toFixed(1);
+        document.getElementById('val_h2').innerText = (h2_sp*100).toFixed(1);
+
+        // Matemáticas de Control
+        let F1 = calcF(h1_sp), F2 = calcF(h2_sp);
+        let u1 = I11*F1 + I12*F2;
+        let u2 = I21*F1 + I22*F2;
+
+        // Limitar bombas para la animación (para no romper matemáticas)
+        let u1_eff = Math.max(0, Math.min(u1, 1.0));
+        let u2_eff = Math.max(0, Math.min(u2, 1.0));
+
+        // Calcular Estanques Superiores
+        let h3_calc = (1 / (2 * g)) * Math.pow(((1 - gamma2) * k * u2_eff) / a_sup, 2);
+        let h4_calc = (1 / (2 * g)) * Math.pow(((1 - gamma1) * k * u1_eff) / a_sup, 2);
+
+        // Actualizar Animación Visual SCADA
+        updateTankFill('water_1', 'text_h1', h1_sp);
+        updateTankFill('water_2', 'text_h2', h2_sp);
+        updateTankFill('water_3', 'text_h3', h3_calc);
+        updateTankFill('water_4', 'text_h4', h4_calc);
+
+        // Reporte y Estados
+        let lims = obtenerLimites(F1, F2);
+        let isRealOk = (u1 >= U_MIN && u1 <= U_MAX && u2 >= U_MIN && u2 <= U_MAX);
+        let rebalse = (h3_calc > H_MAX || h4_calc > H_MAX);
+        
+        let color = isRealOk ? (rebalse ? '#f1c40f' : '#2ecc71') : '#e74c3c';
+        let statusText = "";
+        
+        if (!isRealOk) statusText = "<span class='status-err'>[ERROR] INALCANZABLE (Bombas Fuera de Rango)</span>";
+        else if (rebalse) statusText = "<span class='status-warn'>[ALERTA] REBALSE EN ESTANQUES SUPERIORES</span>";
+        else statusText = "<span class='status-ok'>[OK] ESTADO SEGURO Y ALCANZABLE</span>";
+
+        let rep = `ESTADO SISTEMA: ${statusText}<br>`;
+        rep += `-----------------------------------------<br>`;
+        rep += `Bomba 1 Requerida: ${(u1*100).toFixed(1)}%<br>`;
+        rep += `Bomba 2 Requerida: ${(u2*100).toFixed(1)}%<br>`;
+        rep += `-----------------------------------------<br>`;
+        if(lims.h1_max !== -1 && isRealOk) rep += `[LÍMITE H1] Rango seguro: ${(lims.h1_min*100).toFixed(1)} - ${(lims.h1_max*100).toFixed(1)} cm<br>`;
+        if(lims.h2_max !== -1 && isRealOk) rep += `[LÍMITE H2] Rango seguro: ${(lims.h2_min*100).toFixed(1)} - ${(lims.h2_max*100).toFixed(1)} cm`;
+        
+        document.getElementById('report_div').innerHTML = rep;
+
+        // Trazos de Plotly
+        let traces = [
+            { x: polyReal.x, y: polyReal.y, fill: 'toself', fillcolor: 'rgba(52, 152, 219, 0.4)', line: {color: '#2980b9'}, name: 'Zona Controlable' },
+            { x: [h1_sp], y: [h2_sp], mode: 'markers', marker: {color: color, size: 14, symbol: 'circle'}, name: 'SP Deseado' }
+        ];
+
+        let layout = {
+            margin: {l: 40, r: 20, b: 40, t: 20}, height: 350,
+            xaxis: {title: 'Estanque 1 (m)', range: [0, 0.65], gridcolor: '#e5e5e5'},
+            yaxis: {title: 'Estanque 2 (m)', range: [0, 0.65], gridcolor: '#e5e5e5'},
+            plot_bgcolor: '#f8f9fa', paper_bgcolor: '#f8f9fa'
+        };
+
+        Plotly.newPlot('plot_div', traces, layout, {responsive: true});
+    }
+
+    document.getElementById('slider_h1').addEventListener('input', actualizarSimulacion);
+    document.getElementById('slider_h2').addEventListener('input', actualizarSimulacion);
+    actualizarSimulacion();
+</script>
+</body>
+</html>

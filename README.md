@@ -33,7 +33,7 @@ Este repositorio documenta el diseño, simulación e implementación de un siste
 * **Programación PLC:** Studio 5000 (Rockwell Automation).
 * **Desarrollo HMI:** FactoryTalk (Rockwell Automation).
 * **Comunicación:** Protocolo EtherNet/IP y servidor OPC UA (FactoryTalk Gateway) para integración con Matlab/Simulink.
-* **Simulación y Análisis:** Matlab / Simulink.
+* **Simulación y Análisis:** Matlab / Simulink, python.
 
 ---
 ## Ingenieros

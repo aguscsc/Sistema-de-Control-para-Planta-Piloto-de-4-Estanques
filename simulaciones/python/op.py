@@ -1,139 +1,148 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Parámetros físicos de la planta
-g = 9.81; a = 0.001; k = 0.003
-gamma1 = 0.455; gamma2 = 0.4195
+# --- Parámetros físicos de la planta ---
+g = 9.81
+a1 = 6.1360e-04
+a2 = 5.4678e-04        
+a3 = 3.5752e-04
+a4 = 4.1820e-04 
+k = 0.0017
+gamma1 = 0.455
+gamma2 = 0.4195
 
+H_MAX = 0.60 # Altura máxima física de los estanques (60 cm)
+
+# Matriz de Ganancia Estática M
 M = np.array([
     [gamma1 * k, (1 - gamma2) * k],
     [(1 - gamma1) * k, gamma2 * k]
 ])
 M_inv = np.linalg.inv(M)
 
-# --- LÍMITES FÍSICOS REALES ---
-U_MIN = 0.40  # 40% Zona Muerta
+# --- LÍMITES DE FLUJO ---
+U_MIN = 0.26  # 26% Zona Muerta (Fricción estática)
 U_MAX = 1.00  # 100% Saturación máxima
 
-def obtener_limites_reales(F1_sp, F2_sp):
-    I11, I12 = M_inv[0, 0], M_inv[0, 1]
-    I21, I22 = M_inv[1, 0], M_inv[1, 1]
+def calc_H(F, area):
+    """Calcula la altura dado un caudal y el área de descarga"""
+    return np.where(F < 0, -1, (F**2) / (2 * g * area**2))
 
-    # Límites de F2 dado F1 usando U_MIN (0.4) en vez de 0.0
-    bounds_F2 = [
-        ('u1_min', (U_MIN - I11*F1_sp)/I12, I12),
-        ('u1_max', (U_MAX - I11*F1_sp)/I12, I12),
-        ('u2_min', (U_MIN - I21*F1_sp)/I22, I22),
-        ('u2_max', (U_MAX - I21*F1_sp)/I22, I22)
-    ]
-    F2_min, F2_max = 0.0, float('inf')
-    for name, val, coeff in bounds_F2:
-        if name.endswith('_min'):
-            if coeff > 0: F2_min = max(F2_min, val)
-            else: F2_max = min(F2_max, val)
-        elif name.endswith('_max'):
-            if coeff > 0: F2_max = min(F2_max, val)
-            else: F2_min = max(F2_min, val)
-
-    h2_min = (F2_min**2)/(2*g*a**2) if F2_max >= F2_min and F2_min >= 0 else 0
-    h2_max = (F2_max**2)/(2*g*a**2) if F2_max >= F2_min and F2_max > 0 else -1
-
-    # Límites de F1 dado F2 usando U_MIN (0.4) en vez de 0.0
-    bounds_F1 = [
-        ('u1_min', (U_MIN - I12*F2_sp)/I11, I11),
-        ('u1_max', (U_MAX - I12*F2_sp)/I11, I11),
-        ('u2_min', (U_MIN - I22*F2_sp)/I21, I21),
-        ('u2_max', (U_MAX - I22*F2_sp)/I21, I21)
-    ]
-    F1_min, F1_max = 0.0, float('inf')
-    for name, val, coeff in bounds_F1:
-        if name.endswith('_min'):
-            if coeff > 0: F1_min = max(F1_min, val)
-            else: F1_max = min(F1_max, val)
-        elif name.endswith('_max'):
-            if coeff > 0: F1_max = min(F1_max, val)
-            else: F1_min = max(F1_min, val)
-
-    h1_min = (F1_min**2)/(2*g*a**2) if F1_max >= F1_min and F1_min >= 0 else 0
-    h1_max = (F1_max**2)/(2*g*a**2) if F1_max >= F1_min and F1_max > 0 else -1
-
-    return h1_min, h1_max, h2_min, h2_max
-
-def generar_perimetro(u_min, u_max, res=200):
-    """Genera las coordenadas del polígono para graficar la zona"""
-    u1_b = np.concatenate([np.linspace(u_min,u_max,res), np.full(res, u_max), np.linspace(u_max,u_min,res), np.full(res, u_min)])
-    u2_b = np.concatenate([np.full(res, u_min), np.linspace(u_min,u_max,res), np.full(res, u_max), np.linspace(u_max,u_min,res)])
+def generar_poligono_principal(u_min, u_max, res=100):
+    """Genera las coordenadas del polígono (Ambas bombas ON)"""
+    u1_b = np.concatenate([np.linspace(u_min, u_max, res), np.full(res, u_max), np.linspace(u_max, u_min, res), np.full(res, u_min)])
+    u2_b = np.concatenate([np.full(res, u_min), np.linspace(u_min, u_max, res), np.full(res, u_max), np.linspace(u_max, u_min, res)])
+    
     F_b = M @ np.vstack([u1_b, u2_b])
-    return F_b**2 / (2 * g * a**2)
+    h1_b = calc_H(F_b[0, :], a1)
+    h2_b = calc_H(F_b[1, :], a2)
+    return h1_b, h2_b
 
-def graficar_punto_real(h1_sp, h2_sp):
-    # Calcular esfuerzos requeridos
-    F1_sp = a * np.sqrt(2 * g * h1_sp)
-    F2_sp = a * np.sqrt(2 * g * h2_sp)
-    U = M_inv @ np.array([F1_sp, F2_sp])
-    u1, u2 = U[0], U[1]
+def generar_trayectorias_1_bomba(u_min, u_max, res=100):
+    """Genera las curvas utilizables cuando 1 sola bomba está encendida"""
+    u_activa = np.linspace(u_min, u_max, res)
     
-    # Evaluar condiciones
-    is_feasible_real = (U_MIN <= u1 <= U_MAX) and (U_MIN <= u2 <= U_MAX)
-    is_feasible_teorico = (0.0 <= u1 <= U_MAX) and (0.0 <= u2 <= U_MAX)
-
-    h1_min, h1_max, h2_min, h2_max = obtener_limites_reales(F1_sp, F2_sp)
-
-    #  Generar polígonos
-    H_ideal = generar_perimetro(0.0, 1.0)
-    H_real = generar_perimetro(U_MIN, U_MAX)
-
-    # Crear el Gráfico
-    fig, ax = plt.subplots(figsize=(10, 8))
+    # Cola 1: Bomba 1 OFF (0%), Bomba 2 ON
+    F_cola1 = M @ np.vstack([np.zeros(res), u_activa])
+    h1_c1 = calc_H(F_cola1[0, :], a1)
+    h2_c1 = calc_H(F_cola1[1, :], a2)
     
-    # Zona Teórica (0% - 100%)
-    ax.plot(H_ideal[0,:], H_ideal[1,:], color='gray', linestyle='--', linewidth=1.5, alpha=0.8)
-    ax.fill(H_ideal[0,:], H_ideal[1,:], color='lightgray', alpha=0.3, label='Zona Teórica Ideal (0-100%)')
+    # Cola 2: Bomba 2 OFF (0%), Bomba 1 ON
+    F_cola2 = M @ np.vstack([u_activa, np.zeros(res)])
+    h1_c2 = calc_H(F_cola2[0, :], a1)
+    h2_c2 = calc_H(F_cola2[1, :], a2)
     
-    # Zona Real (40% - 100%)
-    ax.plot(H_real[0,:], H_real[1,:], 'k-', linewidth=2)
-    ax.fill(H_real[0,:], H_real[1,:], color='royalblue', alpha=0.6, label=f'Zona Controlable Real ({U_MIN*100:.0f}%-100%)')
+    return (h1_c1, h2_c1), (h1_c2, h2_c2)
 
-    # Evaluar semáforo de seguridad
-    if is_feasible_real:
-        c = 'green'; st = "ALCANZABLE (ZONA SEGURA)"
-    elif is_feasible_teorico:
-        c = 'orange'; st = "PELIGRO (BOMBA EN ZONA MUERTA)"
+def es_alcanzable(u, tolerancia=1e-4):
+    """Valida si un esfuerzo u es físicamente posible (0 o entre U_MIN y U_MAX)"""
+    if abs(u) < tolerancia:
+        return True
+    if U_MIN - tolerancia <= u <= U_MAX + tolerancia:
+        return True
+    return False
+
+def evaluar_puntos_utilizables(h1_sp, h2_sp):
+    # 1. Calcular flujos requeridos
+    F1_sp = a1 * np.sqrt(2 * g * h1_sp)
+    F2_sp = a2 * np.sqrt(2 * g * h2_sp)
+    
+    # 2. Calcular esfuerzo requerido de bombas
+    U_req = M_inv @ np.array([F1_sp, F2_sp])
+    u1, u2 = U_req[0], U_req[1]
+    
+    # Limpieza numérica de ruidos cercanos a cero
+    if abs(u1) < 1e-4: u1 = 0.0
+    if abs(u2) < 1e-4: u2 = 0.0
+    
+    # 3. Validar si el punto es utilizable físicamente
+    is_feasible = es_alcanzable(u1) and es_alcanzable(u2)
+    
+    # Evaluar rebalses superiores
+    u1_eff = np.clip(u1, 0, 1)
+    u2_eff = np.clip(u2, 0, 1)
+    h3_calc = calc_H((1 - gamma2) * k * u2_eff, a3)
+    h4_calc = calc_H((1 - gamma1) * k * u1_eff, a4)
+    rebalse = h3_calc > H_MAX or h4_calc > H_MAX
+
+    # --- GRAFICACIÓN DEL ESPACIO UTILIZABLE ---
+    h1_poly, h2_poly = generar_poligono_principal(U_MIN, U_MAX)
+    (h1_c1, h2_c1), (h1_c2, h2_c2) = generar_trayectorias_1_bomba(U_MIN, U_MAX)
+    
+    fig, ax = plt.subplots(figsize=(9, 7))
+    
+    # Rellenar Zona Principal (Ambas bombas)
+    ax.fill(h1_poly, h2_poly, color='royalblue', alpha=0.3, label=f'Operación MIMO (Ambas Bombas {U_MIN*100:.0f}%-{U_MAX*100:.0f}%)')
+    ax.plot(h1_poly, h2_poly, 'b-', linewidth=1.5)
+    
+    # Dibujar trayectorias degradadas (1 Bomba)
+    ax.plot(h1_c1, h2_c1, color='purple', linestyle='--', linewidth=2.5, label='Operación SIMO (Bomba 1 OFF)')
+    ax.plot(h1_c2, h2_c2, color='green', linestyle='--', linewidth=2.5, label='Operación SIMO (Bomba 2 OFF)')
+    
+    # Marcar el Origen
+    ax.plot(0, 0, 'ko', markersize=8, label='Planta Apagada')
+
+    # Evaluar color del SP solicitado
+    if not is_feasible:
+        color_sp, texto_estado = 'red', "INALCANZABLE (Saturación/Zona Muerta)"
+    elif rebalse:
+        color_sp, texto_estado = 'orange', "PELIGRO (Rebalse Superior)"
+    elif (u1 == 0 and u2 != 0) or (u2 == 0 and u1 != 0):
+        color_sp, texto_estado = 'purple', "ALCANZABLE (Operando con 1 Bomba)"
     else:
-        c = 'red'; st = "INALCANZABLE (SATURACIÓN > 100%)"
+        color_sp, texto_estado = 'green', "ALCANZABLE (Operación MIMO Segura)"
 
-    # Marcar el punto
-    ax.plot(h1_sp, h2_sp, marker='X', markersize=12, color=c, zorder=5)
-
-    # Dibujar líneas de rango si es posible
-    if h1_max != -1 and is_feasible_real:
-        ax.plot([h1_min, h1_max], [h2_sp, h2_sp], color=c, linestyle='-', linewidth=3, label=f"Rango h1: [{h1_min*100:.1f}, {h1_max*100:.1f}] cm")
-    if h2_max != -1 and is_feasible_real:
-        ax.plot([h1_sp, h1_sp], [h2_min, h2_max], color=c, linestyle='-', linewidth=3, label=f"Rango h2: [{h2_min*100:.1f}, {h2_max*100:.1f}] cm")
-
+    ax.plot(h1_sp, h2_sp, marker='X', markersize=12, color=color_sp, zorder=5, markeredgecolor='black')
+    
     # Configuraciones visuales
-    ax.set_title(f'Envolvente Operativa con Zona Muerta (Deadband)\nSP1={h1_sp*100:.0f}cm, SP2={h2_sp*100:.0f}cm | {st}\nU1Req: {u1*100:.1f}% | U2Req: {u2*100:.1f}%', fontsize=13, fontweight='bold', color=c)
-    ax.set_xlabel('Nivel Estanque 1 [metros]', fontsize=12)
-    ax.set_ylabel('Nivel Estanque 2 [metros]', fontsize=12)
-    ax.set_xlim(0, 0.6)
-    ax.set_ylim(0, 0.6)
-    ax.legend(loc='upper right')
+    ax.set_title(f'Espacio de Puntos Utilizables\nSP = ({h1_sp*100:.1f} cm, {h2_sp*100:.1f} cm) | {texto_estado}', fontweight='bold')
+    ax.set_xlabel('Nivel Estanque 1 [metros]')
+    ax.set_ylabel('Nivel Estanque 2 [metros]')
+    ax.set_xlim(-0.02, 0.6)
+    ax.set_ylim(-0.02, 0.6)
+    ax.legend()
     ax.grid(True, linestyle=':', alpha=0.7)
     
     plt.show()
 
-    # Reporte en Consola
-    print(f"=== REPORTE DINÁMICO ===")
-    print(f"Esfuerzo Bomba 1: {u1*100:.1f}%")
-    print(f"Esfuerzo Bomba 2: {u2*100:.1f}%")
-    print(f"Estado: {st}")
-    print("-" * 25)
-    if is_feasible_real:
-        print(f"Rango utilizable para Estanque 1: [{h1_min*100:.1f} cm a {h1_max*100:.1f} cm]")
-        print(f"Rango utilizable para Estanque 2: [{h2_min*100:.1f} cm a {h2_max*100:.1f} cm]")
-    else:
-        print("El punto cae fuera de la zona segura. No se puede garantizar el control.")
+    # REPORTE
+    print("="*50)
+    print(f"Setpoints Solicitados : h1 = {h1_sp*100:.1f} cm  |  h2 = {h2_sp*100:.1f} cm")
+    print(f"Estado del Sistema    : {texto_estado}")
+    print("-" * 50)
+    print("ESFUERZOS REQUERIDOS (BOMBAS):")
+    print(f"  > Bomba 1 (U1)      : {u1*100:.1f} %")
+    print(f"  > Bomba 2 (U2)      : {u2*100:.1f} %")
 
-sp_1 = float(input("sp 1:"))
-sp_2 = float(input("sp 2:"))
-graficar_punto_real(sp_1, sp_2)
+# PRUEBA: Intenta usar un SP que caiga justo en la trayectoria de 1 bomba
+# Por ejemplo, pide flujos proporcionales a las matrices para u1=0, u2=50%
+u2_test = 0.50
+F1_test = M[0,1]*u2_test
+F2_test = M[1,1]*u2_test
+h1_test = calc_H(F1_test, a1)
+h2_test = calc_H(F2_test, a2)
+
+print("Ingresa tu Setpoint a evaluar:")
+sp_1 = float(input("Nivel L1 (metros) [ej. 0.013]: "))
+sp_2 = float(input("Nivel L2 (metros) [ej. 0.054]: "))
+evaluar_puntos_utilizables(sp_1*0.6/100, sp_2*0.6/100)

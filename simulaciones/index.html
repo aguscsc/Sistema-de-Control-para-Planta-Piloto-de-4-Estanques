@@ -51,11 +51,20 @@
         <div class="controls">
             <div class="slider-group">
                 <label>SP Estanque 1: <span class="sp-label" id="val_h1">30</span> cm</label>
-                <input type="range" id="slider_h1" min="0" max="60" step="0.5" value="30">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="range" id="slider_h1" min="0" max="60" step="0.5" value="30" style="flex-grow: 1;">
+                    <input type="number" id="input_h1_pct" min="0" max="100" step="0.1" value="50" style="width: 70px;">
+                    <span>%</span>
+                </div>
             </div>
-            <div class="slider-group">
-                <label>SP Estanque 2: <span class="sp-label" id="val_h2">25</span> cm</label>
-                <input type="range" id="slider_h2" min="0" max="60" step="0.5" value="25">
+
+            <div class="slider-group" style="margin-top: 15px;">
+                <label>SP Estanque 2: <span class="sp-label" id="val_h2">30</span> cm</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="range" id="slider_h2" min="0" max="60" step="0.5" value="30" style="flex-grow: 1;">
+                    <input type="number" id="input_h2_pct" min="0" max="100" step="0.1" value="50" style="width: 70px;">
+                    <span>%</span>
+                </div>
             </div>
         </div>
 
@@ -97,162 +106,208 @@
 </div>
 
 <script>
-    // --- FÍSICA Y PARÁMETROS ---
-    const g = 9.81, a = 0.001, k = 0.003;
-    const a_sup = 6.3347e-4; // Área real de estanques superiores
-    const gamma1 = 0.455, gamma2 = 0.4195;
-    const U_MIN = 0.40, U_MAX = 1.00;
-    const H_MAX = 0.60; // 60 cm físicos
+// --- FÍSICA Y PARÁMETROS (Basados en quad_op.py) ---
+const g = 9.81;
+const a1 = 6.1360e-04; // Área de fuga inferior Estanque 1
+const a2 = 5.4678e-04; // Área de fuga inferior Estanque 2
+const a3 = 3.5752e-04; // Área superior Estanque 3
+const a4 = 4.1820e-04; // Área superior Estanque 4
+const k = 0.0017;
+const gamma1 = 0.455, gamma2 = 0.4195;
+const U_MIN = 0.26, U_MAX = 1.00;
+const H_MAX = 0.60; // 60 cm físicos
 
-    // --- MATRIZ INVERSA ---
-    const M11 = gamma1 * k, M12 = (1 - gamma2) * k;
-    const M21 = (1 - gamma1) * k, M22 = gamma2 * k;
-    const det = M11 * M22 - M12 * M21;
-    const I11 = M22 / det, I12 = -M12 / det;
-    const I21 = -M21 / det, I22 = M11 / det;
+// --- MATRIZ INVERSA ---
+const M11 = gamma1 * k, M12 = (1 - gamma2) * k;
+const M21 = (1 - gamma1) * k, M22 = gamma2 * k;
+const det = M11 * M22 - M12 * M21;
+const I11 = M22 / det, I12 = -M12 / det;
+const I21 = -M21 / det, I22 = M11 / det;
 
-    function calcF(h) { return a * Math.sqrt(2 * g * h); }
-    function calcH(F) { return F < 0 ? -1 : Math.pow(F, 2) / (2 * g * Math.pow(a, 2)); }
+// Fórmulas desacopladas por área
+function calcF(h, area) { return area * Math.sqrt(2 * g * h); }
+function calcH(F, area) { return F < 0 ? -1 : Math.pow(F, 2) / (2 * g * Math.pow(area, 2)); }
 
-    // Función para actualizar nivel de agua visual
-    function updateTankFill(tankId, textId, heightMeters) {
-        let waterDiv = document.getElementById(tankId);
-        let textDiv = document.getElementById(textId);
-        let cm = heightMeters * 100;
-        
-        // Capping visual at 100% fill (60 cm)
-        let fillPercent = (cm / (H_MAX * 100)) * 100;
-        if(fillPercent > 100) fillPercent = 100;
-        if(fillPercent < 0 || isNaN(fillPercent)) fillPercent = 0;
+// Validación estricta de alcanzabilidad física (Permite 0 o rango 26-100%)
+function es_alcanzable(u) {
+    let tol = 1e-4; // Tolerancia para errores de punto flotante
+    if (Math.abs(u) < tol) return true;
+    if (u >= (U_MIN - tol) && u <= (U_MAX + tol)) return true;
+    return false;
+}
 
-        waterDiv.style.height = fillPercent + '%';
-        textDiv.innerText = cm.toFixed(1) + " cm";
+// Función para actualizar nivel de agua visual y alarmas
+function updateTankFill(tankId, textId, heightMeters) {
+    let waterDiv = document.getElementById(tankId);
+    let textDiv = document.getElementById(textId);
+    let cm = heightMeters * 100;
+    
+    let fillPercent = (cm / (H_MAX * 100)) * 100;
+    if(fillPercent > 100) fillPercent = 100;
+    if(fillPercent < 0 || isNaN(fillPercent)) fillPercent = 0;
 
-        // Alarma visual (Rojo si hay rebalse > 60cm)
-        if(cm > (H_MAX * 100)) {
-            waterDiv.classList.add('overflow');
-            textDiv.style.color = '#e74c3c';
-            textDiv.style.fontWeight = 'bold';
-            textDiv.innerText += " (¡REBALSE!)";
-        } else {
-            waterDiv.classList.remove('overflow');
-            textDiv.style.color = '#333';
-            textDiv.style.fontWeight = 'normal';
-        }
+    waterDiv.style.height = fillPercent + '%';
+    textDiv.innerText = cm.toFixed(1) + " cm";
+
+    if(cm > (H_MAX * 100)) {
+        waterDiv.classList.add('overflow');
+        textDiv.style.color = '#e74c3c';
+        textDiv.style.fontWeight = 'bold';
+        textDiv.innerText += " (¡REBALSE!)";
+    } else {
+        waterDiv.classList.remove('overflow');
+        textDiv.style.color = '#333';
+        textDiv.style.fontWeight = 'normal';
+    }
+}
+
+// Genera el polígono continuo cuando AMBAS bombas están encendidas (MIMO)
+function generar_poligono_principal(umin, umax) {
+    let h1_arr = [], h2_arr = []; let steps = 100;
+    for(let i=0; i<=steps; i++) { let u1 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*u1 + M12*umin, a1)); h2_arr.push(calcH(M21*u1 + M22*umin, a2)); }
+    for(let i=0; i<=steps; i++) { let u2 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*umax + M12*u2, a1)); h2_arr.push(calcH(M21*umax + M22*u2, a2)); }
+    for(let i=steps; i>=0; i--) { let u1 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*u1 + M12*umax, a1)); h2_arr.push(calcH(M21*u1 + M22*umax, a2)); }
+    for(let i=steps; i>=0; i--) { let u2 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*umin + M12*u2, a1)); h2_arr.push(calcH(M21*umin + M22*u2, a2)); }
+    return {x: h1_arr, y: h2_arr};
+}
+
+// Genera las líneas de trayectoria cuando UNA bomba está apagada (SIMO)
+function generar_trayectorias_1_bomba(umin, umax) {
+    let c1_x = [], c1_y = [], c2_x = [], c2_y = [];
+    let steps = 100;
+    for(let i=0; i<=steps; i++) { 
+        let u_activa = umin + (umax-umin)*(i/steps); 
+        // Bomba 1 OFF, Bomba 2 ON
+        c1_x.push(calcH(M11*0 + M12*u_activa, a1)); c1_y.push(calcH(M21*0 + M22*u_activa, a2));
+        // Bomba 2 OFF, Bomba 1 ON
+        c2_x.push(calcH(M11*u_activa + M12*0, a1)); c2_y.push(calcH(M21*u_activa + M22*0, a2));
+    }
+    return { cola1: {x: c1_x, y: c1_y}, cola2: {x: c2_x, y: c2_y} };
+}
+
+// Instanciar geometrías
+const polyMIMO = generar_poligono_principal(U_MIN, U_MAX);
+const trayectoriasSIMO = generar_trayectorias_1_bomba(U_MIN, U_MAX);
+
+function actualizarSimulacion() {
+    let h1_sp = parseFloat(document.getElementById('slider_h1').value) / 100;
+    let h2_sp = parseFloat(document.getElementById('slider_h2').value) / 100;
+    
+    document.getElementById('val_h1').innerText = (h1_sp*100).toFixed(1);
+    document.getElementById('val_h2').innerText = (h2_sp*100).toFixed(1);
+
+    // 1. Cálculos de control
+    let F1 = calcF(h1_sp, a1), F2 = calcF(h2_sp, a2);
+    let u1 = I11*F1 + I12*F2;
+    let u2 = I21*F1 + I22*F2;
+
+    // Limpieza numérica rigurosa (como en Python)
+    if(Math.abs(u1) < 1e-4) u1 = 0.0;
+    if(Math.abs(u2) < 1e-4) u2 = 0.0;
+
+    // 2. Efectos en Estanques Superiores
+    let u1_eff = Math.max(0, Math.min(u1, 1.0));
+    let u2_eff = Math.max(0, Math.min(u2, 1.0));
+    let h3_calc = calcH((1 - gamma2) * k * u2_eff, a3);
+    let h4_calc = calcH((1 - gamma1) * k * u1_eff, a4);
+    
+    updateTankFill('water_1', 'text_h1', h1_sp);
+    updateTankFill('water_2', 'text_h2', h2_sp);
+    updateTankFill('water_3', 'text_h3', h3_calc);
+    updateTankFill('water_4', 'text_h4', h4_calc);
+
+    // 3. Diagnóstico de Alcanzabilidad
+    let is_feasible = es_alcanzable(u1) && es_alcanzable(u2);
+    let rebalse = (h3_calc > H_MAX || h4_calc > H_MAX);
+    
+    let color_sp, texto_estado, textColor;
+
+    if (!is_feasible) {
+        color_sp = '#e74c3c'; // Red
+        textColor = '#e74c3c';
+        texto_estado = "INALCANZABLE (Saturación/Zona Muerta)";
+    } else if (rebalse) {
+        color_sp = '#f39c12'; // Orange
+        textColor = '#f39c12';
+        texto_estado = "PELIGRO (Rebalse Superior)";
+    } else if ((u1 === 0 && u2 !== 0) || (u2 === 0 && u1 !== 0)) {
+        color_sp = '#8e44ad'; // Purple
+        textColor = '#8e44ad';
+        texto_estado = "ALCANZABLE (Operación SIMO - 1 Bomba)";
+    } else {
+        color_sp = '#2ecc71'; // Green
+        textColor = '#27ae60';
+        texto_estado = "ALCANZABLE (Operación MIMO Segura)";
     }
 
-    // Calcula límites dinámicos
-    function obtenerLimites(F1_sp, F2_sp) {
-        let F2_bounds = [
-            {val: (U_MIN - I11*F1_sp)/I12, coef: I12, isMin: true},
-            {val: (U_MAX - I11*F1_sp)/I12, coef: I12, isMin: false},
-            {val: (U_MIN - I21*F1_sp)/I22, coef: I22, isMin: true},
-            {val: (U_MAX - I21*F1_sp)/I22, coef: I22, isMin: false}
-        ];
-        let F2_min = 0, F2_max = Infinity;
-        F2_bounds.forEach(b => {
-            if (b.isMin) { b.coef>0 ? F2_min = Math.max(F2_min, b.val) : F2_max = Math.min(F2_max, b.val); } 
-            else { b.coef>0 ? F2_max = Math.min(F2_max, b.val) : F2_min = Math.max(F2_min, b.val); }
-        });
+    // 4. Reporte en Pantalla
+    let rep = `<strong>ESTADO DEL SISTEMA: <span style="color:${textColor};">${texto_estado}</span></strong><br>`;
+    rep += `-----------------------------------------<br>`;
+    rep += `Esfuerzo Bomba 1 (U1): ${(u1*100).toFixed(1)}%<br>`;
+    rep += `Esfuerzo Bomba 2 (U2): ${(u2*100).toFixed(1)}%<br>`;
+    rep += `-----------------------------------------<br>`;
+    rep += `[INFO] Consecuencia en esclavo 3: ${(h3_calc*100).toFixed(1)} cm<br>`;
+    rep += `[INFO] Consecuencia en esclavo 4: ${(h4_calc*100).toFixed(1)} cm`;
+    
+    document.getElementById('report_div').innerHTML = rep;
 
-        let F1_bounds = [
-            {val: (U_MIN - I12*F2_sp)/I11, coef: I11, isMin: true},
-            {val: (U_MAX - I12*F2_sp)/I11, coef: I11, isMin: false},
-            {val: (U_MIN - I22*F2_sp)/I21, coef: I21, isMin: true},
-            {val: (U_MAX - I22*F2_sp)/I21, coef: I21, isMin: false}
-        ];
-        let F1_min = 0, F1_max = Infinity;
-        F1_bounds.forEach(b => {
-            if (b.isMin) { b.coef>0 ? F1_min = Math.max(F1_min, b.val) : F1_max = Math.min(F1_max, b.val); } 
-            else { b.coef>0 ? F1_max = Math.min(F1_max, b.val) : F1_min = Math.max(F1_min, b.val); }
-        });
+    // 5. Gráficos Plotly (Replica exacta visual)
+    let traces = [
+        // Envolvente principal 2D (Ambas bombas ON)
+        { x: polyMIMO.x, y: polyMIMO.y, fill: 'toself', fillcolor: 'rgba(65, 105, 225, 0.3)', line: {color: '#4169E1'}, name: `MIMO (${U_MIN*100}% - ${U_MAX*100}%)` },
+        // Curva Bomba 1 Apagada
+        { x: trayectoriasSIMO.cola1.x, y: trayectoriasSIMO.cola1.y, mode: 'lines', line: {color: '#8e44ad', width: 3, dash: 'dash'}, name: 'SIMO (Bomba 1 OFF)' },
+        // Curva Bomba 2 Apagada
+        { x: trayectoriasSIMO.cola2.x, y: trayectoriasSIMO.cola2.y, mode: 'lines', line: {color: '#27ae60', width: 3, dash: 'dash'}, name: 'SIMO (Bomba 2 OFF)' },
+        // Origen (Ambas Apagadas)
+        { x: [0], y: [0], mode: 'markers', marker: {color: 'black', size: 8}, name: 'Planta Apagada' },
+        // Setpoint Solicitado
+        { x: [h1_sp], y: [h2_sp], mode: 'markers', marker: {color: color_sp, size: 14, symbol: 'x', line: {color: 'black', width: 1}}, name: 'SP Deseado' }
+    ];
 
-        return {
-            h1_min: (F1_max >= F1_min && F1_min >= 0) ? calcH(F1_min) : 0,
-            h1_max: (F1_max >= F1_min && F1_max > 0) ? calcH(F1_max) : -1,
-            h2_min: (F2_max >= F2_min && F2_min >= 0) ? calcH(F2_min) : 0,
-            h2_max: (F2_max >= F2_min && F2_max > 0) ? calcH(F2_max) : -1
-        };
+    let layout = {
+        margin: {l: 40, r: 20, b: 40, t: 30}, height: 380,
+        title: { text: 'Espacio de Puntos Utilizables', font: {size: 14} },
+        xaxis: {title: 'Nivel Estanque 1 (m)', range: [-0.02, 0.65], gridcolor: '#e5e5e5'},
+        yaxis: {title: 'Nivel Estanque 2 (m)', range: [-0.02, 0.65], gridcolor: '#e5e5e5'},
+        plot_bgcolor: '#f8f9fa', paper_bgcolor: '#f8f9fa',
+        legend: { x: 0.05, y: 0.95, bgcolor: 'rgba(255,255,255,0.8)' }
+    };
+
+    Plotly.newPlot('plot_div', traces, layout, {responsive: true});
+}
+
+// --- LÓGICA DE SINCRONIZACIÓN (SLIDER <-> INPUT %) ---
+function syncH1(fromSlider) {
+    let slider = document.getElementById('slider_h1');
+    let inputPct = document.getElementById('input_h1_pct');
+    if(fromSlider) {
+        inputPct.value = ((parseFloat(slider.value) / (H_MAX * 100)) * 100).toFixed(1);
+    } else {
+        slider.value = Math.min(Math.max((parseFloat(inputPct.value) / 100) * (H_MAX * 100), 0), H_MAX * 100); 
     }
-
-    function generarPoligono(umin, umax) {
-        let h1_arr = [], h2_arr = []; let steps = 50;
-        for(let i=0; i<=steps; i++) { let u1 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*u1 + M12*umin)); h2_arr.push(calcH(M21*u1 + M22*umin)); }
-        for(let i=0; i<=steps; i++) { let u2 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*umax + M12*u2)); h2_arr.push(calcH(M21*umax + M22*u2)); }
-        for(let i=steps; i>=0; i--) { let u1 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*u1 + M12*umax)); h2_arr.push(calcH(M21*u1 + M22*umax)); }
-        for(let i=steps; i>=0; i--) { let u2 = umin + (umax-umin)*(i/steps); h1_arr.push(calcH(M11*umin + M12*u2)); h2_arr.push(calcH(M21*umin + M22*u2)); }
-        return {x: h1_arr, y: h2_arr};
-    }
-
-    const polyReal = generarPoligono(U_MIN, U_MAX);
-
-    function actualizarSimulacion() {
-        let h1_sp = parseFloat(document.getElementById('slider_h1').value) / 100;
-        let h2_sp = parseFloat(document.getElementById('slider_h2').value) / 100;
-        
-        document.getElementById('val_h1').innerText = (h1_sp*100).toFixed(1);
-        document.getElementById('val_h2').innerText = (h2_sp*100).toFixed(1);
-
-        // Matemáticas de Control
-        let F1 = calcF(h1_sp), F2 = calcF(h2_sp);
-        let u1 = I11*F1 + I12*F2;
-        let u2 = I21*F1 + I22*F2;
-
-        // Limitar bombas para la animación (para no romper matemáticas)
-        let u1_eff = Math.max(0, Math.min(u1, 1.0));
-        let u2_eff = Math.max(0, Math.min(u2, 1.0));
-
-        // Calcular Estanques Superiores
-        let h3_calc = (1 / (2 * g)) * Math.pow(((1 - gamma2) * k * u2_eff) / a_sup, 2);
-        let h4_calc = (1 / (2 * g)) * Math.pow(((1 - gamma1) * k * u1_eff) / a_sup, 2);
-
-        // Actualizar Animación Visual SCADA
-        updateTankFill('water_1', 'text_h1', h1_sp);
-        updateTankFill('water_2', 'text_h2', h2_sp);
-        updateTankFill('water_3', 'text_h3', h3_calc);
-        updateTankFill('water_4', 'text_h4', h4_calc);
-
-        // Reporte y Estados
-        let lims = obtenerLimites(F1, F2);
-        let isRealOk = (u1 >= U_MIN && u1 <= U_MAX && u2 >= U_MIN && u2 <= U_MAX);
-        let rebalse = (h3_calc > H_MAX || h4_calc > H_MAX);
-        
-        let color = isRealOk ? (rebalse ? '#f1c40f' : '#2ecc71') : '#e74c3c';
-        let statusText = "";
-        
-        if (!isRealOk) statusText = "<span class='status-err'>[ERROR] INALCANZABLE (Bombas Fuera de Rango)</span>";
-        else if (rebalse) statusText = "<span class='status-warn'>[ALERTA] REBALSE EN ESTANQUES SUPERIORES</span>";
-        else statusText = "<span class='status-ok'>[OK] ESTADO SEGURO Y ALCANZABLE</span>";
-
-        let rep = `ESTADO SISTEMA: ${statusText}<br>`;
-        rep += `-----------------------------------------<br>`;
-        rep += `Bomba 1 Requerida: ${(u1*100).toFixed(1)}%<br>`;
-        rep += `Bomba 2 Requerida: ${(u2*100).toFixed(1)}%<br>`;
-        rep += `-----------------------------------------<br>`;
-        if(lims.h1_max !== -1 && isRealOk) rep += `[LÍMITE H1] Rango seguro: ${(lims.h1_min*100).toFixed(1)} - ${(lims.h1_max*100).toFixed(1)} cm<br>`;
-        if(lims.h2_max !== -1 && isRealOk) rep += `[LÍMITE H2] Rango seguro: ${(lims.h2_min*100).toFixed(1)} - ${(lims.h2_max*100).toFixed(1)} cm`;
-        
-        document.getElementById('report_div').innerHTML = rep;
-
-        // Trazos de Plotly
-        let traces = [
-            { x: polyReal.x, y: polyReal.y, fill: 'toself', fillcolor: 'rgba(52, 152, 219, 0.4)', line: {color: '#2980b9'}, name: 'Zona Controlable' },
-            { x: [h1_sp], y: [h2_sp], mode: 'markers', marker: {color: color, size: 14, symbol: 'circle'}, name: 'SP Deseado' }
-        ];
-
-        let layout = {
-            margin: {l: 40, r: 20, b: 40, t: 20}, height: 350,
-            xaxis: {title: 'Estanque 1 (m)', range: [0, 0.65], gridcolor: '#e5e5e5'},
-            yaxis: {title: 'Estanque 2 (m)', range: [0, 0.65], gridcolor: '#e5e5e5'},
-            plot_bgcolor: '#f8f9fa', paper_bgcolor: '#f8f9fa'
-        };
-
-        Plotly.newPlot('plot_div', traces, layout, {responsive: true});
-    }
-
-    document.getElementById('slider_h1').addEventListener('input', actualizarSimulacion);
-    document.getElementById('slider_h2').addEventListener('input', actualizarSimulacion);
     actualizarSimulacion();
+}
+
+function syncH2(fromSlider) {
+    let slider = document.getElementById('slider_h2');
+    let inputPct = document.getElementById('input_h2_pct');
+    if(fromSlider) {
+        inputPct.value = ((parseFloat(slider.value) / (H_MAX * 100)) * 100).toFixed(1);
+    } else {
+        slider.value = Math.min(Math.max((parseFloat(inputPct.value) / 100) * (H_MAX * 100), 0), H_MAX * 100); 
+    }
+    actualizarSimulacion();
+}
+
+// Asignar los Event Listeners a la interfaz
+document.getElementById('slider_h1').addEventListener('input', () => syncH1(true));
+document.getElementById('slider_h2').addEventListener('input', () => syncH2(true));
+document.getElementById('input_h1_pct').addEventListener('input', () => syncH1(false));
+document.getElementById('input_h2_pct').addEventListener('input', () => syncH2(false));
+
+// Primera ejecución al cargar la web
+actualizarSimulacion();
 </script>
 </body>
 </html>

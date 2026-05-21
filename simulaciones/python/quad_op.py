@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 
 # --- Parámetros físicos de la planta ---
 g = 9.81
-a1 = 0.001; a2 = 0.001        # Áreas de fuga inferiores
-a3 = 6.3347e-4; a4 = 6.3347e-4 # Áreas de fuga superiores
-k = 0.003
+a1 = 6.1360e-04; a2 = 5.4678e-04        # Áreas de fuga inferiores
+a3 = 3.5752e-04; a4 = 4.1820e-04 # Áreas de fuga superiores
+k = 0.0017
 gamma1 = 0.455; gamma2 = 0.4195
 
 H_MAX = 0.60 # Altura máxima física de los estanques (60 cm)
@@ -17,8 +17,8 @@ M = np.array([
 ])
 M_inv = np.linalg.inv(M)
 
-# --- LÍMITES  BOMBA ---
-U_MIN = 0.40  # 40% Zona Muerta
+# --- LÍMITES  DE FLUJO---
+U_MIN = 0.26  # 40% Zona Muerta, 26% de flujo
 U_MAX = 1.00  # 100% Saturación máxima
 
 def obtener_limites_reales(F1_sp, F2_sp):
@@ -119,4 +119,4 @@ def calcular_y_graficar(h1_sp, h2_sp):
         print("  > Rangos no disponibles debido a saturación.")
     print("="*50)
 
-calcular_y_graficar(0.30, 0.27)
+calcular_y_graficar(13*0.6/100, 21*0.6/100) # Ejemplo de punto de operación (h1=25.17 cm, h2=27.5 cm) con ajuste al 60% para evitar zona muerta

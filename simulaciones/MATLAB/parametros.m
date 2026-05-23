@@ -69,3 +69,11 @@ n2 = (a4*sqrt(2*g)*n4 + (gamma2)*k2*0.6)/(a2*sqrt(2*g));
 n2r = n2^2
 n1 = (a3*sqrt(2*g)*n3 + (gamma1)*k1*0.6)/(a1*sqrt(2*g));
 n1r = n1^2
+
+%% MAtriz de esfuerzo inversa
+syms y1 y2 k1 k2
+M = [y1*k1 (1-y2)*k2; (1-y1)*k1 y2*k2]
+% M inversa
+M_inv = inv(M); % Inverse of the matrix M
+fprintf('La matriz inversa es:\n');
+disp(M_inv);

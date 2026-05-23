@@ -1,0 +1,7 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Resumen}{\es@scroman {i}}{section.1}%
+\contentsline {section}{\numberline {2}Diagramas y HMI}{1}{section.2}%
+\contentsline {subsection}{\numberline {1.}P\&I}{1}{subsection.0.1}%
+\contentsline {subsection}{\numberline {2.}SAMA}{1}{subsection.0.2}%
+\contentsline {subsection}{\numberline {3.}Bloques}{1}{subsection.0.3}%
+\contentsline {section}{Bibliografía}{4}{figure.caption.3}%

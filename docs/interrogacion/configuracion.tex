@@ -1,0 +1,638 @@
+%%Portada
+\newcommand{\portada}{
+\begin{titlepage}
+    \begin{center}
+        {\fontsize{22}{30}\selectfont\textbf{UNIVERSIDAD DE CONCEPCIÓN}}\\[0.2cm]
+        {\fontsize{16}{30}\selectfont FACULTAD DE INGENIERÍA} \\[0.2cm]
+        {\fontsize{14}{30}\selectfont DEPARTAMENTO DE INGENIERÍA ELÉCTRICA} % No \\ here
+        \vspace{2.5cm}
+
+        \includegraphics[scale=0.5]{img/logo.png}
+        \vspace{1.5cm}
+
+        {\fontsize{20}{30}\selectfont\textbf{\coursename}} \\[1cm]
+        {\fontsize{18}{30}\selectfont \semester} \\[0.5cm]
+        
+        \vspace{1cm}
+        {\fontsize{20}{30}\selectfont \textbf{\tasknumber}} \\[1cm]
+        {\fontsize{12}{30}\selectfont \studentone}
+        \vspace{3cm}
+    \end{center}
+    
+    \begin{center}
+        {\fontsize{12}{30}\selectfont \submissiondate}
+    \end{center}
+    \thispagestyle{empty}
+\end{titlepage}
+}
+% Configuración de márgenes
+\geometry{top=2.5cm, left=2.5cm, right=2cm, bottom=2cm}
+
+% Configuración para codigo minted
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+\usemintedstyle{vs}
+
+% Configuración de encabezados y pies de página para numeración romana
+\setlength{\parindent}{1.2cm}
+\fancypagestyle{roman}{
+    \fancyhf{}
+    %\fancyhead[L]{\thepage} % Número de página en romano en la parte superior izquierda
+    \renewcommand{\headrulewidth}{0pt} % Sin línea bajo el encabezado
+    \renewcommand{\thepage}{\roman{page}} % Números romanos
+    \fancyfoot[R]{\thepage}
+}
+% Definición de colores
+\definecolor{rojo}{RGB}{255, 0, 0}
+\definecolor{amar}{RGB}{227,108,10}
+\definecolor{verde}{RGB}{0, 176, 80}
+\definecolor{azul}{RGB}{0, 112, 192}
+
+\definecolor{cardinalred}{RGB}{140, 21, 21}
+\definecolor{dkcyan}{RGB}{0, 123, 167}
+\definecolor{dkgray}{RGB}{90, 90, 90}
+\definecolor{dkgreen}{RGB}{0, 150, 0}
+\definecolor{gray}{RGB}{127, 127, 127}
+\definecolor{lbrown}{RGB}{255, 252, 249}
+\definecolor{lgray}{RGB}{245, 245, 245}
+\definecolor{mauve}{RGB}{150, 0, 210}
+\definecolor{mitred}{RGB}{161, 0, 47}
+\definecolor{ocre}{RGB}{243, 102, 25}
+\definecolor{rulecolor}{RGB}{217,217,217}
+
+%circuito
+\ctikzloadstyle{romano}
+\tikzset{romano circuit style}
+
+
+
+% Configuración para secciones sin numerar
+\newcommand{\mysection}[1]{
+  \section*{#1}
+  \refstepcounter{nonumsection} 
+   \addcontentsline{toc}{section}{#1}
+    \vspace{-0.7em} % Ajusta el espacio entre el título y la línea
+  \hrule height 1pt % Ajusta el grosor de la línea horizontal
+  \vspace{1em} % Ajusta el espacio después de la línea
+}
+% Llaves de equivalencia math
+\newcommand{\underequal}[2]{%
+	\ensuremath{\underbrace{#1}_{\mathclap{#2}}}
+}
+\newcommand{\underequaltext}[2]{%
+	\underequal{#1}{\text{#2}}
+}
+
+\newcommand{\topequal}[2]{%
+	\ensuremath{\overbrace{#1}^{\mathclap{#2}}}
+}
+\newcommand{\topequaltext}[2]{%
+	\topequal{#1}{\text{#2}}
+}
+
+% Configuración de subsecciones numeradas con "1.-"
+\renewcommand\thesubsection{\arabic{subsection}.}
+
+\newcommand{\tocmysubsection}[1]{%
+  \addcontentsline{toc}{subsection}{\arabic{subsection}.\hspace{1em}#1}%
+}
+
+% Definir el nuevo comando \mysubsection
+\newcommand{\mysubsection}[1]{%
+  \refstepcounter{subsection}%
+  \subsection*{\thesubsection\hspace{1em}#1}%
+  \tocmysubsection{#1}%
+}
+% Redefinir numeración solo para \mysubsectionnum
+\newcommand{\mysubsectionnum}[1]{
+  \refstepcounter{subsection}
+  \subsection*{\arabic{subsection}\hspace{1em}#1}
+  \addcontentsline{toc}{subsection}{\arabic{subsection}\hspace{1em}#1}
+}
+
+\makeatletter
+\newcounter{nonumsection}
+\@addtoreset{subsection}{nonumsection}
+\makeatother
+
+\renewcommand{\nomname}{Nomenclatura}
+\renewcommand{\contentsname}{Tabla de Contenidos}
+\renewcommand{\refname}{Bibliografía}
+\renewcommand{\lstlistingname}{Cod.}
+
+% Numeración de figuras y tablas
+\counterwithin{figure}{subsection}
+\counterwithin{table}{subsection}
+\renewcommand{\thefigure}{\arabic{subsection}.\arabic{figure}}
+\renewcommand{\thetable}{\arabic{subsection}.\arabic{table}}
+\renewcommand{\captionfont}{\fontsize{11}{13}\selectfont}
+
+% Configuración de encabezados y pies de página para numeración 
+\fancypagestyle{arabic}{
+    \fancyhf{}
+    \fancyfoot[R]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\thepage}{\arabic{page}}
+}
+
+\setlength{\headheight}{14.5pt}
+\addtolength{\topmargin}{-2.5pt}
+
+% Configuración del título de secciones
+\titleformat{\section}{\fontsize{20}{24}\selectfont\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\fontsize{16}{22}\selectfont\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\fontsize{14}{20}\selectfont\bfseries}{\thesubsubsection}{1em}{}
+
+\titleformat{\mysection}{\fontsize{18}{24}\selectfont\bfseries}{\thesection}{1em}{}
+\renewcommand\thesubsubsection{\arabic{subsection}.\arabic{subsubsection}}
+\setcounter{tocdepth}{2}
+\setlist[itemize]{label=$\bullet$}
+\lstset{inputencoding=utf8}
+\renewcommand{\equationautorefname}{Ec.}
+% Configuración de hipervínculos
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=blue
+}
+\urlstyle{same}
+% custom commands
+\newlength\tindent
+\setlength{\tindent}{1.17cm}
+\setlength{\parindent}{0pt}
+\renewcommand{\indent}{\hspace*{\tindent}}
+\newcommand{\itembullet}{\item[$\bullet$]}
+%\setlength{\parindent}{1.2cm}
+\onehalfspacing
+% Configuración de leyendas para tablas y figuras
+%\captionsetup[table]{name=Tabla, labelsep=space}
+\captionsetup[figure]{name=Fig., labelsep=space}
+%\captionsetup[lstlisting]{
+%    format=plain, 
+%    labelsep=space, 
+%    labelformat=simple, 
+%    singlelinecheck=off,
+%    justification=centering,
+%}
+% Configuración del glosario para las abreviaturas
+%\makenoidxglossaries
+\glssetwidest{ABCDEF}
+\newcommand{\mygls}[1]{\textcolor{black}{\glsentrytext{#1}}}
+\newglossarystyle{myalttree}{
+    \setglossarystyle{long}
+    \renewenvironment{theglossary}
+        {\begin{longtable}[l]{@{\hskip 0pt}p{2.5cm}p{20cm}}
+        }
+        {\end{longtable}}
+    \renewcommand*{\glsgroupskip}{}
+}
+
+% Configuración de nomenclatura
+\makenomenclature
+\renewcommand{\nomlabel}[1]{\textbf{#1}\hspace{1em}}
+\renewcommand{\nompreamble}{\vspace{-0.5em}}
+\renewcommand{\nomitemsep}{-0.5em}
+\renewcommand{\nomentryend}{\unskip}
+\newcommand{\customnomenclature}{%
+    \printnomenclature[2.75cm]
+}
+
+
+% Configuracion Anexos
+% Define \sectionappen
+\newcommand{\sectionappen}[1]{}
+ % Redefine \sectionappen dentro del entorno
+    \renewcommand{\sectionappen}[1]{%
+        \refstepcounter{section}%
+        \section*{\thesection\hspace{1em}#1}%
+        \addcontentsline{toc}{section}{\thesection\hspace{1em}#1}%
+    }
+
+% Define entorno appendixd
+\newenvironment{appendixd}{%
+    \appendix
+    \renewcommand{\thesection}{\Alph{section}.} % Cambia la numeración de secciones
+    \renewcommand{\thesubsection}{\Alph{section}.\arabic{subsection}}
+    \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+    \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+    \renewcommand{\thetable}{\Alph{section}.\arabic{table}}
+    \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}
+
+    % Configuración de formato para títulos de secciones, subsecciones y subsubsecciones
+    \titleformat{\section}[hang]{\normalfont\fontsize{18}{24}\selectfont\bfseries}{\sectionappen}{1em}{}
+    \titleformat{\subsection}[hang]{\normalfont\fontsize{16}{22}\selectfont\bfseries}{\thesubsection}{1em}{}
+    \titleformat{\subsubsection}[hang]{\normalfont\fontsize{14}{20}\selectfont\bfseries}{\thesubsubsection}{1em}{}
+
+   
+}{%
+    % Restablecer el formato de títulos después del entorno
+    \titleformat{\section}[block]{\normalfont\Large\bfseries}{\thesection}{1em}{}
+    \titleformat{\subsection}[block]{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+    \titleformat{\subsubsection}[block]{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+}
+% Configuración tablas
+
+% Definiciones y comandos
+\global\def\GLOBALtablerowcolorindex {2}          % Índice tabla colores
+\global\def\GLOBALtablerowcolorswitch {false}     % Tabla con colores cambiados
+
+% Formato de columnas
+% Centrado
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{\CColor}[2]{>{\columncolor{#1}\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#2}}
+
+\newcolumntype{P}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\PColor}[2]{>{\columncolor{#1}\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#2}}
+
+\newcolumntype{B}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}b{#1}}
+\newcolumntype{\BColor}[2]{>{\columncolor{#1}\centering\let\newline\\\arraybackslash\hspace{0pt}}b{#2}}
+
+% Izquierda
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{\LColor}[2]{>{\columncolor{#1}\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#2}}
+\newcolumntype{T}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\TColor}[2]{>{\columncolor{#1}\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#2}}
+\newcolumntype{F}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}b{#1}}
+\newcolumntype{\FColor}[2]{>{\columncolor{#1}\raggedright\let\newline\\\arraybackslash\hspace{0pt}}b{#2}}
+
+% Derecha
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{\RColor}[2]{>{\columncolor{#1}\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#2}}
+\newcolumntype{H}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{\HColor}[2]{>{\columncolor{#1}\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#2}}
+\newcolumntype{G}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}b{#1}}
+\newcolumntype{\GColor}[2]{>{\columncolor{#1}\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}b{#2}}
+
+\def\tablelinecolor {black}        % Color de las líneas de las tablas
+\def\tablerowfirstcolor {none}     % Primer color de celda de las tablas
+\def\tablerowsecondcolor {gray!20} % Segundo color de celda de las tablas
+
+\newcommand{\settablerowcolors}[1]{%
+	\ifthenelse{\equal{\GLOBALtablerowcolorswitch}{false}}{% Usa colores normales
+		\ifthenelse{\equal{\tablerowfirstcolor}{none}}{%
+			\ifthenelse{\equal{\tablerowsecondcolor}{none}}{%
+				\rowcolors{#1}{}{}%
+			}{%
+				\rowcolors{#1}{\tablerowsecondcolor}{}%
+			}%
+		}{%
+			\ifthenelse{\equal{\tablerowsecondcolor}{none}}{%
+				\rowcolors{#1}{}{\tablerowfirstcolor}%
+			}{%
+				\rowcolors{#1}{\tablerowsecondcolor}{\tablerowfirstcolor}%
+			}%
+		}%
+	}{% Usa colores alternados
+		\ifthenelse{\equal{\tablerowfirstcolor}{none}}{%
+			\ifthenelse{\equal{\tablerowsecondcolor}{none}}{%
+				\rowcolors{#1}{}{}%
+			}{%
+				\rowcolors{#1}{}{\tablerowsecondcolor}%
+			}%
+		}{%
+			\ifthenelse{\equal{\tablerowsecondcolor}{none}}{%
+				\rowcolors{#1}{\tablerowfirstcolor}{}%
+			}{%
+				\rowcolors{#1}{\tablerowfirstcolor}{\tablerowsecondcolor}%
+			}%
+		}%
+	}%
+	\global\def\GLOBALtablerowcolorindex {#1}%
+}
+
+\newcommand{\enabletablerowcolor}[1][]{%
+	\ifx\hfuzz#1\hfuzz%
+		\settablerowcolors{2}%
+	\else%
+		\settablerowcolors{#1}%
+	\fi%
+}
+\newcommand{\disabletablerowcolor}{\rowcolors{2}{}{}}
+% Comando para ajustar el padding de las celdas
+\newcommand{\settablecellpadding}[2]{%
+    \setlength{\tabcolsep}{#1 em} % Horizontal
+    \renewcommand{\arraystretch}{#2} % Vertical
+}
+
+\def\tablepaddingh {0.75} % Espaciado horizontal de celda de las tablas
+\def\tablepaddingv {1} % Espaciado vertical de celda de las tablas
+
+% Resetea el padding de las celdas de las tablas
+\newcommand{\resettablecellpadding}{%
+    \settablecellpadding{\tablepaddingh}{\tablepaddingv}%
+}
+
+% Activa el color de celda
+\enabletablerowcolor[2]
+
+% Ajuste de espaciado predeterminado
+\resettablecellpadding
+\disabletablerowcolor
+
+% Configuracion codigo
+\newcommand{\importcode}[4]{%
+\lstinputlisting[
+    language=#2,
+    style=#2, 
+    caption={#3},
+    label={#4},
+    backgroundcolor=\color{lgray},
+    inputencoding=utf8
+]{#1}
+}
+
+\lstdefinelanguage{pythonEXTENDED}{
+	language=Python,
+	breakatwhitespace=false,
+	emph={
+		AbstractSet,Any,AsyncContextManager,AsyncGenerator,AsyncIterable,AsyncIterator,Awaitable,AwaitableGenerator,BinaryIO,ByteString,Callable,Collection,Container,ContextManager,Coroutine,Dict,False,ForwardRef,Generator,GenericMeta,Hashable,IO,ItemsView,Iterable,Iterator,KeysView,List,Mapping,MappingView,Match,Meta,MutableMapping,MutableSequence,MutableSet,NamedTuple,None,Pattern,Reversible,Sequence,Sized,SupportInts,SupportsAbs,SupportsBytes,SupportsComplex,SupportsFloat,SupportsIndex,SupportsRound,TextIO,True,Tuple,TypeAlias,TYPE_CHECKING,Union,ValuesView,__add__,__and__,__eq__,__floordiv__,__ge__,__gt__,__init__,__le__,__lt__,__main__,__mod__,__mul__,__name__,__ne__,__or__,__pow__,__repr__,__str__,__sub__,__truediv__,__xor__
+	},
+	emphstyle=\color{dkcyan}\ttfamily,
+	keepspaces=true,
+	morecomment=[s][\color{BurntOrange}]{@}{\ },
+	morekeywords={
+		as,assert,close,listdir,self,sorted,split,strip,with
+	}
+}
+\lstdefinestyle{python}{
+	language=pythonEXTENDED
+}
+% Matlab
+\lstdefinestyle{matlab}{
+	language=Matlab,
+	deletekeywords={fft},
+	keepspaces=true,
+	morecomment=[l]\%,
+	morecomment=[n]{\%\{\^^M}{\%\}\^^M},
+	morekeywords={
+		addOptional,box,break,catch,cell,classdef,continue,deal,double,end,factorial,for,gradient,hessian,if,isa,ltitr,matlab2tikz,methods,minor,movegui,normcdf,normpdf,on,ones,parse,persistent,poissrnd,properties,repmat,solve,strcat,subs,syms,try,var,warning,xlim,ylim
+	},
+      inputencoding=utf8
+}
+% texto plano
+\lstdefinestyle{plaintext}{
+	language={},
+	keepspaces=true,
+	postbreak={},
+	tabsize=4
+}
+
+% powershell
+\lstdefinestyle{powershell}{
+	alsodigit={-},
+	morecomment=[l]{\#},
+	morecomment=[n]{<\#}{\#>},
+	morekeywords={
+		Add-Content,Add-PSSnapin,Clear-Content,Clear-History,Clear-Host,Clear-Item,Clear-ItemProperty,Clear-Variable,Compare-Object,Connect-PSSession,Convert-Path,ConvertFrom-String,Copy-Item,Copy-ItemProperty,Disable-PSBreakpoint,Disconnect-PSSession,Enable-PSBreakpoint,Enter-PSSession,Exit-PSSession,Export-Alias,Export-Csv,Export-PSSession,ForEach-Object,Format-Custom,Format-Hex,Format-List,Format-Table,Format-Wide,Get-Alias,Get-ChildItem,Get-Clipboard,Get-Command,Get-ComputerInfo,Get-Content,Get-History,Get-Item,Get-ItemProperty,Get-ItemPropertyValue,Get-Job,Get-Location,Get-Member,Get-Module,Get-Process,Get-PSBreakpoint,Get-PSCallStack,Get-PSDrive,Get-PSSession,Get-PSSnapin,Get-Service,Get-TimeZone,Get-Unique,Get-Variable,Get-WmiObject,Group-Object,help,Import-Alias,Import-Csv,Import-Module,Import-PSSession,Invoke-Command,Invoke-Expression,Invoke-History,Invoke-Item,Invoke-RestMethod,Invoke-WebRequest,Invoke-WmiMethod,Measure-Object,mkdir,Move-Item,Move-ItemProperty,New-Alias,New-Item,New-Module,New-PSDrive,New-PSSession,New-PSSessionConfigurationFile,New-Variable,Out-GridView,Out-Host,Out-Printer,Pop-Location,powershell_ise.exe,Push-Location,Receive-Job,Receive-PSSession,Remove-Item,Remove-ItemProperty,Remove-Job,Remove-Module,Remove-PSBreakpoint,Remove-PSDrive,Remove-PSSession,Remove-PSSnapin,Remove-Variable,Remove-WmiObject,Rename-Item,Rename-ItemProperty,Resolve-Path,Resume-Job,Select-Object,Select-String,Set-Alias,Set-Clipboard,Set-Content,Set-Item,Set-ItemProperty,Set-Location,Set-PSBreakpoint,Set-TimeZone,Set-Variable,Set-WmiInstance,Show-Command,Sort-Object,Start-Job,Start-Process,Start-Service,Start-Sleep,Stop-Job,Stop-Process,Stop-Service,Suspend-Job,Tee-Object,Trace-Command,Wait-Job,Where-Object,Write-Output
+	},
+	morekeywords={
+		Do,Else,For,ForEach,Function,If,In,Until,While
+	},
+	morestring=[b]{"},
+	morestring=[b]{'},
+	morestring=[s]{@'}{'@},
+	morestring=[s]{@"}{"@},
+	sensitive=false
+}
+% SQL
+\lstdefinestyle{sql}{
+	language=SQL,
+	breakatwhitespace=true
+}
+% Verilog
+\lstdefinestyle{verilog}{
+	language=Verilog
+}
+
+% VDHL
+\lstdefinelanguage{VHDL}{
+	morekeywords=[1]{
+		ALL,all,and,architecture,begin,downto,end,entity,in,is,library,Not,of,or,out,port,use
+	},
+	morekeywords=[2]{
+		IEEE,NUMERIC_STD,STD_LOGIC,std_logic,STD_LOGIC_1164,STD_LOGIC_ARITH,STD_LOGIC_UNSIGNED,STD_LOGIC_VECTOR,std_logic_vector
+	},
+	morecomment=[l]--
+}
+\lstdefinestyle{vhdl}{
+	language=VHDL
+}
+% XML
+\lstdefinelanguage{XML}{
+	morecomment=[s]{<?}{?>},
+	morekeywords={
+		encoding,type,version,xmlns
+	},
+	morestring=[b]",
+	morestring=[s]{>}{<}
+}
+\lstdefinestyle{xml}{
+	language=XML,
+	tabsize=2
+}
+% Assembler
+\lstdefinelanguage[x64]{Assembler}[x86masm]{Assembler}{
+	morekeywords={
+		CDQE,CMPSQ,CMPXCHG16B,CQO,IRETQ,JRCXZ,LODSQ,MOVSXD,POPFQ,PUSHFQ,r8,r8b,r8d,r8w,r9,r9b,r9d,r9w,r10,r10b,r10d,r10w,r11,r11b,r11d,r11w,r12,r12b,r12d,r12w,r13,r13b,r13d,r13w,r14,r14b,r14d,r14w,r15,r15b,r15d,r15w,rax,rbp,rbx,rcx,rdi,RDTSCP,rdx,rsi,rsp,SCASQ,STOSQ,SWAPGS
+	}
+}
+\lstdefinestyle{assemblerx64}{
+	language=[x64]Assembler
+}
+\lstdefinestyle{assemblerx86}{
+	language=[x86masm]Assembler
+}
+
+% bash
+\lstdefinestyle{bash}{
+	language=bash,
+	breakatwhitespace=false,
+	morecomment=[l]{rem},
+	morecomment=[s]{::}{::},
+	morekeywords={
+		call,cp,dig,gcc,git,grep,ls,mv,python,rm,sudo,vim
+	},
+	sensitive=false
+}
+
+% C
+\lstdefinestyle{c}{
+	language=C,
+	breakatwhitespace=false,
+	keepspaces=true
+}
+
+% C++
+\lstdefinestyle{cpp}{
+	language=C++,
+	breakatwhitespace=false,
+	morekeywords={NULL}
+}
+
+% C#
+\lstdefinestyle{csharp}{
+	language=csh,
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morekeywords={
+		abstract,as,base,bool,break,byte,case,catch,char,checked,class,const,continue,decimal,default,delegate,do,double,else,enum,event,explicit,extern,false,finally,fixed,float,for,foreach,goto,if,implicit,in,int,interface,internal,is,lock,long,namespace,new,null,object,operator,out,override,params,private,protected,public,readonly,ref,return,sbyte,sealed,short,sizeof,stackalloc,static,string,struct,switch,this,throw,true,try,typeof,uint,ulong,unchecked,unsafe,ushort,using,virtual,void,volatile,while
+	}
+}
+
+% Fortran-95
+\lstdefinestyle{fortran}{
+	language=[95]Fortran,
+	breakatwhitespace=false
+}
+% Go
+\lstdefinestyle{go}{
+	language=Go
+}
+% HTML5
+\lstdefinelanguage{HTML5}{
+	language=html,
+	alsoletter={<>=-},
+	morecomment=[s]{<!--}{-->},
+	ndkeywords={
+		% General
+		=,
+		% Atributos HTML
+		accept-charset=,accept=,accesskey=,action=,align=,alt=,async=,autocomplete=,autofocus=,autoplay=,autosave=,bgcolor=,border=,buffered=,challenge=,charset=,checked=,cite=,class=,code=,codebase=,color=,cols=,colspan=,content=,contenteditable=,contextmenu=,controls=,coords=,data=,datetime=,default=,defer=,dir=,dirname=,disabled=,download=,draggable=,dropzone=,enctype=,for=,form=,formaction=,headers=,height=,hidden=,high=,href=,hreflang=,http-equiv=,icon=,id=,ismap=,itemprop=,keytype=,kind=,label=,lang=,language=,list=,loop=,low=,manifest=,max=,maxlength=,media=,method=,min=,multiple=,name=,novalidate=,open=,optimum=,pattern=,ping=,placeholder=,poster=,preload=,pubdate=,radiogroup=,readonly=,rel=,required=,reversed=,rows=,rowspan=,sandbox=,scope=,scoped=,seamless=,selected=,shape=,size=,sizes=,span=,spellcheck=,src=,srcdoc=,srclang=,start=,step=,style=,summary=,tabindex=,target=,title=,type=,usemap=,value=,width=,wrap=,
+		% Propiedades CSS
+		-moz-binding:,-moz-border-bottom-colors:,-moz-border-left-colors:,-moz-border-radius-bottomleft:,-moz-border-radius-bottomright:,-moz-border-radius-topleft:,-moz-border-radius-topright:,-moz-border-radius:,-moz-border-right-colors:,-moz-border-top-colors:,-moz-opacity:,-moz-outline-color:,-moz-outline-style:,-moz-outline-width:,-moz-outline:,-moz-transform:,-moz-user-focus:,-moz-user-input:,-moz-user-modify:,-moz-user-select:,-replace:,-set-link-source:,-use-link-source:,accelerator:,azimuth:,background-attachment:,background-color:,background-image:,background-position-x:,background-position-y:,background-position:,background-repeat:,background:,behavior:,border-bottom-color:,border-bottom-style:,border-bottom-width:,border-bottom:,border-collapse:,border-color:,border-left-color:,border-left-style:,border-left-width:,border-left:,border-right-color:,border-right-style:,border-right-width:,border-right:,border-spacing:,border-style:,border-top-color:,border-top-style:,border-top-width:,border-top:,border-width:,border:,bottom:,caption-side:,clear:,clip:,color:,content:,counter-increment:,counter-reset:,cue-after:,cue-before:,cue:,cursor:,direction:,display:,elevation:,empty-cells:,filter:,float:,font-family:,font-size-adjust:,font-size:,font-stretch:,font-style:,font-variant:,font-weight:,font:,height:,ime-mode:,include-source:,layer-background-color:,layer-background-image:,layout-flow:,layout-grid-char-spacing:,layout-grid-char:,layout-grid-line:,layout-grid-mode:,layout-grid-type:,layout-grid:,left:,letter-spacing:,line-break:,line-height:,list-style-image:,list-style-position:,list-style-type:,list-style:,margin-bottom:,margin-left:,margin-right:,margin-top:,margin:,marker-offset:,marks:,max-height:,max-width:,min-height:,min-width:,orphans:,outline-color:,outline-style:,outline-width:,outline:,overflow-X:,overflow-Y:,overflow:,padding-bottom:,padding-left:,padding-right:,padding-top:,padding:,page-break-after:,page-break-before:,page-break-inside:,page:,pause-after:,pause-before:,pause:,pitch-range:,pitch:,play-during:,position:,quotes:,richness:,right:,ruby-align:,ruby-overhang:,ruby-position:,scrollbar-3d-light-color:,scrollbar-arrow-color:,scrollbar-base-color:,scrollbar-dark-shadow-color:,scrollbar-face-color:,scrollbar-highlight-color:,scrollbar-shadow-color:,scrollbar-track-color:,size:,speak-header:,speak-numeral:,speak-punctuation:,speak:,speech-rate:,stress:,table-layout:,text-align-last:,text-align:,text-autospace:,text-decoration:,text-indent:,text-justify:,text-kashida-space:,text-overflow:,text-shadow:,text-transform:,text-underline-position:,top:,transform:,transition-duration:,transition-property:,transition-timing-function:,unicode-bidi:,vertical-align:,visibility:,voice-family:,volume:,white-space:,widows:,width:,word-break:,word-spacing:,word-wrap:,writing-mode:,z-index:,zoom:
+	},
+	otherkeywords={
+		<,</,>,</a,<a,</a>,</abbr,<abbr,</abbr>,</address,<address,</address>,</area,<area,</area>,</area,<area,</area>,</article,<article,</article>,</aside,<aside,</aside>,</audio,<audio,</audio>,</audio,<audio,</audio>,</b,<b,</b>,</base,<base,</base>,</bdi,<bdi,</bdi>,</bdo,<bdo,</bdo>,</blockquote,<blockquote,</blockquote>,</body,<body,</body>,</br,<br,</br>,</button,<button,</button>,</canvas,<canvas,</canvas>,</caption,<caption,</caption>,</cite,<cite,</cite>,</code,<code,</code>,</col,<col,</col>,</colgroup,<colgroup,</colgroup>,</data,<data,</data>,</datalist,<datalist,</datalist>,</dd,<dd,</dd>,</del,<del,</del>,</details,<details,</details>,</dfn,<dfn,</dfn>,</div,<div,</div>,</dl,<dl,</dl>,</dt,<dt,</dt>,</em,<em,</em>,</embed,<embed,</embed>,</fieldset,<fieldset,</fieldset>,</figcaption,<figcaption,</figcaption>,</figure,<figure,</figure>,</footer,<footer,</footer>,</form,<form,</form>,</h1,<h1,</h1>,</h2,<h2,</h2>,</h3,<h3,</h3>,</h4,<h4,</h4>,</h5,<h5,</h5>,</h6,<h6,</h6>,</head,<head,</head>,</header,<header,</header>,</hr,<hr,</hr>,</html,<html,</html>,</i,<i,</i>,</iframe,<iframe,</iframe>,</img,<img,</img>,</input,<input,</input>,</ins,<ins,</ins>,</kbd,<kbd,</kbd>,</keygen,<keygen,</keygen>,</label,<label,</label>,</legend,<legend,</legend>,</li,<li,</li>,</link,<link,</link>,</main,<main,</main>,</map,<map,</map>,</mark,<mark,</mark>,</math,<math,</math>,</menu,<menu,</menu>,</menuitem,<menuitem,</menuitem>,</meta,<meta,</meta>,</meter,<meter,</meter>,</nav,<nav,</nav>,</noscript,<noscript,</noscript>,</object,<object,</object>,</ol,<ol,</ol>,</optgroup,<optgroup,</optgroup>,</option,<option,</option>,</output,<output,</output>,</p,<p,</p>,</param,<param,</param>,</pre,<pre,</pre>,</progress,<progress,</progress>,</q,<q,</q>,</rp,<rp,</rp>,</rt,<rt,</rt>,</ruby,<ruby,</ruby>,</s,<s,</s>,</samp,<samp,</samp>,</script,<script,</script>,</section,<section,</section>,</select,<select,</select>,</small,<small,</small>,</source,<source,</source>,</span,<span,</span>,</strong,<strong,</strong>,</style,<style,</style>,</summary,<summary,</summary>,</sup,<sup,</sup>,</svg,<svg,</svg>,</table,<table,</table>,</tbody,<tbody,</tbody>,</td,<td,</td>,</template,<template,</template>,</textarea,<textarea,</textarea>,</tfoot,<tfoot,</tfoot>,</th,<th,</th>,</thead,<thead,</thead>,</time,<time,</time>,</title,<title,</title>,</tr,<tr,</tr>,</track,<track,</track>,</u,<u,</u>,</ul,<ul,</ul>,</var,<var,</var>,</video,<video,</video>,</wbr,<wbr,</wbr>,/>,<!
+	},
+	sensitive=true,
+	tag=[s]
+}
+\lstdefinestyle{html}{
+	language=HTML5,
+	alsodigit={.:;},
+	alsolanguage=JavaScript,
+	firstnumber=1,
+	ndkeywordstyle=\color{dkgreen}\bfseries,
+	numberfirstline=true
+}
+
+% Java
+\lstdefinestyle{java}{
+	language=Java,
+	breakatwhitespace=true,
+	keepspaces=true
+}
+
+% Javascript
+\lstdefinelanguage{JavaScript}{
+	comment=[l]{//},
+	keepspaces=true,
+	keywords={
+		break,else,false,for,function,if,in,new,null,return,true,typeof,var,while
+	},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]',
+	morestring=[b]",
+	morestring=[b]`,
+	ndkeywords={
+		await,async,case,catch,class,const,default,do,enum,export,extends,finally,from,implements,import,instanceof,let,static,super,switch,then,this,throw,try
+	},
+	ndkeywordstyle=\color{blue}\bfseries,
+	sensitive=false
+}
+\lstdefinestyle{javascript}{
+	language=JavaScript
+}
+
+% JSON
+\lstdefinestyle{json}{
+	literate=*{0}{{{\color{cardinalred}0}}}{1}{1}{{{\color{cardinalred}1}}}{1}{2}
+	{{{\color{cardinalred}2}}}{1}{3}{{{\color{cardinalred}3}}}{1}{4}{{{\color{cardinalred}4}}}
+	{1}{5}{{{\color{cardinalred}5}}}{1}{6}{{{\color{cardinalred}6}}}{1}{7}{{{\color{cardinalred}7}}}
+	{1}{8}{{{\color{cardinalred}8}}}{1}{9}{{{\color{cardinalred}9}}}{1}{:}
+	{{{\color{dkcyan}{:}}}}{1}{,}{{{\color{dkcyan}{,}}}}{1}{\{}
+	{{{\color{MidnightBlue}{\{}}}}{1}{\}}{{{\color{MidnightBlue}{\}}}}}
+	{1}{[}{{{\color{MidnightBlue}{[}}}}{1}{]}{{{\color{MidnightBlue}{]}}}}{1},
+	tabsize=2
+}
+
+\lstset{
+	aboveskip=0.75 em,
+	basicstyle={\small\ttfamily\color{black}},
+	belowskip=0.95 em,
+	breaklines=true,
+	columns=fullflexible,
+	commentstyle=\color{dkgreen}\upshape,
+	extendedchars=true,
+	fontadjust=true,
+	frame=lrtb,
+	framerule=1pt,
+        rulecolor=\color{rulecolor},
+        xleftmargin=9pt ,
+        linewidth=\textwidth,
+	framexbottommargin=0 pt,
+	framexleftmargin=5pt,
+	framexrightmargin=0pt,
+	framextopmargin=0 pt,
+	identifierstyle=\color{black},
+	keepspaces=true,
+	keywordstyle=\color{blue},
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+		{Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {à}{{\`a}}1
+		{è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {À}{{\`A}}1 {È}{{\'E}}1
+		{Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1 {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1
+		{ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1
+		{Ü}{{\"U}}1 {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+		{Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1 {œ}{{\oe}}1
+		{Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1 {ű}{{\H{u}}}1
+		{Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1 {ç}{{\c c}}1 {Ç}{{\c C}}1
+		{ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1 {€}{{\EUR}}1 {£}{{\pounds}}1
+		{ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?``}}1 {¡}{{!``}}1 {«}{{\guillemotleft}}1
+		{»}{{\guillemotright}}1 {°}{{\textdegree}}1 {∢}{{$\sphericalangle$}}1
+		{¬}{{$\neg$}}1 {¨}{{\textasciidieresis}}1 {ã}{{\~a}}1 {Ã}{{\~a}}1
+		{õ}{{\~o}}1 {Õ}{{\~O}}1 {Ð}{{\DJ}}1 {Ø}{{\O}}1 {Ý}{{\'Y}}1
+		{¹}{{\textsuperscript{1}}}1 {²}{{\textsuperscript{2}}}1
+		{³}{{\textsuperscript{3}}}1 {⁴}{{\textsuperscript{4}}}1
+		{⁵}{{\textsuperscript{5}}}1 {⁶}{{\textsuperscript{6}}}1
+		{⁷}{{\textsuperscript{7}}}1 {⁸}{{\textsuperscript{8}}}1
+		{⁹}{{\textsuperscript{9}}}1 {⁰}{{\textsuperscript{0}}}1
+		{ᵃ}{{\textsuperscript{a}}}1 {ᵇ}{{\textsuperscript{b}}}1
+		{ᶜ}{{\textsuperscript{c}}}1 {ᵈ}{{\textsuperscript{d}}}1
+		{ᵉ}{{\textsuperscript{e}}}1 {ᶠ}{{\textsuperscript{f}}}1
+		{ᵍ}{{\textsuperscript{g}}}1 {ʰ}{{\textsuperscript{h}}}1
+		{ᶦ}{{\textsuperscript{i}}}1 {ʲ}{{\textsuperscript{j}}}1
+		{ᵏ}{{\textsuperscript{k}}}1 {ˡ}{{\textsuperscript{l}}}1
+		{ᵐ}{{\textsuperscript{m}}}1 {ⁿ}{{\textsuperscript{n}}}1
+		{ᵒ}{{\textsuperscript{o}}}1 {ᵖ}{{\textsuperscript{p}}}1
+		{ᵠ}{{\textsuperscript{q}}}1 {ʳ}{{\textsuperscript{r}}}1
+		{ˢ}{{\textsuperscript{s}}}1 {ᵗ}{{\textsuperscript{t}}}1
+		{ᵘ}{{\textsuperscript{u}}}1 {ᵛ}{{\textsuperscript{v}}}1
+		{ʷ}{{\textsuperscript{w}}}1 {ˣ}{{\textsuperscript{x}}}1
+		{ʸ}{{\textsuperscript{y}}}1 {ᶻ}{{\textsuperscript{z}}}1
+		{α}{{$\alpha$}}1 {ά}{{$\dot \alpha$}}1 {Γ}{{$\Gamma$}}1 {Þ}{{$\Thorn$}}1
+		{γ}{{$\gamma$}}1 {Δ}{{$\Delta$}}1 {δ}{{$\delta$}}1 {þ}{{$\thorn$}}1
+		{ε}{{$\epsilon$}}1 {έ}{{$\dot \epsilon$}}1 {ζ}{{$\zeta$}}1
+		{η}{{$\eta$}}1 {ή}{{$\dot \eta$}}1 {Θ}{{$\Theta$}}1
+		{θ}{{$\theta$}}1 {ι}{{$\iota$}}1 {ί}{{$\dot \iota$}}1
+		{Ϊ}{{$\ddot I$}}1 {ϊ}{{$\ddot \iota$}}1 {ΐ}{{$\dddot \iota$}}1
+		{κ}{{$\kappa$}}1 {Λ}{{$\Lambda$}}1 {λ}{{$\lambda$}}1
+		{μ}{{$\mu$}}1 {ν}{{$\nu$}}1 {Ξ}{{$\Xi$}}1 {ξ}{{$\xi$}}1
+		{ό}{{$\dot o$}}1 {Π}{{$\Pi$}}1 {π}{{$\pi$}}1 {ρ}{{$\rho$}}1
+		{Σ}{{$\Sigma$}}1 {σ}{{$\sigma$}}1 {ς}{{$\varsigma$}}1 {τ}{{$\tau$}}1
+		{υ}{{$\upsilon$}}1 {ύ}{{$\dot \upsilon$}}1 {Ϋ}{{$\ddot Y$}}1
+		{ϋ}{{$\ddot \upsilon$}}1 {ΰ}{{$\dddot \upsilon$}}1
+		{Φ}{{$\Phi$}}1 {φ}{{$\phi$}}1 {Ψ}{{$\Psi$}}1 {ψ}{{$\psi$}}1
+		{Ω}{{$\Omega$}}1 {ω}{{$\omega$}}1 {ώ}{{$\dot \omega$}}1
+		{“}{{``}}1 {”}{{''}}1 {…}{{$\ldots$}}1 {`}{\`}1 {–}{{--}}1 { }{{ }}1,
+	numbers=none,
+	numbersep={6 pt},
+	numberstyle=\tiny\color{dkgray},
+	postbreak=\mbox{$\hookrightarrow$\space},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	stepnumber=1,
+	stringstyle=\color{mauve},
+	tabsize={3}
+}

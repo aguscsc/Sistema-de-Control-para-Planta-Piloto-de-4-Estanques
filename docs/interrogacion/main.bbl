@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{johansson2000}
+K.~H. Johansson, ``The quadruple-tank process: A multivariable laboratory process with an adjustable zero,'' {\em IEEE Transactions on Control Systems Technology}, vol.~8, pp.~456--465, May 2000.
+
+\bibitem{cpc_proyecto1}
+{Departamento de Ingeniería Eléctrica}, ``Proyecto 1: Hmi para planta 4 estanques,'' tech. rep., Universidad de Concepción, Concepción, Chile, 2026.
+\newblock Asignatura: Control de Procesos por Computador (547507).
+
+\bibitem{rockwell_controllogix}
+{Rockwell Automation}, {\em ControlLogix 5580 Controllers User Manual}.
+\newblock Milwaukee, WI, USA, 2020.
+\newblock Especificaciones de ejecución de tareas y arquitectura asíncrona para CPU 1756-L81E.
+
+\bibitem{udec_hmi_std}
+J.~P. Segovia, ``Estándar programación hmi rev 0,'' tech. rep., Universidad de Concepción, Concepción, Chile, 2014.
+
+\bibitem{isa101_hmi}
+{International Society of Automation}, ``Human machine interfaces for process automation systems,'' 2015.
+
+\bibitem{isa5_1}
+{International Society of Automation}, ``Instrumentation symbols and identification,'' 2009.
+
+\end{thebibliography}

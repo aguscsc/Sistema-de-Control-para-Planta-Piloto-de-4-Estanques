@@ -1,0 +1,42 @@
+\section{Controlador Dahlin}
+El controlador Dahlin fue propuesto por Erik Dahlin en 1968. El objetivo de este método es plantear una respuesta de lazo cerrado deseada para luego obtener el controlador necesario para asegurar la respuesta propuesta.
+
+Nuevamente, planteando una planta $G_p(z^{-1})$ y la respuesta en lazo cerrado $H_{LC}(z^{-1})$ como un sistema de primer orden con retardo, se tiene:
+
+\begin{equation}
+  G_p(z^{-1}) = \frac{b z^{-N}}{1 - a z^{-1}}
+\end{equation}
+
+\begin{equation}
+  H_{LC}(z^{-1}) = \frac{G_p(z^{-1})G_c(z^{-1})}{1 + G_p(z^{-1})G_c(z^{-1})} = \frac{\beta z^{-N}}{1 - \alpha z^{-1}}
+\end{equation}
+
+Luego, despejando el controlador de la ecuación general de lazo cerrado:
+
+\[
+  G_c(z^{-1}) = \frac{H_{LC}(z^{-1})}{1 - H_{LC}(z^{-1})} \cdot \frac{1}{G_p(z^{-1})}
+\]
+
+Sustituyendo las ecuaciones de la planta y de lazo cerrado, se obtiene:
+
+\begin{equation}
+  G_c(z^{-1}) = \frac{\frac{\beta}{b}(1 - a z^{-1})}{1 - \alpha z^{-1} - \beta z^{-N}}
+\end{equation}
+
+Considerando que la función de transferencia del controlador relaciona la acción de control con el error, $G_c(z^{-1}) = \frac{u(z^{-1})}{e(z^{-1})}$, se tiene:
+
+\[
+  u(z^{-1})(1 - \alpha z^{-1} - \beta z^{-N}) = e(z^{-1})\left(\frac{\beta}{b}(1 - a z^{-1})\right)
+\]
+
+Aplicando la transformada Z inversa para llevar la expresión a ecuaciones de diferencias:
+
+\[
+  u_k - \alpha u_{k-1} - \beta u_{k-N} = \frac{\beta}{b} e_k - \frac{a \beta}{b} e_{k-1}
+\]
+
+Finalmente, despejando la acción de control actual $u_k$:
+
+\begin{equation}
+  u_k = \alpha u_{k-1} + \beta u_{k-N} + \frac{\beta}{b} \left( e_k - a e_{k-1} \right)
+\end{equation}

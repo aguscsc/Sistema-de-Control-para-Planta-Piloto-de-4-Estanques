@@ -1,7 +1,9 @@
 \begin{thebibliography}{1}
 
-\bibitem{johansson2000}
-K.~H. Johansson, ``The quadruple-tank process: A multivariable laboratory process with an adjustable zero,'' {\em IEEE Transactions on Control Systems Technology}, vol.~8, pp.~456--465, May 2000.
+\bibitem{rockwellGeneralInstructions}
+{Rockwell Automation}, {\em Logix 5000 Controllers General Instructions}.
+\newblock Rockwell Automation, Milwaukee, WI.
+\newblock Logix5000 Controllers Common Procedures Programming Manual.
 
 \bibitem{cpc_proyecto1}
 {Departamento de Ingeniería Eléctrica}, ``Proyecto 1: Hmi para planta 4 estanques,'' tech. rep., Universidad de Concepción, Concepción, Chile, 2026.

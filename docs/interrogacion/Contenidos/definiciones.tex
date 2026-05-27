@@ -1,0 +1,78 @@
+\section{Definiciones Previas}
+
+Para el diseño y análisis de los controladores digitales, es necesario establecer las equivalencias entre el dominio continuo (Transformada de Laplace) y el dominio discreto (Transformada $\mathcal{Z}$). 
+
+Se define la variable compleja $s$ para representar la dinámica en tiempo continuo, mientras que en el dominio discreto se utilizará el operador de retardo unitario $z^{-1}$.
+
+\subsection{Planta de Primer Orden en Tiempo Continuo}
+Se define un modelo matemático estándar para un proceso industrial de primer orden sin tiempo muerto (retardo) en el dominio de Laplace como:
+\begin{equation}
+  G_p(s) = \frac{K}{\tau s + 1}
+\end{equation}
+Donde:
+\begin{itemize}
+    \item $K$: Ganancia estática del proceso.
+    \item $\tau$: Constante de tiempo del proceso.
+\end{itemize}
+
+\subsection{Discretización mediante Retenedor de Orden Cero (ZOH)}
+Para implementar estrategias de control digital, es imperativo obtener el modelo discreto equivalente de la planta. Se asume la existencia de un conversor Digital-Análogo que actúa como un Retenedor de Orden Cero (ZOH). La función de transferencia discreta $G_p(z^{-1})$ se obtiene mediante la siguiente relación:
+
+\begin{equation} \label{eq:zoh_general}
+  G_p(z^{-1}) = (1 - z^{-1}) \mathcal{Z} \left\{ \frac{G_p(s)}{s} \right\}
+\end{equation}
+
+Sustituyendo la planta de primer orden en la ecuación \ref{eq:zoh_general}:
+
+\[
+  G_p(z^{-1}) = (1 - z^{-1}) \mathcal{Z} \left\{ \frac{K}{s(\tau s + 1)} \right\}
+\]
+
+Para resolver la transformada, se aplica el método de expansión en fracciones parciales al término continuo:
+
+\[
+  \frac{K}{s(\tau s + 1)} = \frac{K}{s} - \frac{K\tau}{\tau s + 1} = K \left( \frac{1}{s} - \frac{1}{s + \frac{1}{\tau}} \right)
+\]
+
+Aplicando la transformada $\mathcal{Z}$ a cada término de forma independiente utilizando las tablas de transformadas (donde el tiempo de muestreo es $T_s$):
+
+\[
+  \mathcal{Z} \left\{ \frac{1}{s} \right\} = \frac{1}{1 - z^{-1}}
+\]
+\[
+  \mathcal{Z} \left\{ \frac{1}{s + a} \right\} = \frac{1}{1 - e^{-aT_s}z^{-1}} \quad \text{con} \quad a = \frac{1}{\tau}
+\]
+
+Reemplazando los términos transformados en la ecuación principal:
+
+\[
+  G_p(z^{-1}) = (1 - z^{-1}) K \left[ \frac{1}{1 - z^{-1}} - \frac{1}{1 - e^{-\frac{T_s}{\tau}}z^{-1}} \right]
+\]
+
+Al multiplicar el término $(1 - z^{-1})$ hacia el interior del corchete, se simplifica la expresión:
+
+\[
+  G_p(z^{-1}) = K \left[ 1 - \frac{1 - z^{-1}}{1 - e^{-\frac{T_s}{\tau}}z^{-1}} \right]
+\]
+
+Buscando un denominador común para agrupar los términos:
+
+\[
+  G_p(z^{-1}) = K \left[ \frac{1 - e^{-\frac{T_s}{\tau}}z^{-1} - (1 - z^{-1})}{1 - e^{-\frac{T_s}{\tau}}z^{-1}} \right]
+\]
+
+\[
+  G_p(z^{-1}) = K \left[ \frac{1 - e^{-\frac{T_s}{\tau}}z^{-1} - 1 + z^{-1}}{1 - e^{-\frac{T_s}{\tau}}z^{-1}} \right]
+\]
+
+Agrupando el término $z^{-1}$ en el numerador, se llega a la función de transferencia final de la planta discretizada:
+
+\begin{equation}
+  G_p(z^{-1}) = \frac{K \left( 1 - e^{-\frac{T_s}{\tau}} \right) z^{-1}}{1 - e^{-\frac{T_s}{\tau}}z^{-1}}
+\end{equation}
+
+Para simplificar el álgebra en los desarrollos posteriores (como la síntesis de controladores), es habitual definir las constantes $\alpha = e^{-\frac{T_s}{\tau}}$ y $b = K(1 - \alpha)$, reescribiendo la planta como:
+
+\begin{equation}
+  G_p(z^{-1}) = \frac{b z^{-1}}{1 - \alpha z^{-1}}
+\end{equation}

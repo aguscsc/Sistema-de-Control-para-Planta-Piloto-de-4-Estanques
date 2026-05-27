@@ -1,0 +1,63 @@
+\section{Deadbeat}
+
+El objetivo del controlador Deadbeat es cancelar la dinámica del sistema para asegurar que este llegue a la referencia en $N$ pasos, siendo $N$ el retardo total del sistema en tiempo discreto. Debido a la naturaleza de este objetivo, el control Deadbeat es inherentemente discreto, por lo que se analizará como tal.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{figures/db.png}
+  \end{center}
+  \caption{Bloques Deadbeat}\label{bloques-deadbeat}
+\end{figure}
+
+Se plantea una planta de la forma:
+\[
+  G_p(z^{-1}) = \frac{\beta}{1 - \alpha z^{-1}}z^{-N}
+\]
+
+Tal que:
+\[
+  \beta = K(1 - e^{-\frac{T_s}{\tau}}), \quad \alpha = e^{-\frac{T_s}{\tau}}
+\]
+
+Luego, tomando la ecuación general de lazo cerrado, se tiene que esta debe ser igual al retardo del sistema para que se cumpla la condición impuesta por el controlador:
+\[
+  H_{LC}(z^{-1}) = \frac{G_p(z^{-1})C_{db}(z^{-1})}{1 + G_p(z^{-1})C_{db}(z^{-1})} = z^{-N}
+\]
+
+Despejando el controlador se tiene:
+\[
+  C_{dB}(z^{-1}) = \frac{H_{LC}(z^{-1})}{1 - H_{LC}(z^{-1})}\frac{1}{G_p(z^{-1})} 
+\]
+
+Sustituyendo $H_{LC}(z^{-1})$ y $G_p(z^{-1})$:
+\[
+  C_{dB}(z^{-1}) = \left( \frac{z^{-N}}{1 - z^{-N}} \right) \left( \frac{1 - \alpha z^{-1}}{\beta z^{-N}} \right) 
+\]
+
+Los términos $z^{-N}$ del numerador de $H_{LC}$ y el denominador de $G_p$ se cancelan directamente:
+\[
+  C_{dB}(z^{-1}) = \frac{1 - \alpha z^{-1}}{\beta(1 - z^{-N})} 
+\]
+
+Luego aplicando $\frac{u(z^{-1})}{e(z^{-1})}$:
+\[
+  \frac{u(z^{-1})}{e(z^{-1})} = \frac{1 - \alpha z^{-1}}{\beta(1 - z^{-N})} 
+\]
+
+Despejando cruzado:
+\[
+  u(z^{-1}) \cdot \beta (1 - z^{-N}) = e(z^{-1}) \cdot (1 - \alpha z^{-1}) 
+\]
+\[
+  \beta u(z^{-1}) - \beta z^{-N} u(z^{-1}) = e(z^{-1}) - \alpha z^{-1} e(z^{-1}) 
+\]
+
+Aplicando la transformada Z inversa para obtener la ecuación de diferencias:
+\[
+  \beta u_k - \beta u_{k-N} = e_k - \alpha e_{k-1}
+\]
+
+Finalmente, despejando la acción de control actual $u_k$:
+\[
+  u_k = u_{k-N} + \frac{1}{\beta}e_k - \frac{\alpha}{\beta}e_{k-1}
+\]

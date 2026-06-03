@@ -1,3 +1,59 @@
-\section{PID + Predictor Smith + Deadbeat}
+\clearpage
+\section{Combinación PID + Predictor Smith + Deadbeat}
 
-Similar al proceso señalado en la pregunta anterio
+El controlador Deadbeat puede considerarse como un caso límite del algoritmo de Dahlin, donde se exige que la respuesta de lazo cerrado alcance el valor de referencia en el mínimo tiempo posible, eliminando toda la dinámica de primer orden. 
+
+Para una planta de primer orden con retardo, el tiempo mínimo de respuesta es el retardo de la planta más una muestra del retenedor. Por lo tanto, la respuesta deseada en lazo cerrado es un retardo puro:
+\[
+  H_{LC}(z^{-1}) = z^{-1-N}
+\]
+
+Al igual que en el caso de Dahlin, utilizamos la arquitectura del Predictor de Smith para aislar el tiempo muerto, dejando al controlador primario $G_c(z^{-1})$ a cargo de la dinámica de la planta pura $G_m(z^{-1}) = \frac{bz^{-1}}{1-az^{-1}}$.
+
+La función de transferencia del controlador con Predictor de Smith se mantiene como:
+\begin{equation}
+  \frac{u(z^{-1})}{e_1(z^{-1})} = \frac{G_c(z^{-1})}{1 + G_c(z^{-1})G_m(z^{-1}) - G_c(z^{-1})G_m(z^{-1})z^{-N}}
+\end{equation}
+
+Si sintetizamos el controlador Deadbeat para la planta completa mediante síntesis directa:
+\[
+  G_{c,Deadbeat}(z^{-1}) = \frac{H_{LC}(z^{-1})}{1 - H_{LC}(z^{-1})}\cdot \frac{1}{G_p(z^{-1})} = \frac{z^{-1-N}}{1 - z^{-1-N}} \cdot \frac{1-az^{-1}}{bz^{-1-N}}
+\]
+Cancelando los términos $z^{-1-N}$ del numerador, el controlador global queda:
+\[
+  G_{c,Deadbeat}(z^{-1}) = \frac{1 - az^{-1}}{b(1 - z^{-1-N})}
+\]
+
+Para hallar nuestro controlador primario $G_c(z^{-1})$, igualamos la estructura del Predictor de Smith a esta síntesis directa:
+\[
+  \frac{1 - az^{-1}}{b(1 - z^{-1-N})} = \frac{G_c(z^{-1})}{1 + G_c(z^{-1}) \left( \frac{bz^{-1}}{1-az^{-1}} \right) (1 - z^{-N})} 
+\]
+
+Al resolver y despejar $G_c(z^{-1})$, el término del retardo $(1 - z^{-N})$ se cancela perfectamente con el denominador del lado izquierdo, resultando en una expresión sumamente reducida:
+\begin{equation}
+  G_c(z^{-1}) = \frac{1 - az^{-1}}{b(1 - z^{-1})} 
+\end{equation}
+
+Llevando esta expresión a su ecuación de diferencias:
+\[
+  u(z^{-1})b(1 - z^{-1}) = e_1(z^{-1})(1 - az^{-1})
+\]
+\[
+  u_k = u_{k-1} + e_k \left( \frac{1}{b} \right) + e_{k-1} \left( -\frac{a}{b} \right)
+\]
+
+Comparando esta última ecuación con la aproximación trapezoidal de un controlador PI estándar (donde $q_0 = K_c(1 + \frac{T_s}{2T_i})$ y $q_1 = K_c(-1 + \frac{T_s}{2T_i})$), igualamos los coeficientes:
+
+\[
+  q_0 - q_1 = 2K_c = \frac{1}{b} - \left(-\frac{a}{b}\right) = \frac{1+a}{b} \implies K_c = \frac{1+a}{2b}
+\]
+\[
+  q_0 + q_1 = K_c\frac{T_s}{T_i} = \frac{1}{b} + \left(-\frac{a}{b}\right) = \frac{1-a}{b}
+\]
+\[
+  T_i = \frac{K_c T_s}{q_0 + q_1} = \frac{ \left( \frac{1+a}{2b} \right) T_s }{ \frac{1-a}{b} } \implies T_i = \frac{T_s(1+a)}{2(1-a)}
+\]
+
+Se demuestra así que un controlador PI, sintonizado con estos parámetros e inserto en un Predictor de Smith, se comporta matemáticamente como un controlador Deadbeat perfecto.
+
+

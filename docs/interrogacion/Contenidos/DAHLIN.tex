@@ -1,42 +1,52 @@
 \section{Controlador Dahlin}
 El controlador Dahlin fue propuesto por Erik Dahlin en 1968. El objetivo de este método es plantear una respuesta de lazo cerrado deseada para luego obtener el controlador necesario para asegurar la respuesta propuesta.
 
-Nuevamente, planteando una planta $G_p(z^{-1})$ y la respuesta en lazo cerrado $H_{LC}(z^{-1})$ como un sistema de primer orden con retardo, se tiene:
+Planteando una planta discreta $G_p(z^{-1})$ y una respuesta en lazo cerrado deseada $H_{LC}(z^{-1})$ como un sistema de primer orden con ganancia unitaria y el mismo retardo de la planta. Para simplificar la notación y mejorar la legibilidad, definiremos el numerador del lazo cerrado como $\beta = 1 - \alpha$:
 
 \begin{equation}
-  G_p(z^{-1}) = \frac{b z^{-N}}{1 - a z^{-1}}
+  G_p(z^{-1}) = \frac{b z^{-1-N}}{1 - a z^{-1}}
 \end{equation}
 
 \begin{equation}
-  H_{LC}(z^{-1}) = \frac{G_p(z^{-1})G_c(z^{-1})}{1 + G_p(z^{-1})G_c(z^{-1})} = \frac{\beta z^{-N}}{1 - \alpha z^{-1}}
+  H_{LC}(z^{-1}) = \frac{G_p(z^{-1})G_c(z^{-1})}{1 + G_p(z^{-1})G_c(z^{-1})} = \frac{\beta z^{-1-N}}{1 - \alpha z^{-1}}
 \end{equation}
 
-Luego, despejando el controlador de la ecuación general de lazo cerrado:
+Luego, despejando el controlador de la ecuación general de lazo cerrado mediante síntesis directa:
 
 \[
   G_c(z^{-1}) = \frac{H_{LC}(z^{-1})}{1 - H_{LC}(z^{-1})} \cdot \frac{1}{G_p(z^{-1})}
 \]
 
-Sustituyendo las ecuaciones de la planta y de lazo cerrado, se obtiene:
+Antes de sustituir las ecuaciones, es conveniente resolver el término $1 - H_{LC}(z^{-1})$ para simplificar la expresión matemática:
+
+\[
+  1 - H_{LC}(z^{-1}) = 1 - \frac{\beta z^{-1-N}}{1 - \alpha z^{-1}} = \frac{1 - \alpha z^{-1} - \beta z^{-1-N}}{1 - \alpha z^{-1}}
+\]
+
+Sustituyendo ahora las ecuaciones de la planta y del lazo cerrado en la expresión del controlador, los denominadores $(1 - \alpha z^{-1})$ y los términos de retardo del numerador se cancelan:
 
 \begin{equation}
-  G_c(z^{-1}) = \frac{\frac{\beta}{b}(1 - a z^{-1})}{1 - \alpha z^{-1} - \beta z^{-N}}
+  G_c(z^{-1}) = \frac{\frac{\beta z^{-1-N}}{1 - \alpha z^{-1}}}{\frac{1 - \alpha z^{-1} - \beta z^{-1-N}}{1 - \alpha z^{-1}}} \cdot \frac{1 - a z^{-1}}{b z^{-1-N}} = \frac{\beta(1 - a z^{-1})}{b \left[ 1 - \alpha z^{-1} - \beta z^{-1-N} \right]}
 \end{equation}
 
-Considerando que la función de transferencia del controlador relaciona la acción de control con el error, $G_c(z^{-1}) = \frac{u(z^{-1})}{e(z^{-1})}$, se tiene:
+Considerando que la función de transferencia del controlador relaciona la acción de control con el error, $G_c(z^{-1}) = \frac{u(z^{-1})}{e(z^{-1})}$, multiplicamos de forma cruzada para preparar la discretización:
 
 \[
-  u(z^{-1})(1 - \alpha z^{-1} - \beta z^{-N}) = e(z^{-1})\left(\frac{\beta}{b}(1 - a z^{-1})\right)
+  u(z^{-1}) \left[ 1 - \alpha z^{-1} - \beta z^{-1-N} \right] = e(z^{-1}) \left[ \frac{\beta}{b} (1 - a z^{-1}) \right]
 \]
-
-Aplicando la transformada Z inversa para llevar la expresión a ecuaciones de diferencias:
 
 \[
-  u_k - \alpha u_{k-1} - \beta u_{k-N} = \frac{\beta}{b} e_k - \frac{a \beta}{b} e_{k-1}
+  u(z^{-1}) - \alpha u(z^{-1})z^{-1} - \beta u(z^{-1})z^{-1-N} = \frac{\beta}{b} e(z^{-1}) - \frac{a\beta}{b} e(z^{-1})z^{-1}
 \]
 
-Finalmente, despejando la acción de control actual $u_k$:
+Aplicando la transformada $\mathcal{Z}$ inversa para llevar la expresión al dominio discreto $k$:
+
+\[
+  u_k - \alpha u_{k-1} - \beta u_{k-1-N} = \frac{\beta}{b} e_k - \frac{a\beta}{b} e_{k-1}
+\]
+
+Finalmente, despejando la acción de control actual $u_k$, obtenemos la ley de control a programar:
 
 \begin{equation}
-  u_k = \alpha u_{k-1} + \beta u_{k-N} + \frac{\beta}{b} \left( e_k - a e_{k-1} \right)
+  u_k = \alpha u_{k-1} + \beta u_{k-1-N} + \frac{\beta}{b} \left( e_k - a e_{k-1} \right)
 \end{equation}

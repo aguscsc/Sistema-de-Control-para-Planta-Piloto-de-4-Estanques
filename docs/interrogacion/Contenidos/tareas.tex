@@ -1,7 +1,7 @@
-\section{Tarea periódicas y continuas}
+\section{Tareas periódicas y continuas}
 \textbf{PLC y estructuras para planta 4 estanques.Tareas para tiempo real en PLC, configuración de tareas (no) periódicas,  variables locales y globales, efectos de scan fijo y variable.}
 \subsection{Tareas}
-En \textit{Studio 5000} las tareas están definidas como periodicas, continuas o eventos. Esto crea una jerarquía de ejecución donde es de suma importancia la elección de un tiempo de muestreo lo suficientemente rápido para asegurar que los algoritmos de co trol capturen la dinámica del sistema sin perjudicar la ejecuciónde tareas continuas.
+En \textit{Studio 5000} las tareas están definidas como periodicas, continuas o eventos. Esto crea una jerarquía de ejecución donde es de suma importancia la elección de un tiempo de muestreo lo suficientemente rápido para asegurar que los algoritmos de control capturen la dinámica del sistema sin perjudicar la ejecución de tareas continuas.
 
 \begin{figure}[H]
   \begin{center}
@@ -10,12 +10,12 @@ En \textit{Studio 5000} las tareas están definidas como periodicas, continuas o
   \caption{Tareas (tomado de \textbf{rockwellGeneralInstructions})\cite{rockwellGeneralInstructions}}\label{fig:tareas}
 \end{figure}
 
-Las tareas periodicas comprenden todo lo que es algoritmos de calculo y muestreo deterministico, las tareas continuas por otro lado se encargan  de las alarmas y advertencias, finalmente las tareas eventos son tareas de muy alta prioridad que interrumpen el proceso cuando lo requieran. 
+Las tareas periodicas comprenden todo lo que es algoritmos de cálculo y muestreo determinístico, las tareas continuas por otro lado se encargan  de las alarmas y advertencias, finalmente las tareas eventos son tareas de muy alta prioridad que interrumpen el proceso cuando lo requieran. 
 
 \subsection{ScanTime}
-Por \textit{ScanTime} se define el tiempo total que le demora al PLC en completar una vuelta de las tareas continuas considerando todas las interrupciones causadas por tareas periodicas en medio. Por esto es imperativo escoger un tiempo de meustreo adecuado, normalmente este elige tomando en consideración que sea al menos 5 veces más rápido que la constante de tiempo más rápida del sistema. Este criterio deber ser contrastado con la necesidad de no aumentar el \textit{ScanTime} innecesariamente, esto porque entre más pequeño es el timepo de muestreo, más veces se ejecutará la tarea periodica en un tiempo determinado, quitando tiempo de ejecución a las tareas continuas, generando que el \textit{ScanTime} aumente.
+Por \textit{ScanTime} se define el tiempo total que le demora al PLC en completar una vuelta de las tareas continuas considerando todas las interrupciones causadas por tareas periodicas en medio. Por esto es imperativo escoger un tiempo de muestreo adecuado, normalmente este elige tomando en consideración que sea al menos 5 veces más rápido que la constante de tiempo más rápida del sistema. Este criterio deber ser contrastado con la necesidad de no aumentar el \textit{ScanTime} innecesariamente, esto porque entre más pequeño es el timepo de muestreo, más veces se ejecutará la tarea periodica en un tiempo determinado, quitando tiempo de ejecución a las tareas continuas, generando que el \textit{ScanTime} aumente.
 
-Esto puede generar problemas de comunicaciónn con la HMI, lag entre los datos desplegados o alarmas.
+Esto puede generar problemas de comunicación con la HMI, lag entre los datos desplegados o alarmas.
 
 \subsection{Tipos de variables}
 

@@ -100,44 +100,73 @@ Tomando el diagrama discreto de un predictor smith, se debe encontrar un $G_c$ t
 Y así finalmente, la ecuación del controaldor del predictor smith es:
 \begin{equation}
   \frac{u(z^{-1})}{e_1(z^{-1})} = \frac{G_c(z^{-1})}{1 + G_c(z^{-1})G_m(z^{-1}) -G_c(z^{-1})G_m(z^{-1})z^{-N}}
-  \label{GC_ps}
 \end{equation}
 
-\subsubsection{Análisis de $y_m$ y $\hat{b}$}
+\subsubsection{Análisis de $y_m$ y $\hat{b}$ para el Predictor de Smith}
 
+Para implementar el Predictor de Smith en un procesador digital, no se debe agrupar la planta y el controlador en una única ecuación en diferencias, ya que esto generaría un lazo algebraico irresoluble en tiempo de ejecución. En su lugar, el problema se divide de forma algorítmica calculando secuencialmente el modelo con retardo ($y_m$), el modelo sin retardo ($\hat{b}$), y finalmente corrigiendo el error que alimenta al controlador PI.
+
+Asumiendo un modelo de primer orden discretizado de la forma $G_m(z^{-1}) = \frac{\beta z^{-1}}{1 - \alpha z^{-1}}$ y un tiempo muerto equivalente a $N$ muestras, el desarrollo es el siguiente:
+
+\textbf{Análisis de $y_m$ (Predicción con retardo)}
+
+Partimos de la función de transferencia del modelo incluyendo el tiempo muerto:
 \[
-  y_m = z^{-N}G_m(z^{-1})u(z^{-1})
+  y_m(z^{-1}) = z^{-N}G_m(z^{-1})u(z^{-1})
 \]
-
 \[
-  \frac{y_m(z^{-1})}{u(z^{-1})} = \frac{\beta z^{-(N+1)}}{1 - \alpha z^{-1}}
+  y_m(z^{-1}) = \frac{\beta z^{-(N+1)}}{1 - \alpha z^{-1}}u(z^{-1})
 \]
-
+Multiplicando de forma cruzada para despejar el denominador:
 \[
-  \hat{b} = G_m(z^{-1})u(z^{-1})
+  y_m(z^{-1})(1 - \alpha z^{-1}) = u(z^{-1})(\beta z^{-(N+1)})
 \]
-
 \[
-  \frac{\hat{b}}{u(z^{-1})} = \frac{\beta z^{-1}}{1 - \alpha z^{-1}}
+  y_m(z^{-1}) - \alpha y_m(z^{-1})z^{-1} = \beta u(z^{-1})z^{-(N+1)}
 \]
-
-
-analisis de $y_m$
+Aplicando la transformada $\mathcal{Z}$ inversa, obtenemos la ecuación de diferencias para la predicción con retardo:
 \[
-  y_m(z^{-1})(1 - \alpha z^{-1}) = u(z^{-1})(\beta z^{-(1+N))}
-\]
-
-\[
-  y_m[k] - y_m[k-1]\alpha = u_k \beta - u_{k-1-N}
+  y_m[k] = \alpha y_m[k-1] + \beta u[k-(N+1)]
 \]
  
-y
+\textbf{Análisis de $\hat{b}$ (Predicción pura sin retardo)}
 
-
+El predictor puro corresponde al modelo de la planta sin el tiempo muerto extra $z^{-N}$:
 \[
-  e(z^{-1})(1 - \alpha z^{-1}) = u(z^{-1})(\beta z^{-1)}
+  \hat{b}(z^{-1}) = G_m(z^{-1})u(z^{-1})
+\]
+\[
+  \hat{b}(z^{-1}) = \frac{\beta z^{-1}}{1 - \alpha z^{-1}}u(z^{-1})
+\]
+Despejando de manera análoga al caso anterior:
+\[
+  \hat{b}(z^{-1})(1 - \alpha z^{-1}) = u(z^{-1})(\beta z^{-1})
+\]
+\[
+  \hat{b}(z^{-1}) - \alpha \hat{b}(z^{-1})z^{-1} = \beta u(z^{-1})z^{-1}
+\]
+Llevando la expresión al dominio discreto $k$, la ecuación de diferencias resulta:
+\[
+  \hat{b}[k] = \alpha \hat{b}[k-1] + \beta u[k-1]
 \]
 
+\textbf{Cálculo del Error Modificado y Ley de Control PI}
+
+Una vez calculadas ambas predicciones en el instante actual $k$, el algoritmo del Predictor de Smith corrige el error tradicional ($e_1[k] = SP[k] - PV[k]$) restando el efecto del modelo puro y sumando el modelo con retardo. Esto se define como el error modificado $e_2[k]$:
 \[
-  e[k] - e[k-1]\alpha = u_k \beta - u_{k-1}
+  e_2[k] = (SP[k] - PV[k]) - \hat{b}[k] + y_m[k]
 \]
+
+Finalmente, este error modificado $e_2[k]$ es el que alimenta la ecuación en diferencias del controlador PI en su forma de velocidad (incremental):
+\[
+  u(z^{-1})(1 - z^{-1}) = e_2(z^{-1})(q_0 + q_1z^{-1})
+\]
+\[
+  u(z^{-1}) - u(z^{-1})z^{-1} = q_0 e_2(z^{-1}) + q_1 e_2(z^{-1})z^{-1}
+\]
+Lo que se traduce en la siguiente ley de control final a ser ejecutada por el PLC:
+\[
+  u[k] = u[k-1] + q_0 e_2[k] + q_1 e_2[k-1]
+\]
+
+De esta manera, el controlador calcula el esfuerzo de control $u[k]$ en función de un error compensado iterativamente, eliminando el retardo de la ecuación característica del sistema sin comprometer la causalidad del código.

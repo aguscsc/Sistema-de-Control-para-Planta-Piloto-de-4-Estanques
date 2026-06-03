@@ -1,6 +1,9 @@
-\section{Combinación PID + Predictor Smith + Dahlin.}
-Primero se plantea
+\clearpage
+\section{Combinación PID + Predictor Smith + Dahlin}
 
+La premisa fundamental de esta combinación es que el Predictor de Smith compensa el tiempo muerto de la planta, permitiendo que el controlador primario $G_c(z^{-1})$ sea diseñado exclusivamente para la dinámica libre de retardo mediante el algoritmo de Dahlin.
+
+Primero se plantea el modelo de la planta con retardo y el modelo interno sin retardo:
 \begin{equation}
   G_p(z^{-1}) = \frac{bz^{-1}}{1-az^{-1}}z^{-N}
   \label{planta-ps}
@@ -9,133 +12,67 @@ Primero se plantea
   G_m(z^{-1}) = \frac{bz^{-1}}{1-az^{-1}}
   \label{modelo-ps}
 \end{equation}
-\[
-  \alpha = e^{-t_s/\tau}
-\]
-\[
-  \beta = k(1 - \alpha)
-\]
-Luego por algebra de bloques se obtiene la función de transferencia del controlador con predictor smith.
 
-\[
-  u(z^{-1}) = G_c(z^{-1}) e_2(z^{-1}) = G_c(z^{-1})(e_1(z^{-1}) - \hat{b}(1 - z^{-N})))
-\]
+Donde la dinámica deseada en lazo cerrado se define por el parámetro de sintonía $\alpha = e^{-T_s/\tau}$ y para garantizar ganancia unitaria en estado estacionario establecemos $\beta = 1 - \alpha$.
 
+Por álgebra de bloques, la función de transferencia del controlador inmerso en un Predictor de Smith es:
 \[
-  u(z^{-1}) = G_c(z^{-1})(e_1(z^{-1}) - u(z^{-1})G_m(z^{-1})(1 - z^{-N})))
+  u(z^{-1}) = G_c(z^{-1}) \left( e_1(z^{-1}) - u(z^{-1})G_m(z^{-1})(1 - z^{-N}) \right)
 \]
-
-\[
-  u(z^{-1})(1 + G_c(z^{-1})G_m(z^{-1})(1 - z^{-N}))) = G_c(z^{-1})(e_1(z^{-1}))
-\]
-
-Y así finalmente, la ecuación del controaldor del predictor smith es:
 \begin{equation}
-  \frac{u(z^{-1})}{e_1(z^{-1})} = \frac{G_c(z^{-1})}{1 + G_c(z^{-1})G_m(z^{-1}) -G_c(z^{-1})G_m(z^{-1})z^{-N}}
+  \frac{u(z^{-1})}{e_1(z^{-1})} = \frac{G_c(z^{-1})}{1 + G_c(z^{-1})G_m(z^{-1}) - G_c(z^{-1})G_m(z^{-1})z^{-N}}
   \label{GC_ps}
 \end{equation}
 
-Ahora, tomando la estructura general de la función de transferencia en lazo cerrado se tiene:
-
+Por otro lado, la estructura general de Dahlin busca imponer la siguiente respuesta en lazo cerrado:
 \[
-  H_{LC} = \frac{G_pG_c}{1 + G_pG_c} = \frac{\beta z^{-N}}{1 - \alpha z^{-1}}
+  H_{LC}(z^{-1}) = \frac{\beta z^{-1-N}}{1 - \alpha z^{-1}}
+\]
+Sintetizando el controlador general de Dahlin para la planta $G_p(z^{-1})$:
+\[
+  G_{c,Dahlin}(z^{-1}) = \frac{H_{LC}}{1 - H_{LC}}\cdot \frac{1}{G_p} = \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1-N}}
 \]
 
-Luego, despejando el controldor de la ecuación general,
-
+Para que nuestro sistema con Predictor de Smith se comporte idéntico a Dahlin, igualamos ambas expresiones:
 \[
-  G_c = \frac{H_{LC}}{1 - H_{LC}}\cdot \frac{1}{G_p}
+  \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1-N}} =\frac{G_c(z^{-1})}{1 + G_c(z^{-1}) \left( \frac{bz^{-1}}{1-az^{-1}} \right) (1 - z^{-N})} 
 \]
-
-Tomando las ecuaciones de la planta y lazo cerrado se reemplaza,
-
+Al resolver esta ecuación para encontrar el controlador primario $G_c(z^{-1})$, el retardo $z^{-N}$ se cancela algebraicamente, aislando la dinámica:
 \begin{equation}
-  G_c = \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1-N}}
-  \label{gc_normal}
-\end{equation}
-
-Ahora igualando la ecuación del controlador general \ref{gc_normal} con la del controlador con predictor smith \ref{GC_ps}, es posible determinar los parámetros para diseñar un controlador PI tal que se comporte como un controlador con predictor smith.
-
-\[
- G_c(z^{-1}) = \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1-N}} =\frac{G_c(z^{-1})}{1 + G_c(z^{-1})G_m(z^{-1}) -G_c(z^{-1})G_m(z^{-1})z^{-N}} 
-\]
-
-\[
-  \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1-N}} =\frac{G_c(z^{-1})(a - z^{-1})}{(1 - az^{-1}) + G_c(z^{-1})(bz^{-1}) -G_c(z^{-1})bz^{-1-N}} 
-\]
-
-\[
-  \frac{\beta}{b}(1-az^{-1} + G_c(z^{-1})b z^{-1} - G_c(z^{-1})(b z^{-(1+N)})) = G_c(z^{-1})(1 - \alpha z^{-1} - \beta z^{z^{-(1+N)}})
-\]
-
-
-\[
-  \frac{\beta}{b}(1-az^{-1}) = G_c(z^{-1})(1 - \alpha z^{-1} - \beta z^{-(1+N)} - \beta z^{-1} +\beta z^{-(1+N)})
-\]
-Y finalmente,
-
-\begin{equation}
-  G_c = \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1}} 
+  G_c(z^{-1}) = \frac{\frac{\beta}{b}(1 - az^{-1})}{1 - \alpha z^{-1} - \beta z^{-1}} 
   \label{controlador-ps}
 \end{equation}
 
-Ahora, despejando los componentes del controlador se llega a 
-
+Despejando para obtener la ecuación de diferencias del controlador:
 \[
-  u(z^{-1})(1 - \alpha z^{-1} - \beta z^{-1}) = e(z^{-1})\frac{\beta}{b}(1 - az^{-1})
+  u(z^{-1})(1 - \alpha z^{-1} - \beta z^{-1}) = e_1(z^{-1})\frac{\beta}{b}(1 - az^{-1})
+\]
+Factorizando el denominador:
+\[
+  u(z^{-1}) \left( 1 - (\alpha + \beta) z^{-1} \right) = e_1(z^{-1})\frac{\beta}{b}(1 - az^{-1})
+\]
+Dado que $\beta = 1 - \alpha$, sabemos que $\alpha + \beta = 1$. Llevando la expresión al dominio discreto $k$:
+\[
+  u_k - u_{k-1} = e_k\frac{\beta}{b} - e_{k-1}a\frac{\beta}{b}
+\]
+\[
+  u_k = u_{k-1} + e_k \left( \frac{\beta}{b} \right) + e_{k-1} \left( -a\frac{\beta}{b} \right)
 \]
 
-
+Esta ecuación tiene exactamente la misma estructura matemática que un controlador PI discreto. Si lo comparamos con la aproximación trapezoidal (Tustin) de un PI clásico:
 \[
-  u_k - u_{k-1}(\alpha - \beta) = e_k\frac{\beta}{b} - e_{k-1}a\frac{\beta}{b}
+  u_k = u_{k-1} + e_k \left[ K_c \left(1 + \frac{T_s}{2T_i}\right) \right] + e_{k-1} \left[ K_c \left(-1 + \frac{T_s}{2T_i}\right) \right]
 \]
 
+Igualando los coeficientes ($q_0$ y $q_1$) de ambas expresiones, es posible despejar directamente los parámetros de sintonía $K_c$ y $T_i$:
 \[
-  u_k - u_{k-1}(\alpha - k(1-\alpha)) = e_k\frac{\beta}{b} - e_{k-1}a\frac{\beta}{b}
+  q_0 - q_1 = 2K_c = \frac{\beta}{b} - \left(-a\frac{\beta}{b}\right) \implies K_c = \frac{\beta(1+a)}{2b}
+\]
+\[
+  q_0 + q_1 = K_c\frac{T_s}{T_i} = \frac{\beta}{b} + \left(-a\frac{\beta}{b}\right) = \frac{\beta(1-a)}{b}
+\]
+\[
+  T_i = \frac{K_c T_s}{q_0 + q_1} \implies T_i = \frac{T_s(1+a)}{2(1-a)}
 \]
 
-Para que la salida sea igual al $SP$ deseado, la ganancia dc debe ser unitaria por lo que $K = 1$ y entonces.
-
-
-\[
-  u_k  = u_{k-1} + e_k\frac{\beta}{b} - e_{k-1}a\frac{\beta}{b}
-\]
-
-Luego, para encontrar los parámetros del \textbf{PI},
-
-\[
-  u_k  = u_{k-1} + e_k\frac{1 - e^{-\frac{t_s}{\tau}}}{b} - e_{k-1}a\frac{1 -e^{\frac{t_s}{\tau}}}{b}
-\]
-
-Comparando con los parámetros del PI clásico.
-
-\[
-  u_k = u_{k-1} + e_kk_c(1 + \frac{T_s}{2T_i}) + e_{k-1}k_c(-1 + \frac{T_s}{2T_i})
-\]
-
-\[
-  \therefore k_c(1 + \frac{T_s}{2T_i}) = \frac{\beta}{b}, \implies k_c = \frac{2T_i \beta}{2T_ib +T_s}
-\]
-
-\[
-  -\frac{\beta a}{b} = (\frac{2T_i \beta}{2T_i b + T_s})(-1 + \frac{1}{2T_i})
-\]
-
-
-\[
-  -\frac{\beta a}{b} = (\frac{\beta - 2T_i \beta}{2T_i b + T_s})
-\]
-
-\[
-  -\frac{\beta a}{b}(2T_i b + T_s) = \beta - 2T_i \beta
-\]
-
-
-\[
-  2T_i(\beta - \beta a) = \beta + \beta T_s
-\]
-
-
-\[
-  T_i = \frac{1 + T_s}{2(1 - a)}
-\]
+Se concluye que un controlador PI sintonizado con estos parámetros e integrado dentro de un Predictor de Smith, equivale matemáticamente al algoritmo de Dahlin.

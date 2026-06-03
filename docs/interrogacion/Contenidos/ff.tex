@@ -28,7 +28,6 @@ Y(z^{-1}) = G_p(z^{-1})\left[ (u_{z}(z^{-1}) + W(z^{-1})G_h(z^{-1})) G_a(z^{-1})
   \label{eq:ff2}
 \end{equation}
 
-\clearpage
 
 
 El objetivo del compensador de perturbaciones es lograr una invariancia perfecta, es decir, que el efecto de $W(z^{-1})$ sobre $Y(z^{-1})$ sea nulo ($Y(z^{-1}) = 0$ asumiendo $u_{z}=0$). Igualando a cero la contribución de la perturbación, se despeja la acción de control anticipatoria:
@@ -75,7 +74,6 @@ Ignorando la perturbación y la acción del controlador temporalmente, se busca 
 \end{align}
 
 Definiendo este segundo bloque como $G_{sp}(z^{-1}) = \frac{1}{G_a(z^{-1}) G_p(z^{-1})}$, se establece un control de \textit{2 Grados de Libertad}, donde el Feedforward proporciona el esfuerzo base y el PID se encarga únicamente de corregir errores dinámicos y no linealidades residuales no modeladas.
-\clearpage
 \subsubsection{SP vs PV}
 
 Para tomar una decisión de diseño justificada, el ingeniero debe balancear la precisión matemática contra la robustez física de los actuadores y la facilidad de sintonía figura \ref{fig:ffsp}.

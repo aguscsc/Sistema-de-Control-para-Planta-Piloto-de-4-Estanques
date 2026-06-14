@@ -3,6 +3,14 @@
 \bibitem{johansson2000}
 K.~H. Johansson, ``The quadruple-tank process: A multivariable laboratory process with an adjustable zero,'' {\em IEEE Transactions on Control Systems Technology}, vol.~8, pp.~456--465, May 2000.
 
+\bibitem{stigler1981gauss}
+S.~M. Stigler, ``Gauss and the invention of least squares,'' {\em The Annals of Statistics}, vol.~9, no.~3, pp.~465--474, 1981.
+
+\bibitem{astrom1995adaptive}
+K.~J. {\AA}str{\"o}m and B.~Wittenmark, {\em Adaptive Control}.
+\newblock Addison-Wesley, 2nd~ed., 1995.
+\newblock Ver Apéndice sobre el Lema de Inversión de Matrices.
+
 \bibitem{cpc_proyecto1}
 {Departamento de Ingeniería Eléctrica}, ``Proyecto 1: Hmi para planta 4 estanques,'' tech. rep., Universidad de Concepción, Concepción, Chile, 2026.
 \newblock Asignatura: Control de Procesos por Computador (547507).

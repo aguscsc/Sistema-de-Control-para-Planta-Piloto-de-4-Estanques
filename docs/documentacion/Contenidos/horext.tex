@@ -136,7 +136,7 @@ Esta ecuación es conocida como la ecuación normal de Gauss, si se generaliza a
   \hat{\theta}_k = (\sum_{i=1}^{k} \phi_i\phi^T_i)^{-1} (\sum_{i=1}^{k} \phi_i y_i) 
 \]
 
-Luego, se define al término que acumula información como la matriz de covarianza del sistema, también conocida como la matriz de información de Fisher. 
+Luego, se define al término que acumula información como la matriz de covarianza del sistema.
 
 \[
   P_k = (\sum_{i=1}^{k} \phi_i\phi^T_i)^{-1}
@@ -315,10 +315,63 @@ Al aplicar este decaimiento exponencial a la derivación del Lema de Inversión 
   \label{P_olvido}
 \end{equation}
 
-El efecto de dividir la covarianza por un escalar menor a la unidad ($\frac{1}{\lambda}$) en la Ecuación \ref{P_olvido} es una "inflación" artificial y continua de la matriz $P_k$ en cada ciclo de ejecución. Esto garantiza que la incertidumbre del modelo nunca sea nula, manteniendo el vector de ganancia $K_k$ activo y, por ende, preservando la adaptatividad del sistema.
+El efecto de dividir la covarianza por un escalar menor a la unidad ($\frac{1}{\lambda}$) en la Ecuación \ref{P_olvido} es una "inflación" artificial y continua de la matriz $P_k$ en cada ciclo de ejecución. Esto garantiza que la incertidumbre del modelo nunca sea nula, manteniendo el vector de ganancia $K_k$ activo y, por ende, preservando la adaptabilidad del sistema.
 
+\subsubsection{Factor de olvido variable}
 
+En la identificación de parámetros, la elección del factor de olvido compromete directamente la adaptabilidad y la estabilidad del estimador. Se debe escoger entre privilegiar la estabilidad (utilizando un $\lambda \approx 1$, lo que provoca que la matriz de covarianza $P$ disminuya monótonamente hasta cero, dejando al estimador ciego ante futuros cambios dinámicos) o privilegiar la adaptabilidad (arriesgando que la matriz $P$ crezca hacia el infinito al entrar en un estado estacionario prolongado, fenómeno conocido como \textit{covariance windup}).
 
+El algoritmo de Fortescue et al. \cite{fortescue1981implementation} soluciona este dilema mediante un factor de olvido variable ($\lambda_k$), el cual acota los valores de la matriz $P$ conservando una cantidad de información constante dentro del estimador. 
+
+Se parte definiendo la función de costo $V_k$ como la acumulación de la información de los errores predictivos, dada por la expresión:
+\[
+  V_k = \sum_{i=1}^{k} \lambda^{k-i} e^2_i
+\]
+
+Su formulación recursiva aproximada es:
+\[
+  V_k = \lambda_k V_{k-1} + (1-\phi^T_k K_{\mathrm{prov}})e_k^2
+\]
+
+Donde el término que pondera al error a priori ($e_k$) proviene de su relación fundamental con el error a posteriori (o residual, $\epsilon_k$):
+\[
+\underbrace{\epsilon_k}_{\text{Error residual}}
+=
+(1-\phi^T_k K_{\mathrm{prov}})
+\underbrace{e_k}_{\text{Error a priori}}
+\]
+
+Cuando la planta entra en estado estacionario y el error $e_k$ se vuelve $0$, la ecuación recursiva se reduce a $V_k = \lambda_k V_{k-1}$. Si $\lambda_k$ fuera un valor constante menor a $1$, el factor $V_k$ tendería a $0$. Dado que la matriz de covarianza es inversamente proporcional a la información ($P_k \propto \frac{1}{V_k}$), esto implicaría que la incertidumbre diverja hacia infinito.
+
+Para evitar este colapso, Fortescue propone forzar que el estimador mantenga una cantidad de información nominal constante $\Sigma_0$ en todo momento:
+\[
+  V_k = V_{k-1} = \Sigma_0
+\]
+
+Reemplazando esta condición de equilibrio en la ecuación recursiva, se tiene:
+\[
+  \Sigma_0 = \lambda_k\Sigma_0 + (1-\phi^T_k K_{\mathrm{prov}})e_k^2
+\]
+
+Al despejar $\lambda_k$, se obtiene la ley de actualización del factor de olvido:
+\[
+  \lambda_k = 1 - \frac{(1 - \phi^T_k K_{\mathrm{prov}})e^2_k}{\Sigma_0}
+\]
+
+Mediante el lema de inversión de matrices, el factor de innovación se puede reescribir como $(1 - \phi_k^T K_{\mathrm{prov}}) = \frac{1}{1 + \phi_k^T P_{k-1} \phi_k}$, obteniendo la expresión final implementable en el controlador:
+\[
+  \lambda_k = 1 - \frac{e^2_k}{\Sigma_0(1 + \phi_k^T P_{k-1} \phi_k)}
+\]
+
+Finalmente, en procesos industriales reales, el error en estado estacionario nunca es nulo debido al ruido estocástico del propio sensor. Por esta razón, el parámetro $\Sigma_0$ se define teóricamente como la acumulación de la varianza del ruido en la ventana asintótica de memoria del estimador:
+\[
+  \Sigma_0 = N_0\cdot(\sigma_{\mathrm{ruido}})^2
+\]
+\[
+  N_0 =\sum_{i=0}^{\infty}\lambda^i = \frac{1}{1 - \lambda_{\min}}
+\]
+
+Físicamente, esto significa que $\Sigma_0$ actúa como un umbral máximo de energía de ruido estocástico que el algoritmo tolerará. Solo cuando el error predictivo supere la acumulación natural de este ruido, el algoritmo reducirá el valor de $\lambda_k$ para forzar un reaprendizaje de los parámetros.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \subsubsection{Pseudo-Random Bit Sequence}
@@ -348,7 +401,7 @@ P_k = (\frac{1}{0.99} P_{0})^{1200} \approx 172.888\cdot P_0
 \]
 Para prevenir esto y garantizar el continuo aprendizaje del estimador, el sistema debe cumplir con la condición de \textbf{Persistencia de Excitación}. Esto implica forzar a la planta a operar en un régimen dinámico transitorio de manera constante, para que revele su relación de causa y efecto. Para lograr esto sin desestabilizar el proceso ni alejarlo drásticamente de su punto de operación nominal, se impopone una \textbf{Señal Pseudo-Aleatoria Binaria (PRBS)} a la acción de control.
 
-La PRBS es una señal determinista que conmuta entre dos niveles lógicos de forma pseudo-aleatoria, emulando las propiedades espectrales del ruido blanco. Proviene originalmente del campo de la criptografía y las telecomunicaciones (específicamente de los sistemas de espectro ensanchado desarrollados a mediados del siglo XX), posteriormente fue adoptado por la teoría de control para la identificación de sistemas.
+La PRBS es una señal determinista que conmuta entre dos niveles lógicos de forma pseudo-aleatoria, emulando las propiedades espectrales del ruido blanco. Proviene originalmente del campo de la criptografía y las telecomunicaciones (específicamente de los sistemas de espectro ensanchado desarrollados a mediados del siglo XX), posteriormente fue adoptado por la teoría de control para la identificación de sistemas
 
 A nivel computacional, la PRBS no es verdaderamente aleatoria, sino completamente determinista, lo cual es ventajoso ya que permite reproducir el mismo experimento en las mismas condiciones. Su generación se basa en la arquitectura de un \textbf{Registro de Desplazamiento con Retroalimentación Lineal} (LFSR, por sus siglas en inglés: \textit{Linear Feedback Shift Register}).
 
@@ -367,7 +420,7 @@ Si las posiciones de los \textit{taps} se eligen correctamente (basándose en la
 
 Donde $n$ es la cantidad de bits del registro. Una vez generado el bit de salida, este valor lógico (0 o 1) se escala y mapea algebraicamente a los valores físicos de amplitud deseados ($+A$ y $-A$).
 
-Los esfuerzos de control asignados a la amplitud de la \texbf{PRBS}, deben caer dentro de un punto de operacioń donde el sistema se comporte los más lineal posible, esto para que el estimador pueda caracterizar zonas lineales correctamente. Seguido a esto, se debe asignar una duración de las señales de control que aseguren que el valor medido obtenga el estado transitorio de manera satisfactoria.
+Los esfuerzos de control asignados a la amplitud de la \textbf{PRBS}, deben caer dentro de un punto de operacioń donde el sistema se comporte los más lineal posible, esto para que el estimador pueda caracterizar zonas lineales correctamente. Seguido a esto, se debe asignar una duración de las señales de control que aseguren que el valor medido obtenga el estado transitorio de manera satisfactoria.
 \begin{figure}[H]
   \begin{center}
     \includegraphics[width=0.7\textwidth]{img/prbs.png}
@@ -376,4 +429,164 @@ Los esfuerzos de control asignados a la amplitud de la \texbf{PRBS}, deben caer 
 \end{figure}
 
 \subsection{Control con Horizonte Extendido}
-\subsection{Implementación de control predictivo en planta de 4 estanques}
+\subsection{Implementación de Control con Horizonte Extendido (HOREXT)}
+
+La implementación del algoritmo HOREXT combina el estimador RLS con la ley de control predictiva en una secuencia estricta de ejecución discreta. A diferencia del RLS estándar, el regresor y el vector de parámetros deben reformularse para describir un modelo de predicción a $T$ pasos adelante, no la dinámica instantánea del sistema.
+
+Para un modelo de orden $n$ y horizonte $T$, la dimensión del problema queda determinada por:
+\begin{itemize}
+    \item \textbf{Lado A} (dinámica de salida): $n$ parámetros $\bar{\alpha}_0, \ldots, \bar{\alpha}_{n-1}$
+    \item \textbf{Lado B} (respuesta a controles): $n + T - 1$ parámetros $\bar{\beta}_1, \ldots, \bar{\beta}_{n+T-1}$
+    \item \textbf{Total}: $n + (n + T - 1) = 2n + T - 1$ parámetros
+\end{itemize}
+
+Es importante destacar que estos coeficientes \textbf{no corresponden} a los polinomios $A$ y $B$ del sistema físico. Son combinaciones lineales de los parámetros reales convolucionados con los polinomios auxiliares $F$ y $G$ de la identidad polinomial de Ydstie (Ec. 3 del paper). El estimador identifica directamente el modelo de predicción a $T$ pasos, no el modelo del sistema.
+
+\subsubsection*{Vectores del sistema (orden $n$, horizonte $T$)}
+
+\textbf{Vector de parámetros} $\bar{\theta}$, de dimensión $(2n+T-1) \times 1$:
+\[
+    \bar{\theta} =
+    \underbrace{\begin{bmatrix} \bar{\alpha}_0 \\ \vdots \\ \bar{\alpha}_{n-1} \end{bmatrix}}_{\text{lado A, }n\text{ términos}}
+    \oplus
+    \underbrace{\begin{bmatrix} \bar{\beta}_1 \\ \vdots \\ \bar{\beta}_{n+T-1} \end{bmatrix}}_{\text{lado B, }n+T-1\text{ términos}}
+\]
+
+\textbf{Vector de regresores} $\bar{\phi}_k$, de dimensión $(2n+T-1) \times 1$.
+
+Bajo la \textbf{Estrategia 1} (control constante), se asume que los incrementos de control futuros son nulos: $\Delta u_{k+1} = \Delta u_{k+2} = \ldots = \Delta u_{k+T-1} = 0$. El regresor en el instante $k$ queda:
+
+\[
+    \bar{\phi}_k =
+    \underbrace{\begin{bmatrix}
+        \Delta y_k \\ \vdots \\ \Delta y_{k-n+1}
+    \end{bmatrix}}_{\text{lado A, }n\text{ términos}}
+    \oplus
+    \underbrace{\begin{bmatrix}
+        0 \\ \vdots \\ 0 \\ \Delta u_k \\ \vdots \\ \Delta u_{k-n+1}
+    \end{bmatrix}}_{\text{lado B, }n+T-1\text{ términos}}
+\]
+
+Donde los primeros $T-1$ slots del lado B son cero (controles futuros asumidos nulos bajo Estrategia 1), y los últimos $n$ slots contienen el historial de controles pasados conocidos.
+
+\textbf{Caso concreto} ($n=1$, $T=3$): dimensión total $= 2(1)+3-1 = 4$.
+
+\[
+    \bar{\theta} = \begin{bmatrix} \bar{\alpha}_0 \\ \bar{\beta}_1 \\ \bar{\beta}_2 \\ \bar{\beta}_3 \end{bmatrix}_{4\times1}
+    \qquad
+    \bar{\phi}_k = \begin{bmatrix} \Delta y_k \\ 0 \\ 0 \\ \Delta u_k \end{bmatrix}_{4\times1}
+\]
+
+La matriz de covarianza $P$ tiene dimensión $(2n+T-1)\times(2n+T-1)$, en el caso concreto $4\times4$.
+
+\clearpage
+\subsubsection*{Secuencia algorítmica}
+
+En cada instante de muestreo $k$, el procesador ejecuta los siguientes pasos en orden estricto.
+
+\paragraph{Paso 1: Lectura de sensores y construcción del regresor}
+
+Se adquiere la variable de proceso actual y se calcula su incremento:
+\[
+    \Delta y_k = y_k - y_{k-1}
+\]
+
+Se construye el regresor del instante actual con la Estrategia 1 ya aplicada:
+\[
+    \bar{\phi}_k =
+    \begin{bmatrix}
+        \Delta y_k,\ \Delta y_{k-1},\ \ldots,\ \Delta y_{k-n+1},\
+        \underbrace{0,\ \ldots,\ 0}_{T-1},\
+        \Delta u_k,\ \ldots,\ \Delta u_{k-n+1}
+    \end{bmatrix}^T
+\]
+
+Nótese que $\Delta u_k$ es el esfuerzo de control calculado en el ciclo anterior y ya aplicado a la planta.
+
+\paragraph{Paso 2: Error de predicción (innovación)}
+
+El error que corrige al estimador en el instante $k$ es el que se cometió hace $T$ pasos. Recién en $k$ se dispone de la medición real para comparar contra aquella predicción. Por esto el RLS utiliza el regresor retrasado $\bar{\phi}_{k-T}$, que debe mantenerse en un buffer circular de longitud $T$:
+
+\[
+    e_k = \Delta y_k - \bar{\phi}_{k-T}^T\, \bar{\theta}_{k-1}
+\]
+
+Esta es la diferencia fundamental respecto al RLS estándar: el regresor que genera la predicción y el regresor que la corrige están separados por $T$ pasos.
+
+\paragraph{Paso 3: Factor de olvido variable (Fortescue)}
+
+El factor de normalización escalar $D$ se calcula con el regresor retrasado:
+\[
+    D = 1 + \bar{\phi}_{k-T}^T\, P_{k-1}\, \bar{\phi}_{k-T}
+\]
+
+La ley de Fortescue determina qué proporción de memoria descartar en este ciclo:
+\[
+    \lambda_k = 1 - \frac{e_k^2}{\Sigma_0 \cdot D}, \qquad \lambda_k \in [0.95,\ 1.00]
+\]
+
+\paragraph{Paso 4: Ganancia de Kalman}
+
+\[
+    K_k = \frac{P_{k-1}\,\bar{\phi}_{k-T}}{\lambda_k + \bar{\phi}_{k-T}^T\, P_{k-1}\,\bar{\phi}_{k-T}}
+\]
+
+\paragraph{Paso 5: Actualización del vector de parámetros}
+
+\[
+    \bar{\theta}_k = \bar{\theta}_{k-1} + K_k\, e_k
+\]
+
+Los $2n+T-1$ parámetros se actualizan simultáneamente. A partir de este instante, $\bar{\theta}_k$ contiene el mejor estimado disponible del modelo de predicción a $T$ pasos.
+
+\paragraph{Paso 6: Actualización de la matriz de covarianza}
+
+\[
+    P_k = \frac{P_{k-1} - K_k\,(\bar{\phi}_{k-T}^T\, P_{k-1})}{\lambda_k}
+\]
+
+\paragraph{Paso 7: Ley de control HOREXT (Estrategia 1)}
+
+Con los parámetros actualizados, se calcula la \textbf{respuesta libre} $\bar{h}_{k+T}$: la predicción de la salida en $k+T$ asumiendo que no se aplica ningún control adicional a partir de $k$. Físicamente representa la inercia del proceso — hacia dónde se dirige la salida por sí sola dado el historial de controles pasados.
+
+\[
+    \bar{h}_{k+T} = y_k + \sum_{i=0}^{n-1} \bar{\alpha}_i\, \Delta y_{k-i}
+    + \sum_{i=1}^{n} \bar{\beta}_{T+i-1}\, \Delta u_{k-i+1}
+\]
+
+El esfuerzo de control incremental que lleva la salida al setpoint $y^*_{k+T}$ es:
+
+\[
+    \Delta u_k = \frac{y^*_{k+T} - \bar{h}_{k+T}}{\displaystyle\sum_{j=1}^{T} \bar{\beta}_j}
+\]
+
+El denominador $\sum_{j=1}^{T}\bar{\beta}_j$ representa la ganancia acumulada del predictor: cuánto desplaza la salida un escalón unitario sostenido durante $T$ pasos. Si este valor se aproxima a cero, se debe saturar por software para evitar división numérica inestable.
+
+El esfuerzo de control posicional aplicado al actuador es:
+\[
+    u_k = u_{k-1} + \Delta u_k
+\]
+
+\textbf{Caso concreto} ($n=1$, $T=3$):
+
+\[
+    \bar{h}_{k+3} = y_k + \bar{\alpha}_0\,\Delta y_k + \bar{\beta}_3\,\Delta u_k
+\]
+\[
+    \Delta u_k = \frac{y^*_{k+3} - \bar{h}_{k+3}}{\bar{\beta}_1 + \bar{\beta}_2 + \bar{\beta}_3}
+\]
+
+\paragraph{Paso 8: Desplazamiento de memoria}
+
+El PLC actualiza su buffer circular de regresores pasados, descartando $\bar{\phi}_{k-T}$ e insertando $\bar{\phi}_k$:
+
+\[
+    \bar{\phi}_{k-T+1} \leftarrow \bar{\phi}_{k-T+2} \leftarrow \cdots \leftarrow \bar{\phi}_{k-1} \leftarrow \bar{\phi}_k
+\]
+
+Y actualiza el historial de controles para el siguiente ciclo:
+\[
+    \Delta u_{k-n} \leftarrow \cdots \leftarrow \Delta u_{k-1} \leftarrow \Delta u_k
+\]
+
+Una vez finalizado este paso, el ciclo concluye y el valor $u_k$ es enviado al actuador (válvula o bomba).

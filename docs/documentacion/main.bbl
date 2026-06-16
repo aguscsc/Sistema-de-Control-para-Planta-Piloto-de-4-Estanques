@@ -11,6 +11,9 @@ K.~J. {\AA}str{\"o}m and B.~Wittenmark, {\em Adaptive Control}.
 \newblock Addison-Wesley, 2nd~ed., 1995.
 \newblock Ver Apéndice sobre el Lema de Inversión de Matrices.
 
+\bibitem{fortescue1981implementation}
+T.~R. Fortescue, L.~S. Kershenbaum, and B.~E. Ydstie, ``Implementation of self-tuning regulators with variable forgetting factors,'' {\em Automatica}, vol.~17, no.~6, pp.~831--835, 1981.
+
 \bibitem{cpc_proyecto1}
 {Departamento de Ingeniería Eléctrica}, ``Proyecto 1: Hmi para planta 4 estanques,'' tech. rep., Universidad de Concepción, Concepción, Chile, 2026.
 \newblock Asignatura: Control de Procesos por Computador (547507).

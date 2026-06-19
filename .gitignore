@@ -1,0 +1,49 @@
+## LaTeX build artifacts (docs/)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nlo
+*.nls
+*.ilg
+*.ind
+*.idx
+*.glo
+*.gls
+*.glg
+*.acn
+*.acr
+*.alg
+*.glsdefs
+*.run.xml
+*.xdv
+
+## MATLAB / Simulink generated cache (simulaciones/)
+slprj/
+*.slxc
+*.autosave
+*.asv
+codegen/
+
+## Rockwell Automation / Studio 5000 / FactoryTalk (plc/, HMI/)
+~$*.apa
+~$*.ACD
+*.ACD.Bak
+*_Backup_*/
+*.mer
+# Uncomment if you decide to track only the L5X export and not the raw binary project:
+# *.ACD
+
+## OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+*~

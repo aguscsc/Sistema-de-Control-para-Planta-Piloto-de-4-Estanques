@@ -1,6 +1,6 @@
 \clearpage
 \section{Control Predictivo Adaptativo}
-El control Predictivo Adaptativo nace de la necesidad de poder adaptar el control a los cambios propios de un sistema. En procesos industriales reales, la dinámica de una planta rara vez es estática, perturbaciones externas, desgaste de actuadores (como válvulas o bombas) o no linealidades inherentes al proceso provocan que un controlador sintonizado para un punto de operación específico pierda eficiencia al alejarse de este.
+El control Predictivo Adaptativo nace de la necesidad de poder adaptar el control a los cambios propios de un sistema. En procesos industriales reales, la dinámica de una planta rara vez es estática, perturbaciones externas, desgaste de actuadores (como válvulas o bombas) o no línealidades inherentes al proceso provocan que un controlador sintonizado para un punto de operación específico pierda eficiencia al alejarse de este.
 
 El control Predictivo Adaptativo divide el proceso en una parte adaptativa, el cual se encarga de estimar los parámetros del proceso mediante el monitoreo de los esfuerzos de control y las salidas resultantes, y una parte predictiva encargada de tomar la estimación obtenida y generar predicciones del comportamiento del sistema a lo largo de un horizonte predeterminado para luego seleccionar la acción de control que minimice el error futuro proyectado
 \subsection{Estimador de Parámetros}
@@ -21,7 +21,7 @@ Desde la necesidad de implementar algoritmos de indentificación de parámetros 
 \textbf{Filtro Kalman}.
 
 
-Se asume que el nuevo estado es una combinación lineal del estado anterior y la salida
+Se asume que el nuevo estado es una combinación líneal del estado anterior y la salida
 
 \[
   \hat{x}_k = W_1\hat{x}_{k-1} + W_2y_k
@@ -293,7 +293,7 @@ Los valores dentro de $\phi^T_k$ pueden ser valores intantáneos o incrementales
 
 La derivación matemática del algoritmo RLS estándar asume implícitamente que los parámetros del sistema ($\theta$) son constantes en el tiempo. Bajo esta suposición, a medida que el algoritmo acumula más y más datos (aumentando la información de la matriz $\Phi^T\Phi$), la matriz de covarianza $P_k$ decrece de forma monótona, tendiendo a cero ($P_k \to 0$). Físicamente, esto significa que el algoritmo adquiere una "certeza absoluta" sobre su modelo, lo que provoca que el vector de ganancia se anule ($K_k \to 0$). En este punto, el estimador se vuelve ciego e ignora cualquier dato futuro, perdiendo su capacidad de adaptación.
 
-Sin embargo, en procesos industriales reales como la planta de cuatro estanques, cuya dinámica es intrínsecamente no lineal  los parámetros linealizados cambian a medida que el proceso se desplaza a diferentes puntos de operación.
+Sin embargo, en procesos industriales reales como la planta de cuatro estanques, cuya dinámica es intrínsecamente no líneal  los parámetros línealizados cambian a medida que el proceso se desplaza a diferentes puntos de operación.
 
 Para evitar que el estimador se vuelva ciego, se introduce una modificación en la función de costo original mediante un \textbf{Factor de Olvido Exponencial ($\lambda$)}. La nueva función de costos asigna mayor peso a los errores recientes:
 
@@ -375,7 +375,7 @@ Físicamente, esto significa que $\Sigma_0$ actúa como un umbral máximo de ene
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \subsubsection{Pseudo-Random Bit Sequence}
-Como se demostró en la derivación de la ecuación normal de Gauss (Ecuación \ref{gaussnormal}), el cálculo del vector de parámetros $\hat{\theta}$ requiere la inversión de la matriz de información $(\Phi^T\Phi)$. En el ámbito del álgebra lineal, para que esta matriz sea no singular (invertible), es un requisito matemático estricto que los vectores de datos que la componen posean información linealmente independiente.
+Como se demostró en la derivación de la ecuación normal de Gauss (Ecuación \ref{gaussnormal}), el cálculo del vector de parámetros $\hat{\theta}$ requiere la inversión de la matriz de información $(\Phi^T\Phi)$. En el ámbito del álgebra líneal, para que esta matriz sea no singular (invertible), es un requisito matemático estricto que los vectores de datos que la componen posean información línealmente independiente.
 
 Físicamente, si el proceso se mantiene operando en un estado estacionario prolongado (es decir, la variable manipulada $u$ y la variable de proceso $y$ no sufren variaciones), el vector de regresores $\phi_k$ estará compuesto por valores estáticos repetidos ciclo a ciclo. Al no ingresar nueva "energía" o información dinámica al sistema, la matriz de covarianza $P_k$ comenzará a crecer descontroladamente (fenómeno conocido en la teoría de control como \textit{bursting} o explosión de covarianza), y el estimador RLS quedará ciego, fallando matemáticamente al intentar procesar una matriz con determinante nulo.
 
@@ -403,7 +403,7 @@ Para prevenir esto y garantizar el continuo aprendizaje del estimador, el sistem
 
 La PRBS es una señal determinista que conmuta entre dos niveles lógicos de forma pseudo-aleatoria, emulando las propiedades espectrales del ruido blanco. Proviene originalmente del campo de la criptografía y las telecomunicaciones (específicamente de los sistemas de espectro ensanchado desarrollados a mediados del siglo XX), posteriormente fue adoptado por la teoría de control para la identificación de sistemas
 
-A nivel computacional, la PRBS no es verdaderamente aleatoria, sino completamente determinista, lo cual es ventajoso ya que permite reproducir el mismo experimento en las mismas condiciones. Su generación se basa en la arquitectura de un \textbf{Registro de Desplazamiento con Retroalimentación Lineal} (LFSR, por sus siglas en inglés: \textit{Linear Feedback Shift Register}).
+A nivel computacional, la PRBS no es verdaderamente aleatoria, sino completamente determinista, lo cual es ventajoso ya que permite reproducir el mismo experimento en las mismas condiciones. Su generación se basa en la arquitectura de un \textbf{Registro de Desplazamiento con Retroalimentación líneal} (LFSR, por sus siglas en inglés: \textit{línear Feedback Shift Register}).
 
 El algoritmo LFSR consiste en un arreglo de $n$ bits de memoria (el registro) y compuertas lógicas que se ejecutan cíclicamente:
 \begin{enumerate}
@@ -420,7 +420,7 @@ Si las posiciones de los \textit{taps} se eligen correctamente (basándose en la
 
 Donde $n$ es la cantidad de bits del registro. Una vez generado el bit de salida, este valor lógico (0 o 1) se escala y mapea algebraicamente a los valores físicos de amplitud deseados ($+A$ y $-A$).
 
-Los esfuerzos de control asignados a la amplitud de la \textbf{PRBS}, deben caer dentro de un punto de operacioń donde el sistema se comporte los más lineal posible, esto para que el estimador pueda caracterizar zonas lineales correctamente. Seguido a esto, se debe asignar una duración de las señales de control que aseguren que el valor medido obtenga el estado transitorio de manera satisfactoria.
+Los esfuerzos de control asignados a la amplitud de la \textbf{PRBS}, deben caer dentro de un punto de operacioń donde el sistema se comporte los más líneal posible, esto para que el estimador pueda caracterizar zonas líneales correctamente. Seguido a esto, se debe asignar una duración de las señales de control que aseguren que el valor medido obtenga el estado transitorio de manera satisfactoria.
 \begin{figure}[H]
   \begin{center}
     \includegraphics[width=0.7\textwidth]{img/prbs.png}
@@ -429,18 +429,141 @@ Los esfuerzos de control asignados a la amplitud de la \textbf{PRBS}, deben caer
 \end{figure}
 
 \subsection{Control con Horizonte Extendido}
+El control con por horizonte extendido fue introducido para suplir las limitaciones del control por mínima varianza, cual presentaba problemas al ser aplicado en sistemas con gran retardo o con fase no mínima.
+\[
+  E[y_{k+D}|[Y_k]] = y^*_{k+D}
+\]
+\begin{equation}
+  u_k = \frac{y^*_{k+D}-h_{k+D}}{b_0}
+  \label{minimum-variance}
+\end{equation}
+
+En la ecuación \ref{minimum-variance} se muestra el cálculo del esfuerzo de control para un control por mínima varianza. 
+
+En el caso de un sistema con un gran retardo o con un retardo $D$ subestimado, al relación que ve el estimador entre el esfuerzo de control y la salida es mínima porque el efecto de la entrada no ha podido reflejarse en la salida, generando que el término $b_0$ sea muy pequeño, resultando en una acción de control desproporcionada y violenta. 
+
+Por otro lado, en sistemas de fase no mínima, el estimador registra una relación inversa entre el esfuerzo de control y la salida, al adapatarse el controlador comnenzará a oscilar entre acciones de control negativas y positivas, esto es debido a que el controlador trata de cancelar la dinámica de la planta en un paso, creando un control deadbeat. En casos de sistemas de fase no-mínima, un control de este estilo genera un polo inestable al tratar de cancelar el cero positivo del sistemas, esto general un controlador inherentemente inestable.
+
+
+El control por horizonte extendido relaja la acción de control al darle más tiempo para ejercer la acción de control. Esto permite ajustarse a sistemas de grand retardo o ignorar la dinámmica inicial de los ceros de un sistema de fase no mínima.
+
+\subsubsection{Modelo ARMA}
+
+Para poder estimar en línea los parámetros de un proceso desconocido, es necesario adoptar una estructura matemática que describa su comportamiento dinámico. El algoritmo HOREXT, al igual que el regulador autoajustable original, asume que la dinamica local del proceso puede aproximarse mediante un modelo líneal discreto de
+la familia ARMA (\textit{AutoRegressive Moving Average})\footnote{Estrictamente, el modelo de la Ecuación \ref{eq:arma} corresponde a la estructura ARX (\textit{AutoRegressive with eXogenous input}), ya que el ruido $v_k$ ingresa de forma aditiva y no filtrada. El termino ARMA se emplea aquí siguiendo la convención utilizada en el artículo de Ydstie et al. (1985), que no distingue formalmente entre ambas estructuras.}, el cual relaciona la salida del sistema con sus propios valores pasados y con los valores pasados de la entrada de control:
+
+\begin{equation}
+    A(z^{-1})y_k = z^{-D}B(z^{-1})u_k + d + v_k
+    \label{eq:arma}
+\end{equation}
+
+donde $z^{-1}$ es el operador de retardo unitario ($z^{-1}y_k = y_{k-1}$), $D$ es el retardo de transporte del proceso, $d$ es un parámetro de sesgo constante, y $v_k$ es una secuencia de ruido de media nula. Los polinomios $A$ y $B$ se definen como:
+
+\begin{equation}
+    A(z^{-1}) = 1 + a_1 z^{-1} + a_2 z^{-2} + \ldots + a_n z^{-n}
+\end{equation}
+\begin{equation}
+    B(z^{-1}) = b_0 + b_1 z^{-1} + b_2 z^{-2} + \ldots + b_{n-1} z^{-n+1}
+\end{equation}
+
+El polinomio $A$ describe la parte \textbf{autorregresiva} del modelo: como la salida actual depende de sus propios valores pasados. El polinomio $B$ describe los esfuerzos de control en forma de \textbf{media móvil}: como la salida depende de los valores pasados (y, tras el retardo $D$, presentes) de la señal de control. El orden $n$ de ambos polinomios determina cuantos términos pasados se consideran relevantes para describir la dinamica del proceso.
+
+Es importante notar que, sin pérdida de generalidad, ambos polinomios pueden asumirse del mismo orden $n$, ya que los coeficientes sobrantes en cualquiera de
+los dos pueden fijarse en cero. Esta es la convencion utilizada en este trabajo (previo a la implementación del control por horizonte extendido).
+
+\paragraph{Por que un modelo ARMA y no otra estructura}
+
+El modelo ARMA es la representación líneal de orden finito mas general que admite una formulación recursiva para la estimación de parámetros. Cualquier sistema líneal e invariante en el tiempo con función de transferencia racional pueden representarse exactamente mediante esta estructura para un orden $n$ suficiente. Además, al ser líneal en los parámetros $a_i$ y $b_i$, el error de predicción del
+modelo también es líneal respecto a estos, lo cual es precisamente la condición que permite aplicar el algoritmo de Minimos Cuadrados Recursivos (RLS) descrito en
+la Sección previa para su identificacion en línea.
+
+\subsubsection{Uso del modelo ARMA en HOREXT}
+
+Para poder implementar el control por horizonte extendido, es necesario ajustar el modelo ARMA presentado anteriormente para predecir $T$ pasos en el futuro. En el paper \cite{ydstie1985extended}, se propone trabajar desde la ecuación diofántica, tal que se cumpla
+\begin{equation}
+  1 = F(z^{-1})A'(z^{-1}) + z^{-T}G(z^{-1})
+  \label{dino}
+\end{equation}
+donde $F(z^{-1}) = f_0 + f_1z^{-1} + \dots + f_{T-1}z^{-T+1}$, $G(z^{-1}) = g_0 + g_1z^{-1} + \dots + g_{n}z^{-n}$ y $A'(z^{-1}) = A(z^{-1})(1 - z^{-1})$. $F$ y $G$ no se escogen libremente: se obtienen dividiendo $1$ entre $A'(z^{-1})$ y deteniendo la división tras $T$ términos, de modo que $F$ es el cociente truncado y $G$ es el resto desplazado por $z^{T}$.
+
+\paragraph{Por qué aparece $A'$}
+El modelo original (Ecuación \ref{eq:arma}) incluye el sesgo constante $d$. Aplicando el operador incremental $\Delta(z^{-1}) = 1 - z^{-1}$ a ambos lados, $d$ se cancela ($\Delta d = 0$) y queda
+\begin{equation}
+  A(z^{-1})\,\Delta(z^{-1})\,y_k = z^{-D}B(z^{-1})\,\Delta u_k + \Delta v_k
+  \label{eq:arma-delta}
+\end{equation}
+El polinomio que multiplica a $y_k$ ya no es $A(z^{-1})$ sino $A(z^{-1})\Delta(z^{-1})$; por eso se define $A'(z^{-1}) := A(z^{-1})(1-z^{-1})$. No es un polinomio físico nuevo, es simplemente $A$ con el operador de diferencia ya incorporado, y es la razón por la que el algoritmo completo trabaja con $\Delta y$ y $\Delta u$ en lugar de $y$ y $u$ (esto le da al controlador acción integral y elimina el offset de forma análoga al modelo CARIMA usado en control predictivo generalizado).
+
+\paragraph{Del modelo al predictor a $T$ pasos}
+Desplazando la Ecuación \ref{eq:arma-delta} $T$ pasos hacia adelante y multiplicando ambos lados por $F(z^{-1})$:
+\[
+  F(z^{-1})A'(z^{-1})\,y_{k+T} = F(z^{-1})B(z^{-1})\,\Delta u_{k+T-D} + F(z^{-1})\,\Delta v_{k+T}
+\]
+Usando la identidad diofántica (Ecuación \ref{dino}) para reemplazar $F(z^{-1})A'(z^{-1}) = 1 - z^{-T}G(z^{-1})$, y notando que $z^{-T}y_{k+T} = y_k$, se obtiene
+\begin{equation}
+  y_{k+T} = G(z^{-1})\,y_k + F(z^{-1})B(z^{-1})\,\Delta u_{k+T-D} + F(z^{-1})\,\Delta v_{k+T}
+  \label{eq:predictor}
+\end{equation}
+Como $F$ tiene grado $T-1$, el término $F(z^{-1})\Delta v_{k+T}$ depende exclusivamente de ruido futuro ($v_{k+1}, \ldots, v_{k+T}$), no disponible en el instante $k$. Despreciándolo se obtiene el predictor óptimo (varianza mínima) a $T$ pasos:
+\begin{equation}
+  \hat{y}_{k+T} = G(z^{-1})\,y_k + F(z^{-1})B(z^{-1})\,\Delta u_{k+T-D}
+  \label{eq:predictor-opt}
+\end{equation}
+
+\paragraph{De $G(z^{-1})y_k$ a la forma con $\Delta y$}
+Evaluando la identidad diofántica en $z^{-1}=1$: dado que $A'(1) = A(1)\cdot\Delta(1) = A(1)\cdot 0 = 0$, se cumple $G(1) = 1$. Esto implica que $G(z^{-1})-1$ tiene una raíz en $z^{-1}=1$ y por lo tanto es divisible por $\Delta(z^{-1})=(1-z^{-1})$, de modo que $G(z^{-1})y_k$ se puede escribir exactamente como $y_k$ más $n$ términos de $\Delta y$ (no $n+1$ términos de $y$, que es lo que se tendría usando los coeficientes de $G$ directamente):
+\begin{equation}
+  G(z^{-1})\,y_k = y_k + \sum_{i=0}^{n-1} \bar{\alpha}_i\,\Delta y_{k-i}
+  \label{eq:Gfactor}
+\end{equation}
+Sustituyendo en la Ecuación \ref{eq:predictor-opt}, y renombrando como $\bar{\beta}_j$ los coeficientes de la convolución $F(z^{-1})B(z^{-1})$ (grado $(T-1)+(n-1)=n+T-2$, es decir $n+T-1$ términos), el predictor queda
+\begin{equation}
+  y_{k+T} = y_k + \sum_{i=0}^{n-1} \bar{\alpha}_i\,\Delta y_{k-i} + \sum_{j=1}^{n+T-1} \bar{\beta}_j\,\Delta u_{k+T-D-j+1}
+  \label{eq:predictor-final}
+\end{equation}
+Esta es exactamente la forma usada por el algoritmo. Ni $\bar\alpha$ ni $\bar\beta$ corresponden directamente a $A$, $B$, $F$ o $G$ por separado: son combinaciones de estos obtenidas algebraicamente a partir de la identidad diofántica, pero ambos lados quedan expresados como una combinación lineal de datos pasados ($\Delta y$, $\Delta u$) con coeficientes constantes desconocidos, la misma forma $y=\phi^T\theta$ ya usada para el RLS estándar (Sección \ref{RLS}), solo que aquí $\bar\theta = [\bar\alpha\ ;\ \bar\beta]$ son los coeficientes del predictor a $T$ pasos en vez de los de $A$ y $B$. Esa linealidad es la condición exacta que permite identificar $\bar\alpha$ y $\bar\beta$ directamente con RLS, sin pasar por la identificación de $A$ y $B$ ni resolver la ecuación diofántica en línea: el estimador recursivo ajusta directamente los coeficientes del predictor a $T$ pasos, no los del modelo instantáneo del proceso. Los vectores $\bar\theta$ y $\bar\phi_k$ completos se construyen explícitamente en la siguiente sección.
+
+\subsubsection{Estrategias de control}
+
+Una vez disponible el predictor (Ecuación \ref{eq:predictor-final}), falta decidir \textit{cómo} se traduce en un esfuerzo de control concreto $\Delta u_k$. La predicción a $T$ pasos se separa en dos partes: la \textbf{respuesta libre} $\bar h_{k+T}$ (lo que el modelo predice usando únicamente datos ya conocidos, es decir, asumiendo que no se aplica ningún esfuerzo de control nuevo) y la \textbf{respuesta forzada}, el efecto adicional que tendría el nuevo incremento $\Delta u_k$ que se está calculando en este ciclo:
+\[
+  \hat y_{k+T} = \bar h_{k+T} + (\text{efecto del nuevo } \Delta u_k)
+\]
+Igualando $\hat y_{k+T}$ al setpoint $y^*_{k+T}$ y despejando $\Delta u_k$ se obtiene la ley de control. Lo que distingue a las tres estrategias propuestas en \cite{ydstie1985extended} es \textbf{qué se asume sobre cómo se propaga ese nuevo incremento a través del horizonte}, lo cual determina qué combinación de los coeficientes $\bar\beta_j$ aparece en la ley resultante.
+
+\paragraph{Estrategia 1: control de nivel medio (control constante)}
+\begin{equation}
+  \Delta u_k = \frac{y^*_{k+T} - \bar h_{k+T}}{\displaystyle\sum_{j=1}^{T} \bar\beta_j}
+  \label{eq:estrategia1}
+\end{equation}
+Se asume que el nuevo incremento se aplica como un escalón que se \textbf{mantiene constante} durante todo el resto del horizonte ($\Delta u_{k+1} = \Delta u_{k+2} = \ldots = \Delta u_{k+T-1} = \Delta u_k$). Bajo esta hipótesis, el mismo valor aparece en cada una de las $T$ posiciones de rezago que el predictor todavía no conoce, por lo que su efecto acumulado sobre $y_{k+T}$ es la \textbf{suma} de los $T$ primeros coeficientes, $\bar\beta_1 + \ldots + \bar\beta_T$. Es la estrategia detallada e implementada en la sección siguiente: al repartir la corrección entre varios coeficientes, es la más conservadora de las tres y la menos sensible a que un coeficiente individual sea pequeño.
+
+\paragraph{Estrategia 2: control de varianza mínima generalizado}
+\begin{equation}
+  \Delta u_k = \frac{y^*_{k+T} - \bar h_{k+T}}{\bar\beta_T}
+  \label{eq:estrategia2}
+\end{equation}
+Aquí se asume lo contrario: el nuevo incremento actúa únicamente a través de su canal más inmediato, representado por el coeficiente $\bar\beta_T$ (el que multiplica directamente al propio $\Delta u_k$ que se está decidiendo — el análogo exacto, en el predictor a $T$ pasos, del coeficiente $b_0$ del control de varianza mínima de la Ecuación \ref{minimum-variance}, que también multiplica al control recién decidido), ignorando su efecto acumulado en el resto del horizonte. Por eso hereda la misma fragilidad que motivó abandonar el control de varianza mínima en primer lugar (Sección anterior): si $\bar\beta_T$ es pequeño (retardo grande o fase no mínima), el esfuerzo de control puede volverse desproporcionado. De las tres, es la más agresiva.
+
+\paragraph{Estrategia 3: control de mínimos cuadrados}
+\begin{equation}
+  \Delta u_k = \frac{\bar\beta_T\,(y^*_{k+T} - \bar h_{k+T})}{\displaystyle\sum_{j=1}^{n+T-1} \bar\beta_j^2}
+  \label{eq:estrategia3}
+\end{equation}
+Esta ley se puede leer como una versión \textbf{amortiguada} de la Estrategia 2: en vez de normalizar solo por $\bar\beta_T$, lo hace por la energía completa del vector $\bar\beta$, $\sum_j \bar\beta_j^2$. Si todos los demás coeficientes fueran nulos, $\sum_j\bar\beta_j^2 = \bar\beta_T^2$ y la Ecuación \ref{eq:estrategia3} se reduce exactamente a la Ecuación \ref{eq:estrategia2}; en general $\sum_j\bar\beta_j^2 \geq \bar\beta_T^2$, por lo que la Estrategia 3 siempre produce una corrección de menor magnitud que la Estrategia 2, evitando la división por un coeficiente casi nulo de forma análoga a como la Estrategia 1 evita dividir por $\sum_j\bar\beta_j \approx 0$ (Sección siguiente). Es la más conservadora numéricamente de las tres.
+
+En general, la \textbf{Estrategia 1} resulta el mejor punto de partida: es la más robusta frente a sistemas de gran retardo o fase no mínima, que es justamente la motivación original del control por horizonte extendido. Las Estrategias 2 y 3 quedan disponibles como alternativas más agresivas (2) o más conservadoras (3) si la respuesta del sistema requiere ajustar ese compromiso.
+
 \subsection{Implementación de Control con Horizonte Extendido (HOREXT)}
 
 La implementación del algoritmo HOREXT combina el estimador RLS con la ley de control predictiva en una secuencia estricta de ejecución discreta. A diferencia del RLS estándar, el regresor y el vector de parámetros deben reformularse para describir un modelo de predicción a $T$ pasos adelante, no la dinámica instantánea del sistema.
 
 Para un modelo de orden $n$ y horizonte $T$, la dimensión del problema queda determinada por:
 \begin{itemize}
-    \item \textbf{Lado A} (dinámica de salida): $n$ parámetros $\bar{\alpha}_0, \ldots, \bar{\alpha}_{n-1}$
-    \item \textbf{Lado B} (respuesta a controles): $n + T - 1$ parámetros $\bar{\beta}_1, \ldots, \bar{\beta}_{n+T-1}$
+    \item \textbf{Lado A} (dinámica de salida): $n$ parámetros $\bar{\alpha}_0, \ldots, \bar{\alpha}_{n-1}$, coeficientes que aparecen al reescribir $G(z^{-1})y_k$ en la Ecuación \ref{eq:Gfactor}
+    \item \textbf{Lado B} (respuesta a controles): $n + T - 1$ parámetros $\bar{\beta}_1, \ldots, \bar{\beta}_{n+T-1}$, coeficientes de la convolución $F(z^{-1})B(z^{-1})$
     \item \textbf{Total}: $n + (n + T - 1) = 2n + T - 1$ parámetros
 \end{itemize}
-
-Es importante destacar que estos coeficientes \textbf{no corresponden} a los polinomios $A$ y $B$ del sistema físico. Son combinaciones lineales de los parámetros reales convolucionados con los polinomios auxiliares $F$ y $G$ de la identidad polinomial de Ydstie (Ec. 3 del paper). El estimador identifica directamente el modelo de predicción a $T$ pasos, no el modelo del sistema.
 
 \subsubsection*{Vectores del sistema (orden $n$, horizonte $T$)}
 
@@ -454,7 +577,7 @@ Es importante destacar que estos coeficientes \textbf{no corresponden} a los pol
 
 \textbf{Vector de regresores} $\bar{\phi}_k$, de dimensión $(2n+T-1) \times 1$.
 
-Bajo la \textbf{Estrategia 1} (control constante), se asume que los incrementos de control futuros son nulos: $\Delta u_{k+1} = \Delta u_{k+2} = \ldots = \Delta u_{k+T-1} = 0$. El regresor en el instante $k$ queda:
+Bajo la \textbf{Estrategia 1} (control constante), $\Delta u_k$ (el incremento que se está decidiendo en este mismo ciclo, vía el Paso 7) todavía no existe cuando se construye el regresor en el Paso 1, igual que los incrementos futuros que se asumen nulos: $\Delta u_k = \Delta u_{k+1} = \ldots = \Delta u_{k+T-1} = 0$ en $\bar\phi_k$. El regresor en el instante $k$ queda:
 
 \[
     \bar{\phi}_k =
@@ -463,19 +586,20 @@ Bajo la \textbf{Estrategia 1} (control constante), se asume que los incrementos 
     \end{bmatrix}}_{\text{lado A, }n\text{ términos}}
     \oplus
     \underbrace{\begin{bmatrix}
-        0 \\ \vdots \\ 0 \\ \Delta u_k \\ \vdots \\ \Delta u_{k-n+1}
+        0 \\ \vdots \\ 0 \\ \Delta u_{k-1} \\ \vdots \\ \Delta u_{k-n+1}
     \end{bmatrix}}_{\text{lado B, }n+T-1\text{ términos}}
 \]
 
-Donde los primeros $T-1$ slots del lado B son cero (controles futuros asumidos nulos bajo Estrategia 1), y los últimos $n$ slots contienen el historial de controles pasados conocidos.
+Donde los primeros $T$ slots del lado B son cero ($\Delta u_k$ y los $T-1$ controles futuros, todos desconocidos al construir $\bar\phi_k$), y los últimos $n-1$ slots contienen el historial de controles pasados ya conocidos ($\Delta u_{k-1}, \ldots, \Delta u_{k-n+1}$).
 
 \textbf{Caso concreto} ($n=1$, $T=3$): dimensión total $= 2(1)+3-1 = 4$.
 
 \[
     \bar{\theta} = \begin{bmatrix} \bar{\alpha}_0 \\ \bar{\beta}_1 \\ \bar{\beta}_2 \\ \bar{\beta}_3 \end{bmatrix}_{4\times1}
     \qquad
-    \bar{\phi}_k = \begin{bmatrix} \Delta y_k \\ 0 \\ 0 \\ \Delta u_k \end{bmatrix}_{4\times1}
+    \bar{\phi}_k = \begin{bmatrix} \Delta y_k \\ 0 \\ 0 \\ 0 \end{bmatrix}_{4\times1}
 \]
+Con $n=1$ no quedan slots para historial de control ($n-1=0$): los 3 términos del lado B son enteramente los controles desconocidos $\Delta u_k, \Delta u_{k+1}, \Delta u_{k+2}$.
 
 La matriz de covarianza $P$ tiene dimensión $(2n+T-1)\times(2n+T-1)$, en el caso concreto $4\times4$.
 
@@ -496,33 +620,33 @@ Se construye el regresor del instante actual con la Estrategia 1 ya aplicada:
     \bar{\phi}_k =
     \begin{bmatrix}
         \Delta y_k,\ \Delta y_{k-1},\ \ldots,\ \Delta y_{k-n+1},\
-        \underbrace{0,\ \ldots,\ 0}_{T-1},\
-        \Delta u_k,\ \ldots,\ \Delta u_{k-n+1}
+        \underbrace{0,\ \ldots,\ 0}_{T},\
+        \Delta u_{k-1},\ \ldots,\ \Delta u_{k-n+1}
     \end{bmatrix}^T
 \]
 
-Nótese que $\Delta u_k$ es el esfuerzo de control calculado en el ciclo anterior y ya aplicado a la planta.
+Nótese que $\Delta u_k$ \textbf{no} forma parte de $\bar\phi_k$: es el incremento que recién se va a decidir en el Paso 7 de este mismo ciclo, por lo que en el Paso 1 todavía es tan desconocido como los controles futuros $\Delta u_{k+1}, \ldots, \Delta u_{k+T-1}$. El último control efectivamente conocido al construir el regresor es $\Delta u_{k-1}$, calculado y aplicado en el ciclo anterior.
 
 \paragraph{Paso 2: Error de predicción (innovación)}
 
-El error que corrige al estimador en el instante $k$ es el que se cometió hace $T$ pasos. Recién en $k$ se dispone de la medición real para comparar contra aquella predicción. Por esto el RLS utiliza el regresor retrasado $\bar{\phi}_{k-T}$, que debe mantenerse en un buffer circular de longitud $T$:
+El error que corrige al estimador en el instante $k$ es el que se cometió hace $T$ pasos. La predicción hecha en $k-T$ con el regresor $\bar\phi_{k-T}$ pronosticaba el cambio a $T$ pasos $y_k - y_{k-T}$ (Ecuación \ref{eq:predictor-final}), \textbf{no} el cambio de un paso $\Delta y_k$. Recién en $k$ se dispone de la medición real para comparar contra aquella predicción. Por esto el RLS utiliza el regresor retrasado $\bar{\phi}_{k-T}$ y el valor retrasado $y_{k-T}$, ambos mantenidos en buffers circulares de longitud $T$:
 
 \[
-    e_k = \Delta y_k - \bar{\phi}_{k-T}^T\, \bar{\theta}_{k-1}
+    e_k = (y_k - y_{k-T}) - \bar{\phi}_{k-T}^T\, \bar{\theta}_{k-1}
 \]
 
-Esta es la diferencia fundamental respecto al RLS estándar: el regresor que genera la predicción y el regresor que la corrige están separados por $T$ pasos.
+Esta es la diferencia fundamental respecto al RLS estándar: el regresor que genera la predicción y el regresor que la corrige están separados por $T$ pasos, y el error compara el cambio a $T$ pasos, no el cambio de un paso.
 
 \paragraph{Paso 3: Factor de olvido variable (Fortescue)}
 
-El factor de normalización escalar $D$ se calcula con el regresor retrasado:
+El factor de normalización escalar $S_k$ se calcula con el regresor retrasado (se usa $S_k$ y no $D$ para no confundirlo con el retardo de transporte de la Ecuación \ref{eq:arma}):
 \[
-    D = 1 + \bar{\phi}_{k-T}^T\, P_{k-1}\, \bar{\phi}_{k-T}
+    S_k = 1 + \bar{\phi}_{k-T}^T\, P_{k-1}\, \bar{\phi}_{k-T}
 \]
 
 La ley de Fortescue determina qué proporción de memoria descartar en este ciclo:
 \[
-    \lambda_k = 1 - \frac{e_k^2}{\Sigma_0 \cdot D}, \qquad \lambda_k \in [0.95,\ 1.00]
+    \lambda_k = 1 - \frac{e_k^2}{\Sigma_0 \cdot S_k}, \qquad \lambda_k \in [0.95,\ 1.00]
 \]
 
 \paragraph{Paso 4: Ganancia de Kalman}
@@ -547,11 +671,11 @@ Los $2n+T-1$ parámetros se actualizan simultáneamente. A partir de este instan
 
 \paragraph{Paso 7: Ley de control HOREXT (Estrategia 1)}
 
-Con los parámetros actualizados, se calcula la \textbf{respuesta libre} $\bar{h}_{k+T}$: la predicción de la salida en $k+T$ asumiendo que no se aplica ningún control adicional a partir de $k$. Físicamente representa la inercia del proceso — hacia dónde se dirige la salida por sí sola dado el historial de controles pasados.
+Con los parámetros actualizados, se calcula la \textbf{respuesta libre} $\bar{h}_{k+T}$: la predicción de la salida en $k+T$ asumiendo que no se aplica ningún control adicional a partir de $k$ (es decir, sin contar todavía el $\Delta u_k$ que este mismo paso está por decidir). Físicamente representa la inercia del proceso — hacia dónde se dirige la salida por sí sola dado el historial de controles \textbf{ya aplicados} ($\Delta u_{k-1}, \ldots, \Delta u_{k-n+1}$):
 
 \[
     \bar{h}_{k+T} = y_k + \sum_{i=0}^{n-1} \bar{\alpha}_i\, \Delta y_{k-i}
-    + \sum_{i=1}^{n} \bar{\beta}_{T+i-1}\, \Delta u_{k-i+1}
+    + \sum_{i=1}^{n-1} \bar{\beta}_{T+i}\, \Delta u_{k-i}
 \]
 
 El esfuerzo de control incremental que lleva la salida al setpoint $y^*_{k+T}$ es:
@@ -567,10 +691,10 @@ El esfuerzo de control posicional aplicado al actuador es:
     u_k = u_{k-1} + \Delta u_k
 \]
 
-\textbf{Caso concreto} ($n=1$, $T=3$):
+\textbf{Caso concreto} ($n=1$, $T=3$): con $n=1$ no hay términos de historial de control ($n-1=0$), por lo que la respuesta libre se reduce a
 
 \[
-    \bar{h}_{k+3} = y_k + \bar{\alpha}_0\,\Delta y_k + \bar{\beta}_3\,\Delta u_k
+    \bar{h}_{k+3} = y_k + \bar{\alpha}_0\,\Delta y_k
 \]
 \[
     \Delta u_k = \frac{y^*_{k+3} - \bar{h}_{k+3}}{\bar{\beta}_1 + \bar{\beta}_2 + \bar{\beta}_3}
@@ -584,9 +708,14 @@ El PLC actualiza su buffer circular de regresores pasados, descartando $\bar{\ph
     \bar{\phi}_{k-T+1} \leftarrow \bar{\phi}_{k-T+2} \leftarrow \cdots \leftarrow \bar{\phi}_{k-1} \leftarrow \bar{\phi}_k
 \]
 
-Y actualiza el historial de controles para el siguiente ciclo:
+Además, debe mantenerse un segundo buffer circular de longitud $T$ con las mediciones de salida, necesario para construir el error del Paso 2 ($e_k$ requiere $y_{k-T}$):
 \[
-    \Delta u_{k-n} \leftarrow \cdots \leftarrow \Delta u_{k-1} \leftarrow \Delta u_k
+    y_{k-T+1} \leftarrow y_{k-T+2} \leftarrow \cdots \leftarrow y_{k-1} \leftarrow y_k
+\]
+
+Y actualiza el historial de controles ya aplicados para el siguiente ciclo, descartando el más antiguo e insertando el $\Delta u_k$ recién calculado en el Paso 7:
+\[
+    \Delta u_{k-n+2} \leftarrow \cdots \leftarrow \Delta u_{k-1} \leftarrow \Delta u_k
 \]
 
 Una vez finalizado este paso, el ciclo concluye y el valor $u_k$ es enviado al actuador (válvula o bomba).

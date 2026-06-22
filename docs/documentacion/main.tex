@@ -1,5 +1,5 @@
 \documentclass[letterpaper, 12pt]{article}
-\usepackage[spanish]{babel}
+%\usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc} % Opcional en distribuciones modernas
 \usepackage{graphicx} 
 \usepackage[labelfont=bf]{caption}
@@ -26,7 +26,7 @@
 \usepackage{fancyhdr}
 \usepackage{booktabs} 
 \usepackage{multirow} 
-\usepackage{hyperref} 
+\usepackage[hyperfootnotes=false]{hyperref}
 \usepackage{pdfpages}
 \usepackage{geometry} 
 \usepackage{indentfirst} 
@@ -69,8 +69,9 @@
 \newcommand{\submissiondate}{Concepción, Chile}
 
 \begin{document}
+\hypersetup{pageanchor=false}
 \portada
-\pagestyle{roman} 
+\pagestyle{roman}
 \onehalfspacing
 
 % Cambiado a \input por si no quieres saltos de página forzados
@@ -83,8 +84,10 @@
 \clearpage
 %\printnoidxglossary[title={Abreviaciones}, style=myalttree]
 \newpage
-\pagestyle{arabic} 
+\hypersetup{pageanchor=false}
+\pagestyle{arabic}
 \setcounter{page}{1}
+\hypersetup{pageanchor=true}
 
 % Cambiado a \input
 \input{Contenidos/modelacion}

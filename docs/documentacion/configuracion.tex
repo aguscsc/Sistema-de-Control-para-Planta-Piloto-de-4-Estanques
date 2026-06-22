@@ -91,6 +91,12 @@
 
 % Configuración de subsecciones numeradas con "1.-"
 \renewcommand\thesubsection{\arabic{subsection}.}
+% Anclas únicas para hyperref (incluyen número de sección, se define en AtBeginDocument
+% para correr después de que hyperref inicialice sus H-counters)
+\AtBeginDocument{%
+  \renewcommand\theHsubsection{\arabic{section}.\arabic{subsection}}%
+  \renewcommand\theHsubsubsection{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}%
+}
 
 \newcommand{\tocmysubsection}[1]{%
   \addcontentsline{toc}{subsection}{\arabic{subsection}.\hspace{1em}#1}%
@@ -152,7 +158,7 @@
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
-    filecolor=blue,      
+    filecolor=blue,
     urlcolor=blue,
     citecolor=blue
 }

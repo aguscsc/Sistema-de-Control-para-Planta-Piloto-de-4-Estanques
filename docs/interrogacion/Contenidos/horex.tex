@@ -1,0 +1,110 @@
+\clearpage
+\section{Control con Horizonte Extendido (HOREXT)}
+
+El control por \textbf{horizonte extendido} fue introducido para superar las limitaciones del control por mínima varianza, el cual presenta inestabilidad en sistemas con retardo dominante o con fase no mínima. Al dar más tiempo al controlador para ejercer su acción, se evita la cancelación agresiva de ceros que generaría polos inestables.
+
+\subsection{Modelo ARMA}
+
+Se asume que la dinámica local del proceso puede aproximarse mediante un modelo lineal discreto de la familia ARMA:
+
+\begin{equation}
+  A(z^{-1})y_k = z^{-D}B(z^{-1})u_k + d + v_k
+  \label{eq:arma-horex}
+\end{equation}
+
+donde $D$ es el retardo de transporte, $d$ es un sesgo constante y $v_k$ es ruido de media nula. Los polinomios son:
+
+\[
+  A(z^{-1}) = 1 + a_1z^{-1} + \cdots + a_nz^{-n}
+  \qquad
+  B(z^{-1}) = b_0 + b_1z^{-1} + \cdots + b_{n-1}z^{-(n-1)}
+\]
+
+Aplicando el operador incremental $\Delta(z^{-1}) = 1 - z^{-1}$ a ambos lados de la Ecuación \ref{eq:arma-horex}, el sesgo $d$ se cancela y queda:
+
+\begin{equation}
+  A'(z^{-1})\,y_k = z^{-D}B(z^{-1})\,\Delta u_k + \Delta v_k
+  \label{eq:arma-delta-horex}
+\end{equation}
+
+donde $A'(z^{-1}) = A(z^{-1})(1-z^{-1})$. Trabajar con $\Delta u$ y $\Delta y$ otorga al controlador acción integral implícita, eliminando el offset en estado estacionario.
+
+\subsection{Ecuación Diofántica}
+
+Para predecir la salida $T$ pasos hacia adelante se utiliza la \textbf{identidad diofántica}:
+
+\begin{equation}
+  1 = F(z^{-1})A'(z^{-1}) + z^{-T}G(z^{-1})
+  \label{eq:diofantica}
+\end{equation}
+
+Los polinomios $F$ y $G$ no se eligen libremente: se obtienen dividiendo $1$ entre $A'(z^{-1})$ y deteniendo la división tras $T$ términos, de modo que $F$ es el cociente truncado (grado $T-1$) y $G$ es el resto escalado por $z^T$ (grado $n$):
+
+\[
+  F(z^{-1}) = f_0 + f_1z^{-1} + \cdots + f_{T-1}z^{-(T-1)}
+  \qquad
+  G(z^{-1}) = g_0 + g_1z^{-1} + \cdots + g_nz^{-n}
+\]
+
+\subsection{Predictor a $T$ pasos}
+
+Desplazando la Ecuación \ref{eq:arma-delta-horex} $T$ pasos hacia adelante y multiplicando por $F(z^{-1})$:
+
+\[
+  F(z^{-1})A'(z^{-1})\,y_{k+T} = F(z^{-1})B(z^{-1})\,\Delta u_{k+T-D} + F(z^{-1})\,\Delta v_{k+T}
+\]
+
+Usando la identidad diofántica \eqref{eq:diofantica} para sustituir $F A' = 1 - z^{-T}G$, y notando que $z^{-T}y_{k+T} = y_k$:
+
+\[
+  y_{k+T} = G(z^{-1})\,y_k + F(z^{-1})B(z^{-1})\,\Delta u_{k+T-D} + F(z^{-1})\,\Delta v_{k+T}
+\]
+
+Como $F$ tiene grado $T-1$, el término de ruido depende exclusivamente de valores futuros no disponibles en $k$. Despreciándolo, se obtiene el predictor óptimo:
+
+\begin{equation}
+  \hat{y}_{k+T} = G(z^{-1})\,y_k + F(z^{-1})B(z^{-1})\,\Delta u_{k+T-D}
+  \label{eq:predictor-horex}
+\end{equation}
+
+\subsection{Modelo Implícito: relación con el ARMA}
+
+Evaluando la identidad diofántica en $z^{-1}=1$: dado que $A'(1) = A(1)\cdot\Delta(1) = 0$, se cumple $G(1) = 1$. Esto implica que $G(z^{-1}) - 1$ es divisible por $\Delta$, por lo que $G(z^{-1})y_k$ puede reescribirse como:
+
+\begin{equation}
+  G(z^{-1})\,y_k = y_k + \sum_{i=0}^{n-1}\bar{\alpha}_i\,\Delta y_{k-i}
+  \label{eq:G-reesc}
+\end{equation}
+
+Definiendo $\bar{\beta}_j$ como los coeficientes de la convolución $F(z^{-1})B(z^{-1})$ (de grado $n+T-2$), el predictor adopta su \textbf{forma implícita}:
+
+\begin{equation}
+  \hat{y}_{k+T} = y_k + \sum_{i=0}^{n-1}\bar{\alpha}_i\,\Delta y_{k-i}
+  + \sum_{j=1}^{n+T-1}\bar{\beta}_j\,\Delta u_{k+T-D-j+1}
+  \label{eq:predictor-implicito}
+\end{equation}
+
+Esta expresión es lineal en los parámetros $\bar{\theta} = [\bar{\alpha}_0,\ldots,\bar{\alpha}_{n-1},\bar{\beta}_1,\ldots,\bar{\beta}_{n+T-1}]^T$, con la misma estructura $y = \phi^T\theta$ del RLS. La diferencia fundamental con el modelo ARMA directo es:
+
+\begin{itemize}
+  \item Los parámetros $a_i$, $b_i$ del modelo ARMA describen la dinámica instantánea del proceso.
+  \item Los parámetros implícitos $\bar{\alpha}_i$, $\bar{\beta}_j$ son combinaciones algebráicas de $A$, $B$, $F$ y $G$ que describen directamente la \textbf{predicción a $T$ pasos}. El estimador RLS identifica $\bar{\theta}$ en línea sin necesidad de resolver la ecuación diofántica en cada ciclo ni de conocer $A$ y $B$ por separado.
+\end{itemize}
+
+\subsection{Ley de Control (Estrategia 1: Control de Nivel Medio)}
+
+El predictor \eqref{eq:predictor-implicito} se separa en dos partes: la \textbf{respuesta libre} $\bar{h}_{k+T}$ (predicción sin control adicional a partir de $k$) y la contribución del nuevo incremento $\Delta u_k$:
+
+\[
+  \bar{h}_{k+T} = y_k + \sum_{i=0}^{n-1}\bar{\alpha}_i\,\Delta y_{k-i}
+  + \sum_{i=1}^{n-1}\bar{\beta}_{T+i}\,\Delta u_{k-i}
+\]
+
+Bajo la Estrategia 1 se asume que el nuevo incremento se mantiene constante durante el horizonte ($\Delta u_k = \Delta u_{k+1} = \cdots = \Delta u_{k+T-1}$), de modo que su efecto acumulado es la suma de los $T$ primeros coeficientes $\bar{\beta}$. Igualando la predicción al setpoint y despejando:
+
+\begin{equation}
+  \Delta u_k = \frac{y^*_{k+T} - \bar{h}_{k+T}}{\displaystyle\sum_{j=1}^{T}\bar{\beta}_j}
+  \label{eq:control-horex}
+\end{equation}
+
+La acción de control posicional aplicada al actuador es $u_k = u_{k-1} + \Delta u_k$. El denominador $\sum_{j=1}^T\bar{\beta}_j$ representa la ganancia acumulada del predictor; debe saturarse por software si se aproxima a cero para evitar una acción de control numérica inestable. Esta estrategia es la más robusta frente a sistemas con gran retardo o fase no mínima, que es precisamente la motivación original del control por horizonte extendido.

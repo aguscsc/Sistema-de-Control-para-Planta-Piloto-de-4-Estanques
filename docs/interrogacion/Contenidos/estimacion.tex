@@ -1,0 +1,128 @@
+\clearpage
+\section{Estimación de Parámetros}
+
+\subsection{Mínimos Cuadrados BATCH (LS)}
+
+Se asume que la dinámica local del proceso puede describirse mediante un modelo lineal de la forma:
+
+\[
+  y_k = \phi_k^T \theta
+\]
+
+donde $\phi_k$ es el vector de regresores (valores pasados de entrada y salida) y $\theta$ es el vector de parámetros desconocidos. Reuniendo $N$ mediciones en una matriz de regresores $\Phi$ y un vector de salidas $Y$:
+
+\[
+  Y = \Phi\theta + E
+\]
+
+El objetivo es minimizar la función de costo de mínimos cuadrados:
+
+\[
+  J(\theta) = E^TE = (Y - \Phi\theta)^T(Y - \Phi\theta)
+\]
+
+Expandiendo y derivando respecto a $\theta$ e igualando a cero:
+
+\[
+  \frac{\partial J}{\partial \theta} = -2\Phi^TY + 2\Phi^T\Phi\theta = 0
+\]
+
+Despejando $\theta$ se obtiene la \textbf{ecuación normal de Gauss}:
+
+\begin{equation}
+  \hat{\theta} = (\Phi^T\Phi)^{-1}\Phi^T Y
+  \label{eq:gauss-normal}
+\end{equation}
+
+Esta solución es óptima en sentido de varianza mínima para datos sin ruido. Sin embargo, en línea resulta impracticable: la matriz $\Phi$ crece indefinidamente con el tiempo y la inversión de $(\Phi^T\Phi)$ en cada ciclo excede la capacidad de un PLC industrial.
+
+\subsection{Mínimos Cuadrados Recursivos (RLS)}
+
+Para implementar la estimación en tiempo real, se adopta una estructura recursiva análoga al filtro de Kalman. Definiendo la matriz de covarianza $P_k = \left(\sum_{i=1}^k \phi_i\phi_i^T\right)^{-1}$, la ecuación normal generalizada a instante $k$ es:
+
+\[
+  \hat{\theta}_k = P_k \sum_{i=1}^k \phi_i y_i
+\]
+
+La actualización recursiva de $P_k^{-1}$ queda:
+
+\[
+  P_k^{-1} = P_{k-1}^{-1} + \phi_k\phi_k^T
+\]
+
+Para evitar invertir esta matriz en cada ciclo, se aplica el \textbf{lema de inversión de matrices}:
+
+\begin{equation}
+  (A + BCD)^{-1} = A^{-1} - A^{-1}B(C^{-1} + DA^{-1}B)^{-1}DA^{-1}
+\end{equation}
+
+Con $A = P_{k-1}^{-1}$, $B = \phi_k$, $C = 1$, $D = \phi_k^T$, se obtiene:
+
+\[
+  P_k = P_{k-1} - P_{k-1}\phi_k\underbrace{(1 + \phi_k^T P_{k-1}\phi_k)^{-1}}_{\text{escalar}}\phi_k^T P_{k-1}
+\]
+
+Definiendo la \textbf{ganancia de Kalman}:
+
+\[
+  K_k = \frac{P_{k-1}\phi_k}{1 + \phi_k^T P_{k-1}\phi_k}
+\]
+
+Y simplificando el producto $P_k P_{k-1}^{-1} = I - K_k\phi_k^T$, la actualización del vector de parámetros resulta:
+
+\begin{equation}
+  \hat{\theta}_k = \hat{\theta}_{k-1} + K_k\underbrace{(y_k - \phi_k^T\hat{\theta}_{k-1})}_{\text{error de predicción}}
+  \label{eq:RLS}
+\end{equation}
+
+El vector de parámetros y regresor para un modelo ARMA de orden $n$ son:
+
+\[
+  \hat{\theta}_k = \begin{bmatrix} a_1 \\ \vdots \\ a_n \\ b_1 \\ \vdots \\ b_n \end{bmatrix}_{2n\times1}
+  \qquad
+  \phi_k^T = \begin{bmatrix} -\Delta y_{k-1} & \cdots & -\Delta y_{k-n} & \Delta u_{k-1} & \cdots & \Delta u_{k-n} \end{bmatrix}_{1\times2n}
+\]
+
+Las ecuaciones de actualización del RLS, ejecutadas en cada ciclo de muestreo, son:
+
+\begin{align}
+  K_k &= \frac{P_{k-1}\phi_k}{1 + \phi_k^T P_{k-1} \phi_k} \\
+  \hat{\theta}_k &= \hat{\theta}_{k-1} + K_k(y_k - \phi_k^T\hat{\theta}_{k-1}) \\
+  P_k &= (I - K_k\phi_k^T)P_{k-1}
+\end{align}
+
+\subsection{Factor de Olvido Exponencial ($\lambda$)}
+
+El RLS estándar asume parámetros constantes en el tiempo. A medida que acumula datos, $P_k \to 0$ y $K_k \to 0$, volviendo al estimador ciego ante cambios futuros. En procesos industriales con dinámica variable esto es inadmisible.
+
+Se introduce el \textbf{factor de olvido} $\lambda \in (0,1]$ modificando la función de costo para asignar mayor peso a los datos recientes:
+
+\[
+  J(\theta,k) = \sum_{i=1}^{k} \lambda^{k-i}(y_i - \phi_i^T\theta)^2
+\]
+
+El efecto sobre el algoritmo modifica únicamente la ganancia y la covarianza:
+
+\begin{equation}
+  K_k = \frac{P_{k-1}\phi_k}{\lambda + \phi_k^T P_{k-1}\phi_k}
+  \label{eq:K-olvido}
+\end{equation}
+
+\begin{equation}
+  P_k = \frac{1}{\lambda}(I - K_k\phi_k^T)P_{k-1}
+  \label{eq:P-olvido}
+\end{equation}
+
+La división por $\lambda < 1$ en la Ecuación \ref{eq:P-olvido} infla artificialmente $P_k$ en cada ciclo, preservando la adaptabilidad del estimador. Típicamente se utiliza $\lambda \in [0.95,\, 0.99]$.
+
+\subsubsection{Factor de Olvido Variable (Fortescue)}
+
+La elección de un $\lambda$ fijo compromete entre estabilidad y adaptabilidad. Con $\lambda \approx 1$ el estimador pierde adaptabilidad; con $\lambda$ pequeño $P_k$ puede divergir en estado estacionario (\textit{covariance windup}).
+
+El algoritmo de Fortescue et al. resuelve esto mediante un $\lambda_k$ variable que mantiene la información acumulada en un nivel nominal constante $\Sigma_0$. Definiendo la función de costo acumulada $V_k = \lambda_k V_{k-1} + \epsilon_k^2$ y exigiendo $V_k = V_{k-1} = \Sigma_0$, se despeja la ley de actualización:
+
+\begin{equation}
+  \lambda_k = 1 - \frac{e_k^2}{\Sigma_0(1 + \phi_k^T P_{k-1}\phi_k)}, \qquad \lambda_k \in [0.95,\, 1.00]
+\end{equation}
+
+donde $e_k = y_k - \phi_k^T\hat{\theta}_{k-1}$ es el error de predicción y $\Sigma_0 = N_0\sigma_{\text{ruido}}^2$ con $N_0 = \frac{1}{1-\lambda_{\min}}$ es el umbral de energía de ruido tolerable. Solo cuando el error predictivo supera el ruido estocástico natural, el algoritmo reduce $\lambda_k$ para forzar un reaprendizaje de los parámetros.

@@ -1,0 +1,3902 @@
+﻿(*********************************************
+
+  Import-Export
+  Version   := RSLogix 5000 v36.00
+  Owner     := , 
+  Exported  := Sun Jul  5 23:30:09 2026
+
+  Note:  File encoded in UTF-8.  Only edit file in a program 
+         which supports UTF-8 (like Notepad, not Wordpad).
+
+**********************************************)
+IE_VER := 2.27;
+
+CONTROLLER proyecto_2 (ProcessorType := "Emulate 5570",
+                       Major := 36,
+                       TimeSlice := 20,
+                       ShareUnusedTimeSlice := 1,
+                       RedundancyEnabled := 0,
+                       KeepTestEditsOnSwitchOver := 0,
+                       DataTablePadPercentage := 50,
+                       SecurityCode := 0,
+                       ChangesToDetect := 16#ffff_ffff_ffff_ffff,
+                       SFCExecutionControl := "CurrentActive",
+                       SFCRestartPosition := "MostRecent",
+                       SFCLastScan := "DontScan",
+                       SerialNumber := 16#7024_3ff1,
+                       MatchProjectToController := No,
+                       CanUseRPIFromProducer := No,
+                       InhibitAutomaticFirmwareUpdate := 0,
+                       PassThroughConfiguration := EnabledWithAppend,
+                       DownloadProjectDocumentationAndExtendedProperties := Yes,
+                       ReportMinorOverflow := 0)
+	MODULE Local (Parent := "Local",
+	              ParentModPortId := 1,
+	              CatalogNumber := "Emulate 5570",
+	              Vendor := 1,
+	              ProductType := 14,
+	              ProductCode := 53,
+	              Major := 36,
+	              Minor := 11,
+	              ChassisSize := 17,
+	              Slot := 2,
+	              Mode := 2#0000_0000_0000_0001,
+	              CompatibleModule := 0,
+	              KeyMask := 2#0000_0000_0001_1111)
+	END_MODULE
+
+	TAG
+		bypass_1 : BOOL (RADIX := Decimal) := 0;
+		bypass_2 : BOOL (RADIX := Decimal) := 0;
+		bypass_3 : BOOL (RADIX := Decimal) := 0;
+		bypass_4 : BOOL (RADIX := Decimal) := 0;
+		CV_F1_man : REAL (RADIX := Float) := 0.00000000e+000;
+		CV_F2_man : REAL (RADIX := Float) := 0.00000000e+000;
+		dumax_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		dumax_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		dumax_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		dumax_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		dumax_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		dumax_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		FIT_01 : REAL (Description := "Flujo 1",
+		            RADIX := Float) := 0.00000000e+000;
+		FIT_02 : REAL (Description := "Flujo 2",
+		            RADIX := Float) := 0.00000000e+000;
+		inicio : BOOL (RADIX := Decimal) := 0;
+		Kc_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kc_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kc_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kc_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kc_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kc_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kd_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kd_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kd_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kd_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kd_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		Kd_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		kff_1 : REAL (RADIX := Float) := 0.00000000e+000;
+		kff_2 : REAL (RADIX := Float) := 0.00000000e+000;
+		kff_3 : REAL (RADIX := Float) := 0.00000000e+000;
+		kff_4 : REAL (RADIX := Float) := 0.00000000e+000;
+		Ki_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Ki_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Ki_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Ki_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Ki_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		Ki_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		kw_1 : REAL (RADIX := Float) := 0.00000000e+000;
+		kw_2 : REAL (RADIX := Float) := 0.00000000e+000;
+		LIT_01 : REAL (Description := "Estanque 1",
+		            RADIX := Float) := 0.00000000e+000;
+		LIT_02 : REAL (Description := "Etanque 2",
+		            RADIX := Float) := 0.00000000e+000;
+		LIT_03 : REAL (Description := "Estanque 3",
+		            RADIX := Float) := 0.00000000e+000;
+		LIT_04 : REAL (Description := "Estanque 4",
+		            RADIX := Float) := 0.00000000e+000;
+		Nb_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Nb_F2 : REAL (Description := "noise band f2",
+		            RADIX := Float) := 0.00000000e+000;
+		Nb_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Nb_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Nb_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		Nb_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		parada : BOOL (RADIX := Decimal) := 0;
+		pmax_1 : REAL (RADIX := Float) := 0.00000000e+000;
+		pmax_2 : REAL (RADIX := Float) := 0.00000000e+000;
+		pmin_1 : REAL (RADIX := Float) := 0.00000000e+000;
+		pmin_2 : REAL (RADIX := Float) := 0.00000000e+000;
+		prbs_enable_F1 : BOOL (RADIX := Decimal) := 0;
+		prbs_enable_F2 : BOOL (RADIX := Decimal) := 0;
+		prbs_F1_on : BOOL (RADIX := Decimal) := 0;
+		prbs_F2_on : BOOL (RADIX := Decimal) := 0;
+		prbs_L3_on : BOOL (RADIX := Decimal) := 0;
+		prbs_L4_on : BOOL (RADIX := Decimal) := 0;
+		prbs_timer_F1 : TIMER  := [0,0,0];
+		prbs_timer_F2 : TIMER  := [0,0,0];
+		prbs_timer_L3 : TIMER  := [0,0,0];
+		prbs_timer_L4 : TIMER  := [0,0,0];
+		punto_p1 : BOOL (RADIX := Decimal) := 0;
+		Sel1 : BOOL (RADIX := Decimal) := 0;
+		Sel2 : BOOL (RADIX := Decimal) := 0;
+		SP_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		SP_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		SP_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		SP_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		SP_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		SP_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		Sw_acc_b1 : BOOL (RADIX := Decimal) := 0;
+		sw_acc_b2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Sw_am_F1 : BOOL (RADIX := Decimal) := 0;
+		Sw_am_F2 : BOOL (RADIX := Decimal) := 0;
+		Sw_am_L1 : BOOL (RADIX := Decimal) := 0;
+		Sw_am_L2 : BOOL (RADIX := Decimal) := 0;
+		Sw_am_L3 : BOOL (RADIX := Decimal) := 0;
+		Sw_am_L4 : BOOL (RADIX := Decimal) := 0;
+		Sw_FF_1 : BOOL (RADIX := Decimal) := 0;
+		Sw_FF_2 : BOOL (RADIX := Decimal) := 0;
+		Sw_local_F1 : BOOL (RADIX := Decimal) := 0;
+		Sw_local_F2 : BOOL (RADIX := Decimal) := 0;
+		Sw_SP_track_F1 : BOOL (RADIX := Decimal) := 0;
+		Sw_SP_track_F2 : BOOL (RADIX := Decimal) := 0;
+		Sw_SP_track_L1 : BOOL (RADIX := Decimal) := 0;
+		Sw_SP_track_L2 : BOOL (RADIX := Decimal) := 0;
+		Sw_SP_track_L3 : BOOL (RADIX := Decimal) := 0;
+		Sw_SP_track_L4 : BOOL (RADIX := Decimal) := 0;
+		Tm : REAL (RADIX := Float) := 1.00000000e+002;
+		Tp1 : REAL (RADIX := Float) := 0.00000000e+000;
+		Tp2 : REAL (RADIX := Float) := 0.00000000e+000;
+		Tp_l3 : REAL (RADIX := Float) := 0.00000000e+000;
+		Tp_l4 : REAL (RADIX := Float) := 0.00000000e+000;
+		t_task : DINT (RADIX := Decimal) := 0;
+		umax_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		umax_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		umax_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		umax_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		umax_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		umax_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		umin_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+		umin_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+		umin_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+		umin_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+		umin_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+		umin_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+		VF01 : REAL (Description := "Variador de Frecuencia 1",
+		            RADIX := Float) := 0.00000000e+000;
+		VF02 : REAL (Description := "Variador de Frecuencia 2",
+		            RADIX := Float) := 0.00000000e+000;
+	END_TAG
+
+	PROGRAM ContinuousProgram (MAIN := "ContinuousRoutine",
+	                           MODE := 0,
+	                           DisableFlag := 0,
+	                           UseAsFolder := 0)
+		TAG
+			NC_FIT_01 : BOOL (Description := "FIT 01 desconectado",
+			            RADIX := Decimal) := 0;
+			NC_FIT_02 : BOOL (Description := "FIT 02 no conectado",
+			            RADIX := Decimal) := 0;
+			NC_LIT_01 : BOOL (Description := "LIT01 no conectado",
+			            RADIX := Decimal) := 0;
+			NC_LIT_02 : BOOL (Description := "LIT02 no conectado",
+			            RADIX := Decimal) := 0;
+			NC_LIT_03 : BOOL (Description := "LIT03 no conectado",
+			            RADIX := Decimal) := 0;
+			NC_LIT_04 : BOOL (Description := "LIT04 no conectado",
+			            RADIX := Decimal) := 0;
+		END_TAG
+
+		ST_ROUTINE Alarmas 
+			'//desconexion de FIT
+			'if (FIT_01 <= -3.626)then
+			'	NC_FIT_01 :=1;
+			'	parada := 1;
+			'elsif (FIT_02 <= -3.626) then
+			'	NC_FIT_02 :=1;
+			'	parada := 1;
+			'end_if;
+			'
+			'// reconexion de FIT
+			'if (FIT_01 > -3.626)then
+			'	NC_FIT_01 :=0;
+			'elsif (FIT_02 > -3.626) then
+			'	NC_FIT_02 :=0;
+			'end_if;
+			'
+			'//desconexion de FIT
+			'if (LIT_01 <= -3.626)then
+			'	NC_LIT_01 :=1;
+			'	parada := 1;
+			'elsif (LIT_02 <= -3.626) then
+			'	NC_LIT_02 :=1;
+			'	parada := 1;
+			'end_if;
+			'
+			'// reconexion de FIT
+			'if (LIT_01 > -3.626)then
+			'	NC_LIT_01 :=0;
+			'elsif (LIT_02 > -3.626) then
+			'	NC_LIT_02 :=0;
+			'end_if;
+			'
+			'// enable PRBS 1
+			'//if VF01 <= (pmax_1+1) and VF01 >= (pmin_1-1) then
+			'//	prbs_enable_1 := 1;
+			'//else
+			'//	prbs_enable_1 := 0;
+			'//	prbs_1_on :=0;
+			'//end_if;
+			'
+			'// enable PRBS 2
+			'//if VF02 <= (pmax_2+1) and VF02 >= (pmin_2-1) then
+			'//	prbs_enable_2 := 1;
+			'//else
+			'//	prbs_enable_2 := 0;
+			'//	prbs_2_on :=0;
+			'//end_if;
+			'	
+			'	
+			'
+		END_ST_ROUTINE
+
+		ROUTINE ContinuousRoutine 
+				N: JSR(Alarmas,0);
+		END_ROUTINE
+
+		CHILD_PROGRAMS
+		END_CHILD_PROGRAMS
+
+	END_PROGRAM
+
+	PROGRAM ControlProgram (MAIN := "MainRoutine",
+	                        MODE := 0,
+	                        DisableFlag := 0,
+	                        UseAsFolder := 0)
+		TAG
+			a0_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			a0_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			a0_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			a0_L3_usado : REAL (RADIX := Float) := 0.00000000e+000;
+			a0_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			a0_L4_usado : REAL (RADIX := Float) := 0.00000000e+000;
+			a1 : REAL (Description := "área transversal de la tubería del estanque 1",
+			            RADIX := Float,
+			            Usage := Input) := 7.99999980e-004;
+			a1_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			a1_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			a1_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			a1_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			a2 : REAL (Description := "area transversal de la tubería del estanque 2",
+			            RADIX := Float,
+			            Usage := Input) := 7.99999980e-004;
+			a2_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			a2_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			a2_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			a2_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			a3 : REAL (Description := "area transversal de la tubería del estanque 3",
+			            RADIX := Float,
+			            Usage := Input) := 6.33470016e-004;
+			a3_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			a3_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			a4 : REAL (Description := "area transversal de la tubería del estanque 4",
+			            RADIX := Float) := 6.33470016e-004;
+			act_prbs_1 : REAL (RADIX := Float) := 0.00000000e+000;
+			act_prbs_2 : REAL (RADIX := Float) := 0.00000000e+000;
+			act_prbs_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			act_prbs_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			alfa_f_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			alpha0_pred_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			alpha0_pred_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			amp1 : REAL (Description := "amplitud prbs",
+			            RADIX := Float) := 0.00000000e+000;
+			amp2 : REAL (RADIX := Float) := 0.00000000e+000;
+			ampL3 : REAL (RADIX := Float) := 0.00000000e+000;
+			ampL4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b10_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b10_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b11_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b11_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b12_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b12_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b13_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b13_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b14_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b14_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b15_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b15_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b1_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			b1_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			b1_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b1_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b2_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			b2_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			b2_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b2_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b3_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			b3_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			b3_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b3_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b4_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			b4_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			b4_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b4_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b5_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			b5_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			b5_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b5_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b6_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b6_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b7_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b7_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b8_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b8_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b9_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b9_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_ctrl_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_f_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_f_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_run_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_run_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_run_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			beta_run_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			b_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			b_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			b_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			b_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			Contador_Scans_F1 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_F2 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_FIC01 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_FIC02 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_L3 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_L4 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_LIC03 : DINT (RADIX := Decimal) := 0;
+			Contador_Scans_LIC04 : DINT (RADIX := Decimal) := 0;
+			CV_F1 : REAL (Description := "salida del FIC01",
+			            RADIX := Float) := 0.00000000e+000;
+			CV_F1_prev : REAL (Description := "salida previa FIC01",
+			            RADIX := Float) := 0.00000000e+000;
+			CV_F1_Prev_Lento : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_F1_Prev_Lento_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_F1_Real : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_F1_Real_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_F2 : REAL (Description := "salida FIC02",
+			            RADIX := Float) := 9.25000763e+001;
+			CV_F2_Prev : REAL (RADIX := Float) := 9.25000763e+001;
+			CV_F2_Prev_Lento : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_F2_Prev_Lento_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_F2_Real : REAL (Description := "a la bo mba 2",
+			            RADIX := Float) := 0.00000000e+000;
+			CV_F2_Target : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L1_man : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L1_prev : REAL (RADIX := Float) := 2.45953007e+001;
+			CV_L2 : REAL (RADIX := Float) := 4.62775955e+001;
+			CV_L2_man : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L2_prev : REAL (RADIX := Float) := 4.62775955e+001;
+			CV_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L3_man : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L3_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L4_man : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_L4_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			CV_LIC_01 : REAL (Description := "salida del fic$'01",
+			            RADIX := Float) := 0.00000000e+000;
+			CV_LIC_02 : REAL (Description := "salida LIC02",
+			            RADIX := Float) := 0.00000000e+000;
+			CV_LIC_03 : REAL (Description := "salida del controlador LIC03$N$N",
+			            RADIX := Float) := 0.00000000e+000;
+			CV_LIC_04 : REAL (Description := "salida LIC04$N$N",
+			            RADIX := Float) := 0.00000000e+000;
+			delta : REAL (RADIX := Float) := 0.00000000e+000;
+			delta2 : REAL (RADIX := Float) := 0.00000000e+000;
+			deltaL3 : REAL (RADIX := Float) := 0.00000000e+000;
+			deltaL4 : REAL (RADIX := Float) := 0.00000000e+000;
+			Denom_K_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Denom_K_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Denom_K_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Denom_K_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_accum_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_accum_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_F1 : REAL (Description := "CV - CV prev",
+			            RADIX := Float) := -7.59877358e-003;
+			du_F1_lento : REAL (RADIX := Float) := 0.00000000e+000;
+			du_F1_lento_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_F2 : REAL (RADIX := Float) := 4.46159998e-003;
+			du_F2_lento : REAL (RADIX := Float) := 0.00000000e+000;
+			du_F2_lento_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_f_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_f_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_hist_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			du_hist_F2 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			du_hist_L3 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			du_hist_L4 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			du_HOREXT : REAL (RADIX := Float) := 0.00000000e+000;
+			du_HOREXT_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_L1 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_L2 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			du_PID : REAL (RADIX := Float) := -3.00109896e-005;
+			du_PID_F2 : REAL (RADIX := Float) := 8.88061641e-006;
+			du_Real_1 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_ctrl_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_f_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_f_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_hist_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			dy_hist_F2 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			dy_hist_L3 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			dy_hist_L4 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			dy_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			dy_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_F1 : REAL (Description := "error del lazo FIC01",
+			            RADIX := Float) := -5.56953430e-001;
+			Error_F1_prev : REAL (Description := "error previo F1",
+			            RADIX := Float) := -5.56953430e-001;
+			Error_F1_prev_prev : REAL (Description := "error k-2$N",
+			            RADIX := Float) := -5.56922913e-001;
+			Error_F2 : REAL (Description := "error FIC02",
+			            RADIX := Float) := 3.27613831e-001;
+			Error_F2_prev : REAL (RADIX := Float) := 3.27613831e-001;
+			Error_F2_prev_prev : REAL (RADIX := Float) := 3.27606200e-001;
+			Error_L1 : REAL (Description := "error del lazo de nivel 1",
+			            RADIX := Float) := -6.25228882e-003;
+			Error_L1_prev : REAL (RADIX := Float) := -6.25228882e-003;
+			Error_L1_prev_prev : REAL (RADIX := Float) := -6.25228882e-003;
+			Error_L2 : REAL (Description := "error LIC02",
+			            RADIX := Float) := 1.85012817e-003;
+			Error_L2_prev : REAL (RADIX := Float) := 1.85012817e-003;
+			Error_L2_prev_prev : REAL (RADIX := Float) := 1.85012817e-003;
+			Error_L3 : REAL (Description := "error LIC03",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_L3_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_L3_prev_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_L4 : REAL (Description := "error L4",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_L4_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_L4_prev_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_Pred_F1 : REAL (RADIX := Float) := 1.81375258e-002;
+			Error_Pred_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_Pred_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_Pred_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			Error_Prev_F1 : REAL (Description := "error previo fic01",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_Prev_F2 : REAL (Description := "error previo FIC02",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_Prev_L1 : REAL (Description := "error previo LIC01",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_Prev_L2 : REAL (Description := "error previo LIC02",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_Prev_L3 : REAL (Description := "Error previo LIC03",
+			            RADIX := Float) := 0.00000000e+000;
+			Error_Prev_L4 : REAL (Description := "error previo LIC04$N",
+			            RADIX := Float) := 0.00000000e+000;
+			err_sp_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			err_sp_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			estimacion_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			estimacion_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			estimacion_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			estimacion_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			estimador_F1_reset : BOOL (RADIX := Decimal) := 0;
+			estimador_F1_skip : DINT (RADIX := Decimal) := 0;
+			estimador_F2_reset : BOOL (RADIX := Decimal) := 0;
+			estimador_L3_reset : BOOL (RADIX := Decimal) := 0;
+			estimador_L4_reset : BOOL (RADIX := Decimal) := 0;
+			e_pred_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			e_pred_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			e_pred_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			e_pred_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			F1_b1_max : REAL (RADIX := Float) := 0.00000000e+000;
+			F1_b2_max : REAL (RADIX := Float) := 0.00000000e+000;
+			F1_Max_Allowed : REAL (RADIX := Float) := 0.00000000e+000;
+			F1_Min_Allowed : REAL (RADIX := Float) := 0.00000000e+000;
+			F2_Max_Allowed : REAL (RADIX := Float) := 0.00000000e+000;
+			F2_Min_Allowed : REAL (RADIX := Float) := 0.00000000e+000;
+			FF_L1 : REAL (Description := "feedforward nivel 1",
+			            RADIX := Float) := 2.51483192e+001;
+			FF_L2 : REAL (Description := "feedforward LIC02",
+			            RADIX := Float) := 4.59695663e+001;
+			FF_L3 : REAL (Description := "FF LIC03 caudal",
+			            RADIX := Float) := 0.00000000e+000;
+			FF_L4 : REAL (Description := "Feedforward LIC04",
+			            RADIX := Float) := 0.00000000e+000;
+			FIT_01_Prev : REAL (Description := "lectura FIT01 previa$N$N",
+			            RADIX := Float) := 0.00000000e+000;
+			FIT_02_Prev : REAL (Description := "medición de flujo previa",
+			            RADIX := Float) := 0.00000000e+000;
+			g : REAL (Description := "gravedad",
+			            RADIX := Float,
+			            Usage := Input) := 9.81000042e+000;
+			gamma1 : REAL (Description := "porcentaje de flujo que le llega al estanque 1",
+			            RADIX := Float,
+			            Usage := Input) := 4.55000013e-001;
+			gamma2 : REAL (RADIX := Float,
+			            Usage := Input) := 4.55000013e-001;
+			Ganancia_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_L3_usada : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_L4_usada : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_Min_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_Min_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_Min_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Ganancia_Min_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			h1_Max_Limit : REAL (RADIX := Float) := 0.00000000e+000;
+			h1_Min_Limit : REAL (RADIX := Float) := 0.00000000e+000;
+			h2_Max_Limit : REAL (RADIX := Float) := 0.00000000e+000;
+			h2_Min_Limit : REAL (RADIX := Float) := 0.00000000e+000;
+			HOREXT_LIC_03 : REAL (RADIX := Float) := 0.00000000e+000;
+			HOREXT_LIC_03_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			HOREXT_LIC_04 : REAL (RADIX := Float) := 0.00000000e+000;
+			HOREXT_LIC_04_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			horizonte_F1 : DINT (RADIX := Decimal) := 0;
+			horizonte_F2 : DINT (RADIX := Decimal) := 0;
+			horizonte_L3 : DINT (RADIX := Decimal) := 0;
+			horizonte_L4 : DINT (RADIX := Decimal) := 0;
+			h_libre_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			h_libre_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			h_libre_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			h_libre_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			h_max : REAL (Description := "altura del estanque",
+			            RADIX := Float) := 2.00000000e-001;
+			i : DINT (Description := "contador para fors",
+			            RADIX := Decimal) := 0;
+			I11 : REAL (RADIX := Float) := 0.00000000e+000;
+			I12 : REAL (RADIX := Float) := 0.00000000e+000;
+			I21 : REAL (RADIX := Float) := 0.00000000e+000;
+			I22 : REAL (RADIX := Float) := 0.00000000e+000;
+			input_scans_F1 : DINT (RADIX := Decimal) := 0;
+			input_scans_F2 : DINT (RADIX := Decimal) := 0;
+			input_scans_L3 : DINT (RADIX := Decimal) := 0;
+			input_scans_L4 : DINT (RADIX := Decimal) := 0;
+			j : DINT (RADIX := Decimal) := 0;
+			k1 : REAL (Description := "constante de la bomba 1",
+			            RADIX := Float,
+			            Usage := Input) := 5.99999985e-005;
+			k2 : REAL (Description := "constante de la bomba 2",
+			            RADIX := Float,
+			            Usage := Input) := 5.99999985e-005;
+			K_Gain_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			K_Gain_F2 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			K_Gain_L3 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			K_Gain_L4 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			l3 : DINT (RADIX := Decimal) := 0;
+			l4 : DINT (RADIX := Decimal) := 0;
+			Lambda_dem : REAL (RADIX := Float) := 0.00000000e+000;
+			Lambda_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Lambda_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Lambda_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Lambda_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			limite_estimador_F1 : DINT (RADIX := Decimal) := 0;
+			limite_estimador_F2 : DINT (RADIX := Decimal) := 0;
+			limite_estimador_L3 : DINT (RADIX := Decimal) := 0;
+			limite_estimador_L4 : DINT (RADIX := Decimal) := 0;
+			limite_scans_F1 : DINT (RADIX := Decimal) := 0;
+			limite_scans_F2 : DINT (RADIX := Decimal) := 0;
+			Limit_Max_I_F1 : REAL (Description := "limite antiwindup",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Max_I_F2 : REAL (Description := "antiwindup F2",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Max_I_L1 : REAL (Description := "antiwindup L1",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Max_I_L2 : REAL (Description := "$Nantiwindup L2",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Max_I_L3 : REAL (Description := "antiwindup L3",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Max_I_L4 : REAL (Description := "antiwindup L4",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Min_I_F1 : REAL (Description := "limite antiwindup",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Min_I_F2 : REAL (Description := "antiwindup F2",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Min_I_L1 : REAL (Description := "antiwindup L1",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Min_I_L2 : REAL (Description := "antiwindup L2",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Min_I_L3 : REAL (Description := "antiwindup L3",
+			            RADIX := Float) := 0.00000000e+000;
+			Limit_Min_I_L4 : REAL (Description := "antiwindup",
+			            RADIX := Float) := 0.00000000e+000;
+			LIT_01_Prev : REAL (Description := "medición del nivel 1 previa",
+			            RADIX := Float) := 0.00000000e+000;
+			LIT_02_Prev : REAL (Description := "medición previa del nivel 2",
+			            RADIX := Float) := 0.00000000e+000;
+			LIT_03_acum : REAL (RADIX := Float) := 0.00000000e+000;
+			LIT_03_filt : REAL (RADIX := Float) := 0.00000000e+000;
+			LIT_03_Prev : REAL (Description := "meición previa nivel 3",
+			            RADIX := Float) := 0.00000000e+000;
+			LIT_04_acum : REAL (RADIX := Float) := 0.00000000e+000;
+			LIT_04_filt : REAL (RADIX := Float) := 0.00000000e+000;
+			LIT_04_Prev : REAL (Description := "medición previa nivel 4",
+			            RADIX := Float) := 0.00000000e+000;
+			Max_Delta_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Max_Delta_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			muestras_F1 : DINT (RADIX := Decimal) := 0;
+			na_F1 : DINT (RADIX := Decimal) := 0;
+			Nb_L4a1 : REAL (RADIX := Float) := 0.00000000e+000;
+			nu_F1 : DINT (RADIX := Decimal) := 0;
+			n_acum_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			n_acum_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			n_alpha_F1 : DINT (RADIX := Decimal) := 0;
+			n_beta_F1 : DINT (RADIX := Decimal) := 0;
+			n_beta_F2 : DINT (RADIX := Decimal) := 0;
+			n_beta_L3 : DINT (RADIX := Decimal) := 0;
+			n_beta_L4 : DINT (RADIX := Decimal) := 0;
+			n_params_F1 : DINT (RADIX := Decimal) := 0;
+			orden_F1 : DINT (RADIX := Decimal) := 0;
+			orden_F2 : DINT (RADIX := Decimal) := 0;
+			orden_L3 : DINT (RADIX := Decimal) := 0;
+			orden_L4 : DINT (RADIX := Decimal) := 0;
+			P1 : REAL (RADIX := Float) := 0.00000000e+000;
+			P1_out : REAL (RADIX := Float) := 0.00000000e+000;
+			P2 : REAL (RADIX := Float) := 0.00000000e+000;
+			P2_out : REAL (RADIX := Float) := 0.00000000e+000;
+			phi_buffer_F1 : REAL[16,16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			phi_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			phi_F2 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			phi_L3 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			phi_L4 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			PID_FIC_01 : REAL (Description := "salida PID fic01",
+			            RADIX := Float) := 0.00000000e+000;
+			PID_FIC_02 : REAL (Description := "salida PID FIc02",
+			            RADIX := Float) := 0.00000000e+000;
+			PID_LIC_01 : REAL (Description := "Salida del PID de LIC01",
+			            RADIX := Float) := -5.53018153e-001;
+			PID_LIC_01_prev : REAL (RADIX := Float) := -5.53018153e-001;
+			PID_LIC_02 : REAL (Description := "salida PID lic02",
+			            RADIX := Float) := 3.08028787e-001;
+			PID_LIC_02_prev : REAL (RADIX := Float) := 3.08028787e-001;
+			PID_LIC_03 : REAL (Description := "salida PID LIC03$N",
+			            RADIX := Float) := 0.00000000e+000;
+			PID_LIC_03_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			PID_LIC_04 : REAL (Description := "salida PIC LIC04",
+			            RADIX := Float) := 0.00000000e+000;
+			PID_LIC_04_prev : REAL (RADIX := Float) := 0.00000000e+000;
+			PL3_out : REAL (RADIX := Float) := 0.00000000e+000;
+			PL4_out : REAL (RADIX := Float) := 0.00000000e+000;
+			pmax_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			pmax_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			pmin_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			pmin_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			pv_est_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			pv_est_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			pv_est_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			pv_est_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			P_matrix_F1 : REAL[16,16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_matrix_F2 : REAL[16,16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_matrix_L3 : REAL[16,16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_matrix_L4 : REAL[16,16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_Phi_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_Phi_F2 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_Phi_L3 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			P_Phi_L4 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			p_pow_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_pow_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_pow_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			p_pow_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			Quad_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			q_max : REAL (Description := "cuadal maximo ",
+			            RADIX := Float) := 3.00000000e-003;
+			rate_F1 : REAL (RADIX := Float) := 2.00000000e+000;
+			rate_F2 : REAL (RADIX := Float) := 2.00000000e+000;
+			rate_L1 : REAL (RADIX := Float) := 2.00000000e+000;
+			rate_L2 : REAL (RADIX := Float) := 2.00000000e+000;
+			rate_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			rate_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			s : BOOL (RADIX := Decimal) := 0;
+			Scan_Actual_us : DINT (RADIX := Decimal) := 0;
+			Scan_Maximo_ms : REAL (RADIX := Float) := 0.00000000e+000;
+			Scan_Max_us : DINT (RADIX := Decimal) := 0;
+			Scan_Minimo_ms : REAL (RADIX := Float) := 0.00000000e+000;
+			Scan_Tipico_ms : REAL (RADIX := Float) := 0.00000000e+000;
+			seed : BOOL (RADIX := Decimal) := 0;
+			seed2 : BOOL (RADIX := Decimal) := 0;
+			seed_L3 : BOOL (RADIX := Decimal) := 0;
+			seed_L4 : BOOL (RADIX := Decimal) := 0;
+			sh : DINT (Description := "shift register$N",
+			            RADIX := Decimal) := 0;
+			Sigma_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Sigma_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Sigma_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Sigma_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			SP_F1_local : REAL (RADIX := Float) := 0.00000000e+000;
+			SP_F1_remoto : REAL (RADIX := Float) := 0.00000000e+000;
+			SP_F2_local : REAL (RADIX := Float) := 0.00000000e+000;
+			SP_F2_remoto : REAL (RADIX := Float) := 0.00000000e+000;
+			Sw_horext_F1 : BOOL (RADIX := Decimal) := 0;
+			Sw_horext_F2 : BOOL (RADIX := Decimal) := 0;
+			Sw_horext_L3 : BOOL (RADIX := Decimal) := 0;
+			Sw_horext_L4 : BOOL (RADIX := Decimal) := 0;
+			Sw_identificar_L3 : BOOL (RADIX := Decimal) := 0;
+			Sw_identificar_L4 : BOOL (RADIX := Decimal) := 0;
+			S_k_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			target_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			tau_ctrl_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			tau_f_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			tau_f_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			theta_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			theta_F2 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			theta_L3 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			theta_L4 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			Tm_efectivo : REAL (RADIX := Float) := 0.00000000e+000;
+			Tm_efectivo_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Tm_efectivo_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Tm_efectivo_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			tm_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			tm_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Traza_P_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Traza_P_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Traza_P_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			Traza_P_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			u1_Req : REAL (Description := "flujo requerido para sp 1",
+			            RADIX := Float) := 0.00000000e+000;
+			u2_Req : REAL (RADIX := Float) := 0.00000000e+000;
+			umbral_ident_L3 : REAL (RADIX := Float) := 0.00000000e+000;
+			umbral_ident_L4 : REAL (RADIX := Float) := 0.00000000e+000;
+			u_hist_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			U_MAX : REAL (RADIX := Float) := 0.00000000e+000;
+			U_MIN : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u1_max_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u1_max_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u1_min_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u1_min_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u2_max_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u2_max_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u2_min_F1 : REAL (RADIX := Float) := 0.00000000e+000;
+			Val_u2_min_F2 : REAL (RADIX := Float) := 0.00000000e+000;
+			y_delay_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			y_hist_F1 : REAL[16] (RADIX := Float) := [0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000
+					,0.00000000e+000,0.00000000e+000,0.00000000e+000,0.00000000e+000];
+			zh : DINT (RADIX := Decimal) := 0;
+		END_TAG
+
+		ST_ROUTINE estimador_F1 
+			'// =============================================================================
+			'// ESTIMADOR RLS-HOREXT (LAZO F1) -- VERSION 3 (CORREGIDA)
+			'// Sincronizado con Divisor de Scans Directo (input_scans_F1)
+			'// =============================================================================
+			'
+			'// 1. Validar el input del usuario (Tag desde el HMI) compartido con el Controlador
+			'IF input_scans_F1 < 1 THEN
+			'    input_scans_F1 := 1;
+			'END_IF;
+			'
+			'// 2. Incrementar el contador de barridos exclusivo del estimador
+			'Contador_Scans_F1 := Contador_Scans_F1 + 1;
+			'
+			'// 3. Evaluar si es el scan correspondiente para ejecutar el RLS
+			'IF Contador_Scans_F1 >= input_scans_F1 THEN
+			'
+			'    // Resetear el contador
+			'    Contador_Scans_F1 := 0;
+			'
+			'    // ========================= RESET =========================================
+			'    IF estimador_F1_reset THEN
+			'        FOR i := 0 TO 15 DO
+			'            theta_F1[i]   := 0.0;
+			'            phi_F1[i]     := 0.0;
+			'            K_Gain_F1[i]  := 0.0;
+			'            P_Phi_F1[i]   := 0.0;
+			'            dy_hist_F1[i] := 0.0;
+			'            du_hist_F1[i] := 0.0;
+			'
+			'            FOR j := 0 TO 15 DO
+			'                IF i = j THEN
+			'                    P_matrix_F1[i,j] := 10000.0;
+			'                ELSE
+			'                    P_matrix_F1[i,j] := 0.0;
+			'                END_IF;
+			'            END_FOR;
+			'        END_FOR;
+			'
+			'        FIT_01_Prev        := FIT_01;
+			'        estimador_F1_reset := 0;
+			'    END_IF;
+			'
+			'
+			'    // ========================= DIMENSIONES ===================================
+			'    // Lado A: n parametros (a0..a(n-1))
+			'    // Lado B: n + T - 1 parametros (b1..b(n+T-1))
+			'    // Total : 2n + T - 1
+			'    n_beta_F1           := orden_F1 + horizonte_F1 - 1;
+			'    limite_estimador_F1 := (2 * orden_F1) + horizonte_F1 - 2;
+			'
+			'
+			'    // ========================= LEER SENSOR ===================================
+			'    dy_F1       := FIT_01 - FIT_01_Prev;
+			'    FIT_01_Prev := FIT_01;
+			'
+			'
+			'    // =========================================================================
+			'    // CONSTRUIR REGRESOR phi_k
+			'    // Layout n=1, T=3:
+			'    //   indice:    0          1          2          3
+			'    //   contenido: -dy_{k-1}  du_{k-1}   du_{k-2}   du_{k-3}
+			'    //              |--A (n)--| |------- B (n+T-1) -------|
+			'    //
+			'    // IMPORTANTE: cada slot B es un control pasado DISTINTO del historial,
+			'    // no el mismo du repetido. Esto elimina la colinealidad.
+			'
+			'    // Lado A: salidas pasadas con signo negativo
+			'    FOR i := 0 TO (orden_F1 - 1) DO
+			'        phi_F1[i] := -dy_hist_F1[i];        // -dy_{k-1-i}
+			'    END_FOR;
+			'
+			'    // Lado B: controles pasados reales en offsets crecientes
+			'    FOR i := 0 TO (n_beta_F1 - 1) DO
+			'        phi_F1[orden_F1 + i] := du_hist_F1[i];   // du_{k-1-i}
+			'    END_FOR;
+			'
+			'
+			'    // ========================= ESTIMACION Y ERROR ============================
+			'    // dy_k estimado = phi' . theta  (prediccion a partir del historial)
+			'    estimacion_F1 := 0.0;
+			'    FOR i := 0 TO limite_estimador_F1 DO
+			'        estimacion_F1 := estimacion_F1 + (phi_F1[i] * theta_F1[i]);
+			'    END_FOR;
+			'
+			'    Error_Pred_F1 := dy_F1 - estimacion_F1;
+			'    pv_est_F1 := (FIT_01 - dy_F1) + estimacion_F1;
+			'
+			'
+			'    // ========================= P . phi =======================================
+			'    FOR i := 0 TO limite_estimador_F1 DO
+			'        P_Phi_F1[i] := 0.0;
+			'        FOR j := 0 TO limite_estimador_F1 DO
+			'            P_Phi_F1[i] := P_Phi_F1[i] + (P_matrix_F1[i,j] * phi_F1[j]);
+			'        END_FOR;
+			'    END_FOR;
+			'
+			'
+			'    // ========================= FACTOR DE OLVIDO VARIABLE =====================
+			'    Lambda_dem := 1.0;
+			'    FOR i := 0 TO limite_estimador_F1 DO
+			'        Lambda_dem := Lambda_dem + (phi_F1[i] * P_Phi_F1[i]);
+			'    END_FOR;
+			'
+			'    IF Lambda_dem > 0.000001 AND Sigma_F1 > 0.000001 THEN
+			'        Lambda_F1 := 1.0 - ((Error_Pred_F1 * Error_Pred_F1) / (Lambda_dem * Sigma_F1));
+			'
+			'        IF Lambda_F1 < 0.95 THEN
+			'            Lambda_F1 := 0.95;
+			'        ELSIF Lambda_F1 > 1.0 THEN
+			'            Lambda_F1 := 1.0;
+			'        END_IF;
+			'    ELSE
+			'        Lambda_F1 := 1.0;
+			'    END_IF;
+			'
+			'
+			'    // ========================= GANANCIA DE KALMAN ============================
+			'    Denom_K_F1 := Lambda_F1;
+			'    FOR i := 0 TO limite_estimador_F1 DO
+			'        Denom_K_F1 := Denom_K_F1 + (phi_F1[i] * P_Phi_F1[i]);
+			'    END_FOR;
+			'
+			'    IF Denom_K_F1 > 0.000001 THEN
+			'
+			'        FOR i := 0 TO limite_estimador_F1 DO
+			'            K_Gain_F1[i] := P_Phi_F1[i] / Denom_K_F1;
+			'        END_FOR;
+			'
+			'        // ----- Actualizar Parametros -----
+			'        FOR i := 0 TO limite_estimador_F1 DO
+			'            theta_F1[i] := theta_F1[i] + (K_Gain_F1[i] * Error_Pred_F1);
+			'        END_FOR;
+			'
+			'        // ----- Actualizar Covarianza -----
+			'        FOR i := 0 TO limite_estimador_F1 DO
+			'            FOR j := 0 TO limite_estimador_F1 DO
+			'                P_matrix_F1[i,j] := (P_matrix_F1[i,j] - (K_Gain_F1[i] * P_Phi_F1[j])) / Lambda_F1;
+			'            END_FOR;
+			'        END_FOR;
+			'
+			'    ELSE
+			'        estimador_F1_reset := 1;
+			'    END_IF;
+			'
+			'
+			'    // =========================================================================
+			'    // ACTUALIZAR HISTORIALES
+			'    //dy_{k} y du_{k} disponibles como dy_{k-1}, du_{k-1}.
+			'    FOR i := 9 TO 1 BY -1 DO
+			'        dy_hist_F1[i] := dy_hist_F1[i - 1];
+			'    END_FOR;
+			'    dy_hist_F1[0] := dy_F1;
+			'
+			'    FOR i := 9 TO 1 BY -1 DO
+			'        du_hist_F1[i] := du_hist_F1[i - 1];
+			'    END_FOR;
+			'    du_hist_F1[0] := du_F1;
+			'
+			'
+			'    // =========================================================================
+			'    // DIAGNOSTICO (HMI)
+			'    // =========================================================================
+			'    Traza_P_F1 := 0.0;
+			'    FOR i := 0 TO limite_estimador_F1 DO
+			'        Traza_P_F1 := Traza_P_F1 + P_matrix_F1[i,i];
+			'    END_FOR;
+			'
+			'    a0_F1 := -theta_F1[0];
+			'    a1_F1 := 0.0;
+			'    a2_F1 := 0.0;
+			'    b1_F1 := 0.0;
+			'    b2_F1 := 0.0;
+			'    b3_F1 := 0.0;
+			'    b4_F1 := 0.0;
+			'    b5_F1 := 0.0;
+			'
+			'    IF orden_F1 >= 2 THEN a1_F1 := -theta_F1[1]; END_IF;
+			'    IF orden_F1 >= 3 THEN a2_F1 := -theta_F1[2]; END_IF;
+			'
+			'    IF n_beta_F1 >= 1 THEN b1_F1 := theta_F1[orden_F1];     END_IF;
+			'    IF n_beta_F1>= 2 THEN b2_F1 := theta_F1[orden_F1 + 1]; END_IF;
+			'    IF n_beta_F1 >= 3 THEN b3_F1 := theta_F1[orden_F1 + 2]; END_IF;
+			'    IF n_beta_F1 >= 4 THEN b4_F1 := theta_F1[orden_F1 + 3]; END_IF;
+			'    IF n_beta_F1 >= 5 THEN b5_F1 := theta_F1[orden_F1 + 4]; END_IF;
+			'
+			'END_IF; // Fin de la condición de scans
+		END_ST_ROUTINE
+
+		ST_ROUTINE estimador_F2 
+			'// =============================================================================
+			'// ESTIMADOR RLS-HOREXT (LAZO F2) -- VERSION 3 (CORREGIDA)
+			'// Sincronizado con Divisor de Scans Directo (input_scans_F2)
+			'// =============================================================================
+			'
+			'// 1. Validar el input del usuario (Tag desde el HMI) compartido con el Controlador
+			'IF input_scans_F2 < 1 THEN
+			'    input_scans_F2 := 1;
+			'END_IF;
+			'
+			'// 2. Incrementar el contador de barridos exclusivo del estimador
+			'Contador_Scans_F2 := Contador_Scans_F2 + 1;
+			'
+			'// 3. Evaluar si es el scan correspondiente para ejecutar el RLS
+			'IF Contador_Scans_F2 >= input_scans_F2 THEN
+			'
+			'    // Resetear el contador
+			'    Contador_Scans_F2 := 0;
+			'
+			'    // ========================= RESET =========================================
+			'    IF estimador_F2_reset THEN
+			'        FOR i := 0 TO 15 DO
+			'            theta_F2[i]   := 0.0;
+			'            phi_F2[i]     := 0.0;
+			'            K_Gain_F2[i]  := 0.0;
+			'            P_Phi_F2[i]   := 0.0;
+			'            dy_hist_F2[i] := 0.0;
+			'            du_hist_F2[i] := 0.0;
+			'
+			'            FOR j := 0 TO 15 DO
+			'                IF i = j THEN
+			'                    P_matrix_F2[i,j] := 10000.0;
+			'                ELSE
+			'                    P_matrix_F2[i,j] := 0.0;
+			'                END_IF;
+			'            END_FOR;
+			'        END_FOR;
+			'
+			'        FIT_02_Prev        := FIT_02;
+			'        estimador_F2_reset := 0;
+			'    END_IF;
+			'
+			'
+			'    // ========================= DIMENSIONES ===================================
+			'    // Lado A: n parametros (a0..a(n-1))
+			'    // Lado B: n + T - 1 parametros (b1..b(n+T-1))
+			'    // Total : 2n + T - 1
+			'    n_beta_F2           := orden_F2 + horizonte_F2 - 1;
+			'    limite_estimador_F2 := (2 * orden_F2) + horizonte_F2 - 2;
+			'
+			'
+			'    // ========================= LEER SENSOR ===================================
+			'    dy_F2       := FIT_02 - FIT_02_Prev;
+			'    FIT_02_Prev := FIT_02;
+			'
+			'
+			'    // =========================================================================
+			'    // CONSTRUIR REGRESOR phi_k
+			'    // Layout n=1, T=3:
+			'    //   indice:    0          1          2          3
+			'    //   contenido: -dy_{k-1}  du_{k-1}   du_{k-2}   du_{k-3}
+			'    //              |--A (n)--| |------- B (n+T-1) -------|
+			'    //
+			'    // IMPORTANTE: cada slot B es un control pasado DISTINTO del historial,
+			'    // no el mismo du repetido. Esto elimina la colinealidad.
+			'
+			'    // Lado A: salidas pasadas con signo negativo
+			'    FOR i := 0 TO (orden_F2 - 1) DO
+			'        phi_F2[i] := -dy_hist_F2[i];        // -dy_{k-1-i}
+			'    END_FOR;
+			'
+			'    // Lado B: controles pasados reales en offsets crecientes
+			'    FOR i := 0 TO (n_beta_F2 - 1) DO
+			'        phi_F2[orden_F2 + i] := du_hist_F2[i];   // du_{k-1-i}
+			'    END_FOR;
+			'
+			'
+			'    // ========================= ESTIMACION Y ERROR ============================
+			'    // dy_k estimado = phi' . theta  (prediccion a partir del historial)
+			'    estimacion_F2 := 0.0;
+			'    FOR i := 0 TO limite_estimador_F2 DO
+			'        estimacion_F2 := estimacion_F2 + (phi_F2[i] * theta_F2[i]);
+			'    END_FOR;
+			'
+			'    Error_Pred_F2 := dy_F2 - estimacion_F2;
+			'    pv_est_F2 := (FIT_02 - dy_F2) + estimacion_F2;
+			'
+			'
+			'    // ========================= P . phi =======================================
+			'    FOR i := 0 TO limite_estimador_F2 DO
+			'        P_Phi_F2[i] := 0.0;
+			'        FOR j := 0 TO limite_estimador_F2 DO
+			'            P_Phi_F2[i] := P_Phi_F2[i] + (P_matrix_F2[i,j] * phi_F2[j]);
+			'        END_FOR;
+			'    END_FOR;
+			'
+			'
+			'    // ========================= FACTOR DE OLVIDO VARIABLE =====================
+			'    Lambda_dem := 1.0;
+			'    FOR i := 0 TO limite_estimador_F2 DO
+			'        Lambda_dem := Lambda_dem + (phi_F2[i] * P_Phi_F2[i]);
+			'    END_FOR;
+			'
+			'    IF Lambda_dem > 0.000001 AND Sigma_F2 > 0.000001 THEN
+			'        Lambda_F2 := 1.0 - ((Error_Pred_F2 * Error_Pred_F2) / (Lambda_dem * Sigma_F2));
+			'
+			'        IF Lambda_F2 < 0.5 THEN
+			'            Lambda_F2 := 0.5;
+			'        ELSIF Lambda_F2 > 1.0 THEN
+			'            Lambda_F2 := 1.0;
+			'        END_IF;
+			'    ELSE
+			'        Lambda_F2 := 1.0;
+			'    END_IF;
+			'
+			'
+			'    // ========================= GANANCIA DE KALMAN ============================
+			'    Denom_K_F2 := Lambda_F2;
+			'    FOR i := 0 TO limite_estimador_F2 DO
+			'        Denom_K_F2 := Denom_K_F2 + (phi_F2[i] * P_Phi_F2[i]);
+			'    END_FOR;
+			'
+			'    IF Denom_K_F2 > 0.000001 THEN
+			'
+			'        FOR i := 0 TO limite_estimador_F2 DO
+			'            K_Gain_F2[i] := P_Phi_F2[i] / Denom_K_F2;
+			'        END_FOR;
+			'
+			'        // ----- Actualizar Parametros -----
+			'        FOR i := 0 TO limite_estimador_F2 DO
+			'            theta_F2[i] := theta_F2[i] + (K_Gain_F2[i] * Error_Pred_F2);
+			'        END_FOR;
+			'
+			'        // ----- Actualizar Covarianza -----
+			'        FOR i := 0 TO limite_estimador_F2 DO
+			'            FOR j := 0 TO limite_estimador_F2 DO
+			'                P_matrix_F2[i,j] := (P_matrix_F2[i,j] - (K_Gain_F2[i] * P_Phi_F2[j])) / Lambda_F2;
+			'            END_FOR;
+			'        END_FOR;
+			'
+			'    ELSE
+			'        estimador_F2_reset := 1;
+			'    END_IF;
+			'
+			'
+			'    // =========================================================================
+			'    // ACTUALIZAR HISTORIALES
+			'    //dy_{k} y du_{k} disponibles como dy_{k-1}, du_{k-1}.
+			'    FOR i := 9 TO 1 BY -1 DO
+			'        dy_hist_F2[i] := dy_hist_F2[i - 1];
+			'    END_FOR;
+			'    dy_hist_F2[0] := dy_F2;
+			'
+			'    FOR i := 9 TO 1 BY -1 DO
+			'        du_hist_F2[i] := du_hist_F2[i - 1];
+			'    END_FOR;
+			'    du_hist_F2[0] := du_F2;
+			'
+			'
+			'    // =========================================================================
+			'    // DIAGNOSTICO (HMI)
+			'    // =========================================================================
+			'    Traza_P_F2 := 0.0;
+			'    FOR i := 0 TO limite_estimador_F2 DO
+			'        Traza_P_F2 := Traza_P_F2 + P_matrix_F2[i,i];
+			'    END_FOR;
+			'
+			'    a0_F2 := -theta_F2[0];
+			'    a1_F2 := 0.0;
+			'    a2_F2 := 0.0;
+			'    b1_F2 := 0.0;
+			'    b2_F2 := 0.0;
+			'    b3_F2 := 0.0;
+			'    b4_F2 := 0.0;
+			'    b5_F2 := 0.0;
+			'
+			'    IF orden_F2 >= 2 THEN a1_F2 := -theta_F2[1]; END_IF;
+			'    IF orden_F2 >= 3 THEN a2_F2 := -theta_F2[2]; END_IF;
+			'
+			'    IF n_beta_F2 >= 1 THEN b1_F2 := theta_F2[orden_F2];     END_IF;
+			'    IF n_beta_F2>= 2 THEN b2_F2 := theta_F2[orden_F2 + 1]; END_IF;
+			'    IF n_beta_F2 >= 3 THEN b3_F2 := theta_F2[orden_F2 + 2]; END_IF;
+			'    IF n_beta_F2 >= 4 THEN b4_F2 := theta_F2[orden_F2 + 3]; END_IF;
+			'    IF n_beta_F2 >= 5 THEN b5_F2 := theta_F2[orden_F2 + 4]; END_IF;
+			'
+			'END_IF; // Fin de la condición de scans
+		END_ST_ROUTINE
+
+		ST_ROUTINE estimador_L3 
+			'// =============================================================================
+			'// ESTIMADOR RLS-HOREXT (LAZO L3) -- VERSION 3 
+			'// =============================================================================
+			'
+			'LIT_03_acum := LIT_03_acum + LIT_03;
+			'n_acum_L3   := n_acum_L3 + 1;
+			'IF input_scans_L3 < 1 THEN
+			'    input_scans_L3 := 1;
+			'END_IF;
+			'
+			'Contador_Scans_L3 := Contador_Scans_L3 + 1;
+			'
+			'IF Contador_Scans_L3 >= input_scans_L3 THEN
+			'
+			'    Contador_Scans_L3 := 0;
+			'
+			'    // ========================= RESET =========================================
+			'    IF estimador_L3_reset THEN
+			'        FOR i := 0 TO 15 DO
+			'            theta_L3[i]   := 0.0;
+			'            phi_L3[i]     := 0.0;
+			'            K_Gain_L3[i]  := 0.0;
+			'            P_Phi_L3[i]   := 0.0;
+			'            dy_hist_L3[i] := 0.0;
+			'            du_hist_L3[i] := 0.0;
+			'            FOR j := 0 TO 15 DO
+			'                IF i = j THEN
+			'                    P_matrix_L3[i,j] := 10000.0;
+			'                ELSE
+			'                    P_matrix_L3[i,j] := 0.0;
+			'                END_IF;
+			'            END_FOR;
+			'        END_FOR;
+			'        dy_f_L3 := 0.0; du_f_L3 := 0.0;
+			'        LIT_03_Prev        := LIT_03;
+			'        estimador_L3_reset := 0;
+			'    END_IF;
+			'
+			'    // ========================= DIMENSIONES ===================================
+			'    n_beta_L3           := orden_L3 + horizonte_L3 - 1;
+			'    limite_estimador_L3 := (2 * orden_L3) + horizonte_L3 - 2;
+			'
+			'    // ===== LEER SENSOR (promediado) =====
+			'    LIT_03_filt := LIT_03_acum / n_acum_L3;
+			'    LIT_03_acum := 0.0;
+			'    n_acum_L3   := 0;
+			'    dy_L3       := LIT_03_filt - LIT_03_Prev;
+			'    LIT_03_Prev := LIT_03_filt;
+			'
+			'    // ===== LEER ENTRADA REAL (CV_F2) + PREFILTRO =====
+			'    du_F2_lento_L3      := CV_F2 - CV_F2_Prev_Lento_L3;
+			'    CV_F2_Prev_Lento_L3 := CV_F2;
+			'    beta_f_L3 := (Tm * input_scans_L3) / tau_f_L3;
+			'    IF beta_f_L3 > 1.0 THEN beta_f_L3 := 1.0; END_IF;
+			'    IF beta_f_L3 < 0.0 THEN beta_f_L3 := 0.0; END_IF;
+			'    dy_f_L3 := dy_f_L3 + (beta_f_L3 * (dy_L3 - dy_f_L3));
+			'    du_f_L3 := du_f_L3 + (beta_f_L3 * (du_F2_lento_L3 - du_f_L3));
+			'
+			'
+			'    // ========================= CONSTRUIR REGRESOR ============================
+			'    FOR i := 0 TO (orden_L3 - 1) DO
+			'        phi_L3[i] := -dy_hist_L3[i];
+			'    END_FOR;
+			'    FOR i := 0 TO (n_beta_L3 - 1) DO
+			'        phi_L3[orden_L3 + i] := du_hist_L3[i];
+			'    END_FOR;
+			'
+			'    // ========================= ESTIMACION Y ERROR (SIEMPRE) ==================
+			'    estimacion_L3 := 0.0;
+			'    FOR i := 0 TO limite_estimador_L3 DO
+			'        estimacion_L3 := estimacion_L3 + (phi_L3[i] * theta_L3[i]);
+			'    END_FOR;
+			'    Error_Pred_L3 := dy_f_L3 - estimacion_L3;
+			'    pv_est_L3     := (LIT_03 - dy_L3) + estimacion_L3;
+			'
+			'    // <<< error de setpoint, para decidir si re-adaptar >>>
+			'    err_sp_L3 := SP_L3 - LIT_03;
+			'
+			'    // <<< GATE DE CONGELAMIENTO >>>
+			'    // Solo actualiza theta/P si estas identificando (PRBS) o el error es grande (cambio de zona)
+			'    IF (Sw_identificar_L3 OR ABS(err_sp_L3) > umbral_ident_L3) THEN
+			'
+			'        // ---- P . phi ----
+			'        FOR i := 0 TO limite_estimador_L3 DO
+			'            P_Phi_L3[i] := 0.0;
+			'            FOR j := 0 TO limite_estimador_L3 DO
+			'                P_Phi_L3[i] := P_Phi_L3[i] + (P_matrix_L3[i,j] * phi_L3[j]);
+			'            END_FOR;
+			'        END_FOR;
+			'
+			'        // ---- Factor de olvido variable (Fortescue) ----
+			'        Lambda_dem := 1.0;
+			'        FOR i := 0 TO limite_estimador_L3 DO
+			'            Lambda_dem := Lambda_dem + (phi_L3[i] * P_Phi_L3[i]);
+			'        END_FOR;
+			'        IF Lambda_dem > 0.000001 AND Sigma_L3 > 0.000001 THEN
+			'            Lambda_L3 := 1.0 - ((Error_Pred_L3 * Error_Pred_L3) / (Lambda_dem * Sigma_L3));
+			'            IF Lambda_L3 < 0.5 THEN
+			'                Lambda_L3 := 0.5;
+			'            ELSIF Lambda_L3 > 1.0 THEN
+			'                Lambda_L3 := 1.0;
+			'            END_IF;
+			'        ELSE
+			'            Lambda_L3 := 1.0;
+			'        END_IF;
+			'
+			'        // ---- Ganancia de Kalman + actualizacion ----
+			'        Denom_K_L3 := Lambda_L3;
+			'        FOR i := 0 TO limite_estimador_L3 DO
+			'            Denom_K_L3 := Denom_K_L3 + (phi_L3[i] * P_Phi_L3[i]);
+			'        END_FOR;
+			'        IF Denom_K_L3 > 0.000001 THEN
+			'            FOR i := 0 TO limite_estimador_L3 DO
+			'                K_Gain_L3[i] := P_Phi_L3[i] / Denom_K_L3;
+			'            END_FOR;
+			'            FOR i := 0 TO limite_estimador_L3 DO
+			'                theta_L3[i] := theta_L3[i] + (K_Gain_L3[i] * Error_Pred_L3);
+			'            END_FOR;
+			'            FOR i := 0 TO limite_estimador_L3 DO
+			'                FOR j := 0 TO limite_estimador_L3 DO
+			'                    P_matrix_L3[i,j] := (P_matrix_L3[i,j] - (K_Gain_L3[i] * P_Phi_L3[j])) / Lambda_L3;
+			'                END_FOR;
+			'            END_FOR;
+			'        ELSE
+			'            estimador_L3_reset := 1;
+			'        END_IF;
+			'
+			'    END_IF;   
+			'
+			'    // ========================= ACTUALIZAR HISTORIALES (SIEMPRE) ==============
+			'    FOR i := 14 TO 1 BY -1 DO
+			'        dy_hist_L3[i] := dy_hist_L3[i - 1];
+			'    END_FOR;
+			'    dy_hist_L3[0] := dy_f_L3;
+			'    FOR i := 14 TO 1 BY -1 DO
+			'        du_hist_L3[i] := du_hist_L3[i - 1];
+			'    END_FOR;
+			'    du_hist_L3[0] := du_f_L3;
+			'
+			'    // ========================= DIAGNOSTICO (SIEMPRE) ========================
+			'    Traza_P_L3 := 0.0;
+			'    FOR i := 0 TO limite_estimador_L3 DO
+			'        Traza_P_L3 := Traza_P_L3 + P_matrix_L3[i,i];
+			'    END_FOR;
+			'
+			'    a0_L3 := -theta_L3[0];
+			'    a1_L3 := 0.0;  a2_L3 := 0.0;
+			'    b1_L3 := 0.0;  b2_L3 := 0.0;  b3_L3 := 0.0;  b4_L3 := 0.0;  b5_L3 := 0.0;
+			'    b6_L3 := 0.0;  b7_L3 := 0.0;  b8_L3 := 0.0;  b9_L3 := 0.0;  b10_L3 := 0.0;
+			'    b11_L3 := 0.0;  b12_L3 := 0.0;  b13_L3 := 0.0;  b14_L3 := 0.0;  b15_L3 := 0.0;
+			'
+			'    IF orden_L3 >= 2 THEN a1_L3 := -theta_L3[1]; END_IF;
+			'    IF orden_L3 >= 3 THEN a2_L3 := -theta_L3[2]; END_IF;
+			'    IF n_beta_L3 >= 1 THEN b1_L3 := theta_L3[orden_L3];     END_IF;
+			'    IF n_beta_L3 >= 2 THEN b2_L3 := theta_L3[orden_L3 + 1]; END_IF;
+			'    IF n_beta_L3 >= 3 THEN b3_L3 := theta_L3[orden_L3 + 2]; END_IF;
+			'    IF n_beta_L3 >= 4 THEN b4_L3 := theta_L3[orden_L3 + 3]; END_IF;
+			'    IF n_beta_L3 >= 5 THEN b5_L3 := theta_L3[orden_L3 + 4]; END_IF;
+			'    IF n_beta_L3 >= 6 THEN b6_L3 := theta_L3[orden_L3 + 5]; END_IF;
+			'    IF n_beta_L3 >= 7 THEN b7_L3 := theta_L3[orden_L3 + 6]; END_IF;
+			'    IF n_beta_L3 >= 8 THEN b8_L3 := theta_L3[orden_L3 + 7]; END_IF;
+			'    IF n_beta_L3 >= 9 THEN b9_L3 := theta_L3[orden_L3 + 8]; END_IF;
+			'    IF n_beta_L3 >= 10 THEN b10_L3 := theta_L3[orden_L3 + 9]; END_IF;
+			'    IF n_beta_L3 >= 11 THEN b11_L3 := theta_L3[orden_L3 + 10]; END_IF;
+			'    IF n_beta_L3 >= 12 THEN b12_L3 := theta_L3[orden_L3 + 11]; END_IF;
+			'    IF n_beta_L3 >= 13 THEN b13_L3 := theta_L3[orden_L3 + 12]; END_IF;
+			'    IF n_beta_L3 >= 14 THEN b14_L3 := theta_L3[orden_L3 + 13]; END_IF;
+			'    IF n_beta_L3 >= 15 THEN b15_L3 := theta_L3[orden_L3 + 14]; END_IF;
+			'
+			'END_IF;
+		END_ST_ROUTINE
+
+		ST_ROUTINE estimador_L4 
+			'// =============================================================================
+			'// ESTIMADOR RLS-HOREXT (LAZO L4) -- VERSION 3 
+			'// =============================================================================
+			'
+			'LIT_04_acum := LIT_04_acum + LIT_04;
+			'n_acum_L4   := n_acum_L4 + 1;
+			'IF input_scans_L4 < 1 THEN
+			'    input_scans_L4 := 1;
+			'END_IF;
+			'
+			'Contador_Scans_L4 := Contador_Scans_L4 + 1;
+			'
+			'IF Contador_Scans_L4 >= input_scans_L4 THEN
+			'
+			'    Contador_Scans_L4 := 0;
+			'
+			'    // ========================= RESET =========================================
+			'    IF estimador_L4_reset THEN
+			'        FOR i := 0 TO 15 DO
+			'            theta_L4[i]   := 0.0;
+			'            phi_L4[i]     := 0.0;
+			'            K_Gain_L4[i]  := 0.0;
+			'            P_Phi_L4[i]   := 0.0;
+			'            dy_hist_L4[i] := 0.0;
+			'            du_hist_L4[i] := 0.0;
+			'            FOR j := 0 TO 15 DO
+			'                IF i = j THEN
+			'                    P_matrix_L4[i,j] := 10000.0;
+			'                ELSE
+			'                    P_matrix_L4[i,j] := 0.0;
+			'                END_IF;
+			'            END_FOR;
+			'        END_FOR;
+			'        dy_f_L4 := 0.0; du_f_L4 := 0.0;
+			'        LIT_04_Prev        := LIT_04;
+			'        estimador_L4_reset := 0;
+			'    END_IF;
+			'
+			'    // ========================= DIMENSIONES ===================================
+			'    n_beta_L4           := orden_L4 + horizonte_L4 - 1;
+			'    limite_estimador_L4 := (2 * orden_L4) + horizonte_L4 - 2;
+			'
+			'    // ===== LEER SENSOR (promediado) =====
+			'    LIT_04_filt := LIT_04_acum / n_acum_L4;
+			'    LIT_04_acum := 0.0;
+			'    n_acum_L4   := 0;
+			'    dy_L4       := LIT_04_filt - LIT_04_Prev;
+			'    LIT_04_Prev := LIT_04_filt;
+			'
+			'    // ===== LEER ENTRADA REAL (CV_F1) + PREFILTRO =====
+			'    du_F1_lento_L4      := CV_F1 - CV_F1_Prev_Lento_L4;
+			'    CV_F1_Prev_Lento_L4 := CV_F1;
+			'    beta_f_L4 := (Tm * input_scans_L4) / tau_f_L4;
+			'    IF beta_f_L4 > 1.0 THEN beta_f_L4 := 1.0; END_IF;
+			'    IF beta_f_L4 < 0.0 THEN beta_f_L4 := 0.0; END_IF;
+			'    dy_f_L4 := dy_f_L4 + (beta_f_L4 * (dy_L4 - dy_f_L4));
+			'    du_f_L4 := du_f_L4 + (beta_f_L4 * (du_F1_lento_L4 - du_f_L4));
+			'
+			'    // ========================= CONSTRUIR REGRESOR ============================
+			'    FOR i := 0 TO (orden_L4 - 1) DO
+			'        phi_L4[i] := -dy_hist_L4[i];
+			'    END_FOR;
+			'    FOR i := 0 TO (n_beta_L4 - 1) DO
+			'        phi_L4[orden_L4 + i] := du_hist_L4[i];
+			'    END_FOR;
+			'
+			'    // ========================= ESTIMACION Y ERROR (SIEMPRE) ==================
+			'    estimacion_L4 := 0.0;
+			'    FOR i := 0 TO limite_estimador_L4 DO
+			'        estimacion_L4 := estimacion_L4 + (phi_L4[i] * theta_L4[i]);
+			'    END_FOR;
+			'    Error_Pred_L4 := dy_f_L4 - estimacion_L4;
+			'    pv_est_L4     := (LIT_04 - dy_L4) + estimacion_L4;
+			'
+			'    // <<< AÑADIDO 1: error de setpoint, para decidir si re-adaptar >>>
+			'    err_sp_L4 := SP_L4 - LIT_04;
+			'
+			'    // <<< AÑADIDO 2: GATE DE CONGELAMIENTO >>>
+			'    IF (Sw_identificar_L4 OR ABS(err_sp_L4) > umbral_ident_L4) THEN
+			'
+			'        // ---- P . phi ----
+			'        FOR i := 0 TO limite_estimador_L4 DO
+			'            P_Phi_L4[i] := 0.0;
+			'            FOR j := 0 TO limite_estimador_L4 DO
+			'                P_Phi_L4[i] := P_Phi_L4[i] + (P_matrix_L4[i,j] * phi_L4[j]);
+			'            END_FOR;
+			'        END_FOR;
+			'
+			'        // ---- Factor de olvido variable (Fortescue) ----
+			'        Lambda_dem := 1.0;
+			'        FOR i := 0 TO limite_estimador_L4 DO
+			'            Lambda_dem := Lambda_dem + (phi_L4[i] * P_Phi_L4[i]);
+			'        END_FOR;
+			'        IF Lambda_dem > 0.000001 AND Sigma_L4 > 0.000001 THEN
+			'            Lambda_L4 := 1.0 - ((Error_Pred_L4 * Error_Pred_L4) / (Lambda_dem * Sigma_L4));
+			'            IF Lambda_L4 < 0.5 THEN
+			'                Lambda_L4 := 0.5;
+			'            ELSIF Lambda_L4 > 1.0 THEN
+			'                Lambda_L4 := 1.0;
+			'            END_IF;
+			'        ELSE
+			'            Lambda_L4 := 1.0;
+			'        END_IF;
+			'
+			'        // ---- Ganancia de Kalman + actualizacion ----
+			'        Denom_K_L4 := Lambda_L4;
+			'        FOR i := 0 TO limite_estimador_L4 DO
+			'            Denom_K_L4 := Denom_K_L4 + (phi_L4[i] * P_Phi_L4[i]);
+			'        END_FOR;
+			'        IF Denom_K_L4 > 0.000001 THEN
+			'            FOR i := 0 TO limite_estimador_L4 DO
+			'                K_Gain_L4[i] := P_Phi_L4[i] / Denom_K_L4;
+			'            END_FOR;
+			'            FOR i := 0 TO limite_estimador_L4 DO
+			'                theta_L4[i] := theta_L4[i] + (K_Gain_L4[i] * Error_Pred_L4);
+			'            END_FOR;
+			'            FOR i := 0 TO limite_estimador_L4 DO
+			'                FOR j := 0 TO limite_estimador_L4 DO
+			'                    P_matrix_L4[i,j] := (P_matrix_L4[i,j] - (K_Gain_L4[i] * P_Phi_L4[j])) / Lambda_L4;
+			'                END_FOR;
+			'            END_FOR;
+			'        ELSE
+			'            estimador_L4_reset := 1;
+			'        END_IF;
+			'
+			'    END_IF;   // <<< AÑADIDO 3: cierra el gate de congelamiento >>>
+			'
+			'    // ========================= ACTUALIZAR HISTORIALES (SIEMPRE) ==============
+			'    FOR i := 14 TO 1 BY -1 DO
+			'        dy_hist_L4[i] := dy_hist_L4[i - 1];
+			'    END_FOR;
+			'    dy_hist_L4[0] := dy_f_L4;
+			'    FOR i := 14 TO 1 BY -1 DO
+			'        du_hist_L4[i] := du_hist_L4[i - 1];
+			'    END_FOR;
+			'    du_hist_L4[0] := du_f_L4;      
+			'
+			'    // ========================= DIAGNOSTICO (SIEMPRE) ========================
+			'    Traza_P_L4 := 0.0;
+			'    FOR i := 0 TO limite_estimador_L4 DO
+			'        Traza_P_L4 := Traza_P_L4 + P_matrix_L4[i,i];
+			'    END_FOR;
+			'
+			'    a0_L4 := -theta_L4[0];
+			'    a1_L4 := 0.0;  a2_L4 := 0.0;
+			'    b1_L4 := 0.0;  b2_L4 := 0.0;  b3_L4 := 0.0;  b4_L4 := 0.0;  b5_L4 := 0.0;
+			'    b6_L4 := 0.0;  b7_L4 := 0.0;  b8_L4 := 0.0;  b9_L4 := 0.0;  b10_L4 := 0.0;
+			'    b11_L4 := 0.0;  b12_L4 := 0.0;  b13_L4 := 0.0;  b14_L4 := 0.0;  b15_L4 := 0.0;
+			'
+			'    IF orden_L4 >= 2 THEN a1_L4 := -theta_L4[1]; END_IF;
+			'    IF orden_L4 >= 3 THEN a2_L4 := -theta_L4[2]; END_IF;
+			'    IF n_beta_L4 >= 1 THEN b1_L4 := theta_L4[orden_L4];     END_IF;
+			'    IF n_beta_L4 >= 2 THEN b2_L4 := theta_L4[orden_L4 + 1]; END_IF;
+			'    IF n_beta_L4 >= 3 THEN b3_L4 := theta_L4[orden_L4 + 2]; END_IF;
+			'    IF n_beta_L4 >= 4 THEN b4_L4 := theta_L4[orden_L4 + 3]; END_IF;
+			'    IF n_beta_L4 >= 5 THEN b5_L4 := theta_L4[orden_L4 + 4]; END_IF;
+			'    IF n_beta_L4 >= 6 THEN b6_L4 := theta_L4[orden_L4 + 5]; END_IF;
+			'    IF n_beta_L4 >= 7 THEN b7_L4 := theta_L4[orden_L4 + 6]; END_IF;
+			'    IF n_beta_L4 >= 8 THEN b8_L4 := theta_L4[orden_L4 + 7]; END_IF;
+			'    IF n_beta_L4 >= 9 THEN b9_L4 := theta_L4[orden_L4 + 8]; END_IF;
+			'    IF n_beta_L4 >= 10 THEN b10_L4 := theta_L4[orden_L4 + 9]; END_IF;
+			'    IF n_beta_L4 >= 11 THEN b11_L4 := theta_L4[orden_L4 + 10]; END_IF;
+			'    IF n_beta_L4 >= 12 THEN b12_L4 := theta_L4[orden_L4 + 11]; END_IF;
+			'    IF n_beta_L4 >= 13 THEN b13_L4 := theta_L4[orden_L4 + 12]; END_IF;
+			'    IF n_beta_L4 >= 14 THEN b14_L4 := theta_L4[orden_L4 + 13]; END_IF;
+			'    IF n_beta_L4 >= 15 THEN b15_L4 := theta_L4[orden_L4 + 14]; END_IF;
+			'
+			'END_IF; // Fin de la condición de scans
+		END_ST_ROUTINE
+
+		ST_ROUTINE FIC_01 (Description := "lazo esclavo de flujo 01")
+			'// =========================================================================
+			'// CONTROLADOR LAZO F1 (HOREXT / PID) CON DIVISOR DE SCANS DIRECTO
+			'// PRECONDICION: el estimador RLS corre ANTES en el mismo scan y entrega
+			'//   a0_F1, a1_F1, a2_F1, b1_F1..b3_F1 y dy_F1 (incremento de PV).
+			'// =========================================================================
+			'
+			'// 1. Validar el input del usuario (Tag desde el HMI, tipo DINT)
+			'IF input_scans_F1 < 1 THEN
+			'    input_scans_F1 := 1;
+			'END_IF;
+			'
+			'// 2. Incrementar el contador de barridos
+			'Contador_Scans_FIC01 := Contador_Scans_F1 + 1;
+			'
+			'// 3. Evaluar si es el scan correspondiente para ejecutar la rutina
+			'IF Contador_Scans_FIC01 >= input_scans_F1 THEN
+			'
+			'    // Resetear el contador
+			'    Contador_Scans_FIC01 := 0;
+			'
+			'    // =====================================================================
+			'    // INICIO DEL CÓDIGO ORIGINAL DEL CONTROLADOR F1
+			'    // =====================================================================
+			'
+			'    if Sw_local_F1 then
+			'        SP_F1 := SP_F1_local;
+			'        CV_L1 := SP_F1;
+			'        CV_L4 := SP_F1;
+			'    else
+			'        SP_F1 := SP_F1_remoto;
+			'        SP_F1_local := SP_F1;
+			'    end_if;
+			'
+			'    Error_F1 := SP_F1 - FIT_01;
+			'
+			'    // IMPORTANTE: al saltar scans, el tiempo de muestreo real cambia.
+			'    Tm_efectivo_F1 := Tm * input_scans_F1;
+			'
+			'    // Usamos Tm_efectivo_F1 para que la velocidad (rate) sea fiel al tiempo físico
+			'    rate_F1 := dumax_F1 * Tm_efectivo_F1;
+			'
+			'    if ABS(Error_F1) < Nb_F1 then
+			'        Error_F1 := 0;
+			'    end_if;
+			'
+			'    IF Sw_am_F1 THEN
+			'        // ===================== MANUAL ======================
+			'        du_F1 := CV_F1_man - CV_F1_prev;
+			'
+			'        IF du_F1 > rate_F1 THEN
+			'            du_F1 := rate_F1;
+			'        ELSIF du_F1 < -rate_F1 THEN
+			'            du_F1 := -rate_F1;
+			'        END_IF;
+			'
+			'        CV_F1 := CV_F1_prev + du_F1;
+			'
+			'        IF Sw_SP_track_F1 THEN
+			'            SP_F1 := FIT_01;
+			'            SP_F1_local := FIT_01;
+			'            SP_F1_remoto := FIT_01;
+			'        END_IF;
+			'
+			'        Error_F1_prev := 0.0;
+			'        Error_F1_prev_prev := 0.0;
+			'
+			'    ELSE
+			'        // ===================== AUTOMATICO ====================================
+			'        IF Sw_horext_F1 THEN
+			'            // ------------------- HOREXT (Estrategia 1, n=1) -----------------
+			'            // Modelo de un paso desde el estimador
+			'            p_F1 := a0_F1 + a1_F1 + a2_F1;
+			'            b_F1 := b1_F1 + b2_F1 + b3_F1 + b4_F1 + b5_F1;
+			'
+			'            // Derivar predictor a Tc pasos:
+			'            //   alpha0_pred = p + p^2 + ... + p^Tc
+			'            //   Ganancia    = beta_1 + ... + beta_Tc,  beta_j = p*beta_{j-1} + b
+			'            p_pow_F1       := 1.0;
+			'            alpha0_pred_F1 := 0.0;
+			'            beta_run_F1    := 0.0;
+			'            Ganancia_F1    := 0.0;
+			'            FOR i := 1 TO horizonte_F1 DO
+			'                p_pow_F1       := p_pow_F1 * p_F1;
+			'                alpha0_pred_F1 := alpha0_pred_F1 + p_pow_F1;
+			'                beta_run_F1    := (p_F1 * beta_run_F1) + b_F1;
+			'                Ganancia_F1    := Ganancia_F1 + beta_run_F1;
+			'            END_FOR;
+			'
+			'            // Saturacion de ganancia (evita division inestable)
+			'            IF Ganancia_F1 >= 0.0 THEN
+			'                IF Ganancia_F1 < Ganancia_Min_F1 THEN Ganancia_F1 := Ganancia_Min_F1; END_IF;
+			'            ELSE
+			'                IF Ganancia_F1 > -Ganancia_Min_F1 THEN Ganancia_F1 := -Ganancia_Min_F1; END_IF;
+			'            END_IF;
+			'
+			'            // Respuesta libre (n=1) y ley de control
+			'            h_libre_F1 := FIT_01 + (alpha0_pred_F1 * dy_F1);
+			'            e_pred_F1  := SP_F1 - h_libre_F1;
+			'            IF ABS(e_pred_F1) < Nb_F1 THEN
+			'                e_pred_F1 := 0.0;
+			'            END_IF;
+			'            du_F1 := e_pred_F1 / Ganancia_F1;
+			'
+			'        ELSE
+			'            // ------------------- PID (formula original, con Tm_efectivo_F1) ---
+			'            du_F1 := (Kc_F1 * (1.0 + (Ki_F1 * Tm_efectivo_F1 / 2.0) + (Kd_F1 / Tm_efectivo_F1)) * Error_F1)
+			'                   - (Kc_F1 * (1.0 - (Ki_F1 * Tm_efectivo_F1 / 2.0) + (2.0 * Kd_F1 / Tm_efectivo_F1)) * Error_F1_prev)
+			'                   + (Kc_F1 * (Kd_F1 / Tm_efectivo_F1) * Error_F1_prev_prev);
+			'        END_IF;
+			'
+			'        // ---- Compartido por PID y HOREXT (rate limit + CV + tracking) -------
+			'        IF du_F1 > rate_F1 THEN
+			'            du_F1 := rate_F1;
+			'        ELSIF du_F1 < -rate_F1 THEN
+			'            du_F1 := -rate_F1;
+			'        END_IF;
+			'
+			'        CV_F1 := CV_F1_prev + du_F1;
+			'        CV_F1_man := CV_F1;
+			'
+			'        Error_F1_prev_prev := Error_F1_prev;
+			'        Error_F1_prev := Error_F1;
+			'
+			'    END_IF;
+			'
+			'    // ===================== SATURACION ========================================
+			'    IF CV_F1 > umax_F1 THEN
+			'        CV_F1 := umax_F1;
+			'    ELSIF CV_F1 < umin_F1 THEN
+			'        CV_F1 := umin_F1;
+			'    END_IF;
+			'
+			'    CV_F1_prev := CV_F1;
+			'
+			'    // ===================== MAPEO DE SALIDA (Bomba No Lineal) =================
+			'    IF CV_F1 <= 0.0 THEN
+			'        CV_F1_Real := 0;
+			'    ELSIF CV_F1 <= 38.72 THEN
+			'        CV_F1_Real := 34.84 + (CV_F1 * 0.3915);
+			'    ELSIF CV_F1 <= 69.45 THEN
+			'        CV_F1_Real := 50.0 + ((CV_F1 - 38.72) * 0.6508);
+			'    ELSIF CV_F1 > 69.45 THEN
+			'        CV_F1_Real := 70.0 + ((CV_F1 - 69.45) * 0.9820);
+			'    END_IF;
+			'
+			'    IF CV_F1_Real > 100.0 THEN
+			'        CV_F1_Real := 100.0;
+			'    ELSIF CV_F1_Real < 0.0 THEN
+			'        CV_F1_Real := 0.0;
+			'    END_IF;
+			'
+			'    VF01 := CV_F1_Real;
+			'
+			'END_IF; // Fin de la condición de scans
+		END_ST_ROUTINE
+
+		ST_ROUTINE FIC_02 
+			'// =========================================================================
+			'// CONTROLADOR LAZO F2 (HOREXT / PID) CON DIVISOR DE SCANS DIRECTO
+			'// =========================================================================
+			'
+			'// 1. Validar el input del usuario (Tag desde el HMI, tipo DINT)
+			'IF input_scans_F2 < 1 THEN
+			'    input_scans_F2 := 1;
+			'END_IF;
+			'
+			'// 2. Incrementar el contador de barridos
+			'Contador_Scans_FIC02 := Contador_Scans_F2 + 1;
+			'
+			'// 3. Evaluar si es el scan correspondiente para ejecutar la rutina
+			'IF Contador_Scans_FIC02 >= input_scans_F2 THEN
+			'
+			'    // Resetear el contador
+			'    Contador_Scans_FIC02 := 0;
+			'
+			'    // =====================================================================
+			'    // INICIO DEL CÓDIGO ORIGINAL DEL CONTROLADOR F2
+			'    // =====================================================================
+			'
+			'    if Sw_local_F2 then
+			'        SP_F2 := SP_F2_local;
+			'        CV_L2 := SP_F2;
+			'        CV_L3 := SP_F2;
+			'    else
+			'        SP_F2 := SP_F2_remoto;
+			'        SP_F2_local := SP_F2;
+			'    end_if;
+			'
+			'    Error_F2 := SP_F2 - FIT_02;
+			'
+			'    // IMPORTANTE: al saltar scans, el tiempo de muestreo real cambia.
+			'    Tm_efectivo_F2 := Tm * input_scans_F2;
+			'
+			'    if ABS(Error_F2) < Nb_F2 then
+			'        Error_F2 := 0;
+			'    end_if;
+			'
+			'    rate_F2 := dumax_F2 * Tm_efectivo_F2;
+			'
+			'    IF Sw_am_F2 THEN
+			'
+			'        du_F2 := CV_F2_man - CV_F2_Prev;
+			'
+			'        IF du_F2 > rate_F2 THEN
+			'            du_F2 := rate_F2;
+			'        ELSIF du_F2 < -rate_F2 THEN
+			'            du_F2 := -rate_F2;
+			'        END_IF;
+			'
+			'        CV_F2 := CV_F2_Prev + du_F2;
+			'
+			'        // Setpoint Tracking
+			'        IF Sw_SP_track_F2 THEN
+			'            SP_F2 := FIT_02;
+			'            SP_F2_local := FIT_02;
+			'            SP_F2_remoto := FIT_02;
+			'        END_IF;
+			'
+			'        Error_F2_prev := 0.0;
+			'        Error_F2_prev_prev := 0.0;
+			'
+			'    ELSE
+			'
+			'        IF Sw_horext_F2 THEN
+			'            // ------------------- HOREXT (Estrategia 1, n=1) -----------------
+			'            // Modelo de un paso desde el estimador
+			'            p_F2 := a0_F2 + a1_F2 + a2_F2 ;
+			'            b_F2 := b1_F2 + b2_F2 + b3_F2 + b4_F2 + b5_F2;
+			'
+			'            // Derivar predictor a Tc pasos:
+			'            //   alpha0_pred = p + p^2 + ... + p^Tc
+			'            //   Ganancia    = beta_1 + ... + beta_Tc,  beta_j = p*beta_{j-1} + b
+			'            p_pow_F2       := 1.0;
+			'            alpha0_pred_F2 := 0.0;
+			'            beta_run_F2    := 0.0;
+			'            Ganancia_F2    := 0.0;
+			'            FOR i := 1 TO horizonte_F2 DO
+			'                p_pow_F2       := p_pow_F2 * p_F2;
+			'                alpha0_pred_F2 := alpha0_pred_F2 + p_pow_F2;
+			'                beta_run_F2    := (p_F2 * beta_run_F2) + b_F2;
+			'                Ganancia_F2    := Ganancia_F2 + beta_run_F2;
+			'            END_FOR;
+			'
+			'            // Saturacion de ganancia (evita division inestable)
+			'            IF Ganancia_F2 >= 0.0 THEN
+			'                IF Ganancia_F2 < Ganancia_Min_F2 THEN Ganancia_F2 := Ganancia_Min_F2; END_IF;
+			'            ELSE
+			'                IF Ganancia_F2 > -Ganancia_Min_F2 THEN Ganancia_F2 := -Ganancia_Min_F2; END_IF;
+			'            END_IF;
+			'
+			'            // Respuesta libre (n=1) y ley de control
+			'            h_libre_F2 := FIT_02 + (alpha0_pred_F2 * dy_F2);
+			'            e_pred_F2  := SP_F2 - h_libre_F2;
+			'            IF ABS(e_pred_F2) < Nb_F2 THEN
+			'                e_pred_F2 := 0.0;
+			'            END_IF;
+			'            du_F2 := e_pred_F2 / Ganancia_F2;
+			'        else
+			'            du_F2 := (Kc_F2 * (1.0 + (Ki_F2 * Tm_efectivo_F2 / 2.0) + (Kd_F2 / Tm_efectivo_F2)) * Error_F2)
+			'                   - (Kc_F2 * (1.0 - (Ki_F2 * Tm_efectivo_F2 / 2.0) + (2.0 * Kd_F2 / Tm_efectivo_F2)) * Error_F2_prev)
+			'                   + (Kc_F2 * (Kd_F2 / Tm_efectivo_F2) * Error_F2_prev_prev);
+			'        end_if;
+			'        IF du_F2 > rate_F2 THEN
+			'            du_F2 := rate_F2;
+			'        ELSIF du_F2 < -rate_F2 THEN
+			'            du_F2 := -rate_F2;
+			'        END_IF;
+			'
+			'        CV_F2 := CV_F2_Prev + du_F2;
+			'        CV_F2_man := CV_F2;
+			'        Error_F2_prev_prev := Error_F2_prev;
+			'        Error_F2_prev := Error_F2;
+			'
+			'    END_IF;
+			'
+			'    // saturacion
+			'    IF CV_F2 > umax_F2 THEN
+			'        CV_F2 := umax_F2;
+			'    ELSIF CV_F2 < umin_F2 THEN
+			'        CV_F2 := umin_F2;
+			'    END_IF;
+			'
+			'    CV_F2_Prev := CV_F2;
+			'
+			'    // Mapeo de Salida (Inversa de la Bomba 2)
+			'
+			'    IF CV_F2 <= 0.0 THEN
+			'        CV_F2_Real := 0.0; // Corta la zona muerta, la bomba se apaga.
+			'
+			'    // Mapeo Zona 1 (Bomba arranca en ~34.26% y llega a 50%)
+			'    ELSIF CV_F2 <= 38.65 THEN
+			'        // Ecuación: Y = Y_inicial + X * Pendiente
+			'        CV_F2_Real := 34.26 + (CV_F2 * 0.4072);
+			'
+			'    // Mapeo Zona 2 (Inicia exactamente en 50% y llega a 70%)
+			'    ELSIF CV_F2 <= 68.73 THEN
+			'        // Ecuación: Y = 50.0 + (X - X_anterior) * Pendiente
+			'        CV_F2_Real := 50.0 + ((CV_F2 - 38.65) * 0.6649);
+			'
+			'    // Mapeo Zona 3 (Inicia exactamente en 70% y llega a 100%)
+			'    ELSIF CV_F2 > 68.73 THEN
+			'        // Ecuación: Y = 70.0 + (X - X_anterior) * Pendiente
+			'        CV_F2_Real := 70.0 + ((CV_F2 - 68.73) * 0.9594);
+			'
+			'    END_IF;
+			'
+			'    // Saturación de seguridad para la señal física que va a la tarjeta analógica
+			'    IF CV_F2_Real > 100.0 THEN
+			'        CV_F2_Real := 100.0;
+			'    ELSIF CV_F2_Real < 0.0 THEN
+			'        CV_F2_Real := 0.0;
+			'    END_IF;
+			'
+			'    VF02 := CV_F2_Real;
+			'
+			'END_IF; // Fin de la condición de scans
+			't_task := Tm*1000000;
+		END_ST_ROUTINE
+
+		ST_ROUTINE Inicio_planta 
+			'inicio :=0;
+			'Sw_am_F1 := 0;
+			'Sw_am_L1 := 0;
+			'Sw_am_L4 := 0;
+			'Sw_am_F2 := 0;
+			'Sw_am_L2 := 0;
+			'Sw_am_L3 := 0;
+			'//SP_L1 := 25;
+			'//SP_L2 := 35;
+			'//SP_L3 := 22;
+			'//SP_L4 := 25;
+			'SP_L1 := 50;
+			'SP_L2 := 50;
+			'SP_L3 := 50;
+			'SP_L4 := 50;
+			'
+		END_ST_ROUTINE
+
+		ST_ROUTINE LIC_01 (Description := "Lazo de control PID para el nivel del estanque 1")
+			'Error_L1 := SP_L1 - LIT_01;
+			'
+			'rate_L1 := dumax_L1 * Tm;
+			'
+			'if ABS(Error_L1) < Nb_L1 then
+			'	Error_L1 := 0;
+			'	end_if;
+			'	
+			'IF Sw_FF_1 THEN
+			'    FF_L1 := (100.0 / q_max) * (kff_1*(a1 * SQRT(2.0 * g * SP_L1 * (h_max / 100.0))) - kw_1*(a3 * SQRT(2.0 * g *LIT_03*(h_max / 100.0))))/gamma1;
+			'ELSE 
+			'    FF_L1 := 0.0;
+			'END_IF;
+			'
+			'IF Sw_am_L1 OR Sw_local_F1 OR Sw_am_F1 THEN
+			'	if Sw_am_F1 OR Sw_local_F1 then
+			'		CV_L1_man :=SP_F1;
+			'	end_if;
+			'    
+			'    du_L1 := CV_L1_man - CV_L1_prev; 
+			'    
+			'    IF du_L1 > rate_L1 THEN
+			'        du_L1 := rate_L1;
+			'    ELSIF du_L1 < -rate_L1 THEN
+			'        du_L1 := -rate_L1;
+			'    END_IF;
+			'    
+			'    CV_L1 := CV_L1_prev + du_L1;
+			'
+			'    IF Sw_SP_track_L1 THEN
+			'        SP_L1 := LIT_01; 
+			'    END_IF;
+			'
+			'    PID_LIC_01_prev := CV_L1 - FF_L1;
+			'    Error_L1_prev := 0.0;
+			'    Error_L1_prev_prev := 0.0;
+			'    
+			'ELSE
+			'
+			'    du_PID := (Kc_L1*(1.0+(Ki_L1*Tm/2.0)+(Kd_L1/Tm))*Error_L1)-(Kc_L1*(1.0-(Ki_L1*Tm /2.0)+(2.0*Kd_L1/Tm))*Error_L1_prev)+(Kc_L1*(Kd_L1/Tm)*Error_L1_prev_prev);
+			'           
+			'    IF du_PID > rate_L1 THEN
+			'        du_PID := rate_L1;
+			'    ELSIF du_PID < -rate_L1 THEN
+			'        du_PID := -rate_L1;
+			'    END_IF;
+			'    
+			'    PID_LIC_01 := PID_LIC_01_prev + du_PID;
+			'    
+			'    CV_L1 := PID_LIC_01 + FF_L1;
+			'	CV_L1_man := CV_L1;
+			'    PID_LIC_01_prev := PID_LIC_01;
+			'    Error_L1_prev_prev := Error_L1_prev;
+			'    Error_L1_prev := Error_L1;
+			'
+			'END_IF;
+			'
+			'
+			'IF CV_L1 > umax_L1 THEN
+			'    CV_L1 := umax_L1;
+			'    PID_LIC_01_prev := CV_L1 - FF_L1;
+			'ELSIF CV_L1 < umin_L1 THEN
+			'    CV_L1 := umin_L1;
+			'    PID_LIC_01_prev := CV_L1 - FF_L1;
+			'END_IF;
+			'
+			'CV_L1_prev := CV_L1;
+		END_ST_ROUTINE
+
+		ST_ROUTINE LIC_02 
+			'// =========================================================================
+			'// RUTINA: LIC_02 (Control Maestro de Nivel Estanque 2)
+			'// DOMINIO DE SALIDA: Caudal Requerido hacia FIC_02 (q_max)
+			'// =========================================================================
+			'Error_L2 := SP_L2 - LIT_02;
+			'
+			'rate_L2 := dumax_L2 * Tm;
+			'
+			'if ABS(Error_L2) < Nb_L2 then
+			'	Error_L2 := 0;
+			'	end_if;
+			'
+			'IF Sw_FF_2 THEN
+			'    FF_L2 := (100.0 / q_max) * (kff_2*(a2 * SQRT(2.0 * g * SP_L2 * (h_max / 100.0))) - kw_2*(a4 * SQRT(2.0 * g * LIT_04*(h_max / 100.0)))) / gamma2;
+			'ELSE 
+			'    FF_L2 := 0.0;
+			'END_IF;
+			'
+			'IF Sw_am_L2 OR Sw_local_F2 or Sw_am_F2 THEN
+			'	
+			'    if Sw_am_F2 OR Sw_local_F2 then
+			'		CV_L2_man :=SP_F2;
+			'	end_if;
+			'    
+			'    du_L2 := CV_L2_man - CV_L2_prev; 
+			'    
+			'    IF du_L2 > rate_L2 THEN
+			'        du_L2 := rate_L2;
+			'    ELSIF du_L2 < -rate_L2 THEN
+			'        du_L2 := -rate_L2;
+			'    END_IF;
+			'    
+			'    CV_L2 := CV_L2_prev + du_L2;
+			'
+			'    IF Sw_SP_track_L2 THEN
+			'        SP_L2 := LIT_02; 
+			'    END_IF;
+			'
+			'    PID_LIC_02_prev := CV_L2 - FF_L2;
+			'    Error_L2_prev := 0.0;
+			'    Error_L2_prev_prev := 0.0;
+			'    
+			'ELSE
+			'
+			'    du_PID_F2 := (Kc_L2 * (1.0 + (Ki_L2 * Tm / 2.0) + (Kd_L2 / Tm)) * Error_L2) 
+			'            - (Kc_L2 * (1.0 - (Ki_L2 * Tm / 2.0) + (2.0 * Kd_L2 / Tm)) * Error_L2_prev) 
+			'            + (Kc_L2 * (Kd_L2 / Tm) * Error_L2_prev_prev);
+			'           
+			'    IF du_PID_F2 > rate_L2 THEN
+			'        du_PID_F2 := rate_L2;
+			'    ELSIF du_PID_F2 < -rate_L2 THEN
+			'        du_PID_F2 := -rate_L2;
+			'    END_IF;
+			'    
+			'    PID_LIC_02 := PID_LIC_02_prev + du_PID_F2;
+			'    
+			'    CV_L2 := PID_LIC_02 + FF_L2;
+			'    CV_L2_man := CV_L2;
+			'    PID_LIC_02_prev := PID_LIC_02;
+			'    Error_L2_prev_prev := Error_L2_prev;
+			'    Error_L2_prev := Error_L2;
+			'
+			'END_IF;
+			'
+			'
+			'IF CV_L2 > umax_L2 THEN
+			'    CV_L2 := umax_L2;
+			'    PID_LIC_02_prev := CV_L2 - FF_L2;
+			'ELSIF CV_L2 < umin_L2 THEN
+			'    CV_L2 := umin_L2;
+			'    PID_LIC_02_prev := CV_L2 - FF_L2;
+			'END_IF;
+			'
+			'CV_L2_prev := CV_L2;
+		END_ST_ROUTINE
+
+		ST_ROUTINE LIC_03 
+			'// =========================================================================
+			'// CONTROLADOR LAZO L3 (HOREXT / PID) CON DIVISOR DE SCANS DIRECTO
+			'// =========================================================================
+			'
+			'// alidar el input del usuario (Tag desde el HMI, tipo DINT)
+			'// Si el usuario pone 0 o negativo, forzamos a 1 (ejecutar cada scan) para evitar que el lazo se congele.
+			'IF input_scans_L3 < 1 THEN
+			'    input_scans_L3 := 1;
+			'END_IF;
+			'
+			'// Incrementar el contador de barridos
+			'Contador_Scans_LIC03 := Contador_Scans_L3 + 1;
+			'
+			'//  Evaluar si es el scan correspondiente para ejecutar la rutina
+			'IF Contador_Scans_LIC03 >= input_scans_L3 THEN
+			'    
+			'    // Resetear el contador
+			'    Contador_Scans_LIC03 := 0;
+			'
+			'    // =====================================================================
+			'    // INICIO DEL CÓDIGO ORIGINAL DEL CONTROLADOR L3
+			'    // =====================================================================
+			'
+			'    Error_L3 := SP_L3 - LIT_03;
+			'
+			'    // tm real
+			'    Tm_efectivo := Tm * input_scans_L3; 
+			'
+			'    rate_L3 := dumax_L3 * Tm_efectivo;
+			'
+			'    if ABS(Error_L3) < Nb_L3 then
+			'        Error_L3 := 0;
+			'    end_if;
+			'        
+			'    IF Sw_FF_2 THEN
+			'        FF_L3 := (100.0 / q_max) * kff_3*(a3 * SQRT(2.0 * g * SP_L3 * (h_max / 100.0))) / (1.0 - gamma2);
+			'    ELSE 
+			'        FF_L3 := 0.0;
+			'    END_IF;
+			'
+			'    IF Sw_am_L3 or Sw_local_F2 or Sw_am_F2 THEN
+			'        
+			'        if Sw_am_F2 or Sw_local_F2 then
+			'            CV_L3_man :=SP_F2;
+			'        end_if;
+			'        
+			'        du_L3 := CV_L3_man - CV_L3_prev; 
+			'
+			'        IF du_L3 > rate_L3 THEN
+			'            du_L3 := rate_L3;
+			'        ELSIF du_L3 < -rate_L3 THEN
+			'            du_L3 := -rate_L3;
+			'        END_IF;
+			'        
+			'        CV_L3 := CV_L3_prev + du_L3;
+			'
+			'        IF Sw_SP_track_L3 THEN
+			'            SP_L3 := LIT_03; 
+			'        END_IF;
+			'
+			'        PID_LIC_03_prev    := CV_L3 - FF_L3;
+			'        HOREXT_LIC_03_prev := CV_L3;  
+			'        Error_L3_prev      := 0.0;
+			'        Error_L3_prev_prev := 0.0;
+			'        
+			'    ELSE
+			'        // --- MODO AUTOMÁTICO ---
+			'        IF Sw_horext_L3 THEN
+			'            // ===================== HOREXT =================
+			'        	// Modelo de un paso desde el estimador
+			'        	p_L3 := a0_L3 + a1_L3 + a2_L3;
+			'       		b_L3 := b1_L3 + b2_L3 + b3_L3 + b4_L3 + b5_L3 + b6_L3 + b7_L3 + b8_L3 + b9_L3 + b10_L3 + b11_L3 + b12_L3 + b13_L3 + b14_L3 + b15_L3;
+			'
+			'        	// Derivar predictor a Tc pasos:
+			'        	//   alpha0_pred = p + p^2 + ... + p^Tc
+			'        	//   Ganancia    = beta_1 + ... + beta_Tc,  beta_j = p*beta_{j-1} + b
+			'        	p_pow_L3       := 1.0;
+			'        	a0_L3_usado := 0.0;
+			'        	beta_run_L3    := 0.0;
+			'        	Ganancia_L3    := 0.0;
+			'        	FOR i := 1 TO horizonte_L3 DO
+			'            	p_pow_L3       := p_pow_L3 * p_L3;
+			'            	a0_L3_usado := a0_L3_usado + p_pow_L3;
+			'            	beta_run_L3    := (p_L3 * beta_run_L3) + b_L3;
+			'            	Ganancia_L3    := Ganancia_L3 + beta_run_L3;
+			'        	END_FOR;
+			'
+			'			Ganancia_L3_usada := Ganancia_L3;
+			'			IF Ganancia_L3_usada < Ganancia_Min_L3 THEN
+			'    			Ganancia_L3_usada := Ganancia_Min_L3;
+			'			END_IF;
+			'
+			'            h_libre_L3 := LIT_03 + (a0_L3_usado * dy_L3);
+			'
+			'            e_pred_L3 := SP_L3 - h_libre_L3;
+			'            IF ABS(e_pred_L3) < Nb_L3 THEN
+			'                e_pred_L3 := 0.0;
+			'            END_IF;
+			'
+			'            du_HOREXT := e_pred_L3 / Ganancia_L3_usada;
+			'            // theta_L3 / dy_L3 los entrega el estimador RLS de nivel (Tarea_Nivel)
+			'            IF du_HOREXT > rate_L3 THEN
+			'                du_HOREXT := rate_L3;
+			'            ELSIF du_HOREXT < -rate_L3 THEN
+			'                du_HOREXT := -rate_L3;
+			'            END_IF;
+			'
+			'            HOREXT_LIC_03 := HOREXT_LIC_03_prev + du_HOREXT;
+			'            CV_L3         := HOREXT_LIC_03;
+			'            CV_L3_man     := CV_L3;
+			'
+			'            HOREXT_LIC_03_prev  := HOREXT_LIC_03;
+			'            PID_LIC_03_prev     := CV_L3 - FF_L3;   // mantener PID sincronizado
+			'            Error_L3_prev_prev  := Error_L3_prev;
+			'            Error_L3_prev       := Error_L3;
+			'
+			'        ELSE
+			'            // ===================== PID =====================
+			'            du_PID := (Kc_L3*(1.0+(Ki_L3*Tm_efectivo/2.0)+(Kd_L3/Tm_efectivo))*Error_L3)-(Kc_L3*(1.0-(Ki_L3*Tm_efectivo /2.0)+(2.0*Kd_L3/Tm_efectivo))*Error_L3_prev)+(Kc_L3*(Kd_L3/Tm_efectivo)*Error_L3_prev_prev);
+			'
+			'            IF du_PID > rate_L3 THEN
+			'                du_PID := rate_L3;
+			'            ELSIF du_PID < -rate_L3 THEN
+			'                du_PID := -rate_L3;
+			'            END_IF;
+			'
+			'            PID_LIC_03 := PID_LIC_03_prev + du_PID;
+			'            CV_L3      := PID_LIC_03 + FF_L3;
+			'            CV_L3_man  := CV_L3;
+			'
+			'            PID_LIC_03_prev     := PID_LIC_03;
+			'            HOREXT_LIC_03_prev  := CV_L3;   // mantener HOREXT sincronizado
+			'            Error_L3_prev_prev  := Error_L3_prev;
+			'            Error_L3_prev       := Error_L3;
+			'        END_IF;
+			'    END_IF;
+			'
+			'    IF CV_L3 > umax_L3 THEN
+			'        CV_L3 := umax_L3;
+			'        PID_LIC_03_prev    := CV_L3 - FF_L3;
+			'        HOREXT_LIC_03_prev := CV_L3;
+			'    ELSIF CV_L3 < umin_L3 THEN
+			'        CV_L3 := umin_L3;
+			'        PID_LIC_03_prev    := CV_L3 - FF_L3;
+			'        HOREXT_LIC_03_prev := CV_L3;
+			'    END_IF;
+			'
+			'    CV_L3_prev := CV_L3;
+			'
+			'END_IF; // Fin de la condición de scans
+		END_ST_ROUTINE
+
+		ST_ROUTINE LIC_04 
+			'// =========================================================================
+			'// CONTROLADOR LAZO L4 (HOREXT / PID) CON DIVISOR DE SCANS DIRECTO
+			'// =========================================================================
+			'
+			'// Validar el input del usuario (Tag desde el HMI, tipo DINT)
+			'IF input_scans_L4 < 1 THEN
+			'    input_scans_L4 := 1;
+			'END_IF;
+			'
+			'// Incrementar el contador de barridos
+			'Contador_Scans_LIC04 := Contador_Scans_L4 + 1;
+			'
+			'// Evaluar si es el scan correspondiente para ejecutar la rutina
+			'IF Contador_Scans_LIC04 >= input_scans_L4 THEN
+			'
+			'    // Resetear el contador
+			'    Contador_Scans_LIC04 := 0;
+			'
+			'    Error_L4 := SP_L4 - LIT_04;
+			'
+			'    Tm_efectivo_L4 := Tm * input_scans_L4;
+			'
+			'    rate_L4 := dumax_L4 * Tm_efectivo_L4;
+			'
+			'    if ABS(Error_L4) < Nb_L4 then
+			'        Error_L4 := 0;
+			'    end_if;
+			'
+			'    IF Sw_FF_1 THEN
+			'        FF_L4 := (100.0 / q_max) * kff_4*(a4 * SQRT(2.0 * g * SP_L4 * (h_max / 100.0))) / (1.0 - gamma1);
+			'    ELSE
+			'        FF_L4 := 0.0;
+			'    END_IF;
+			'
+			'    IF Sw_am_L4 OR Sw_local_F1 or Sw_am_F1 THEN
+			'
+			'        if Sw_am_F1 or Sw_local_F1 then
+			'            CV_L4_man := SP_F1;
+			'        end_if;
+			'
+			'        du_L4 := CV_L4_man - CV_L4_prev;
+			'
+			'        IF du_L4 > rate_L4 THEN
+			'            du_L4 := rate_L4;
+			'        ELSIF du_L4 < -rate_L4 THEN
+			'            du_L4 := -rate_L4;
+			'        END_IF;
+			'
+			'        CV_L4 := CV_L4_prev + du_L4;
+			'
+			'        IF Sw_SP_track_L4 THEN
+			'            SP_L4 := LIT_04;
+			'        END_IF;
+			'
+			'        PID_LIC_04_prev    := CV_L4 - FF_L4;
+			'        HOREXT_LIC_04_prev := CV_L4;  
+			'        Error_L4_prev      := 0.0;
+			'        Error_L4_prev_prev := 0.0;
+			'
+			'    ELSE
+			'        // --- MODO AUTOMÁTICO ---
+			'        IF Sw_horext_L4 THEN
+			'            // ===================== HOREXT =================
+			'            p_L4 := a0_L4 + a1_L4 + a2_L4;
+			'            b_L4 := b1_L4 + b2_L4 + b3_L4 + b4_L4 + b5_L4 + b6_L4 + b7_L4 + b8_L4 + b9_L4 + b10_L4 + b11_L4 + b12_L4 + b13_L4 + b14_L4 + b15_L4;
+			'
+			'            p_pow_L4    := 1.0;
+			'            a0_L4_usado := 0.0;
+			'            beta_run_L4 := 0.0;
+			'            Ganancia_L4 := 0.0;
+			'            FOR i := 1 TO horizonte_L4 DO
+			'                p_pow_L4    := p_pow_L4 * p_L4;
+			'                a0_L4_usado := a0_L4_usado + p_pow_L4;
+			'                beta_run_L4 := (p_L4 * beta_run_L4) + b_L4;
+			'                Ganancia_L4 := Ganancia_L4 + beta_run_L4;
+			'            END_FOR;
+			'
+			'			Ganancia_L4_usada := Ganancia_L4;
+			'			IF Ganancia_L4_usada < Ganancia_Min_L4 THEN
+			'    			Ganancia_L4_usada := Ganancia_Min_L4;
+			'			END_IF;
+			'
+			'            h_libre_L4 := LIT_04 + (a0_L4_usado * dy_L4);
+			'
+			'            e_pred_L4 := SP_L4 - h_libre_L4;
+			'            IF ABS(e_pred_L4) < Nb_L4 THEN
+			'                e_pred_L4 := 0.0;
+			'            END_IF;
+			'
+			'            du_HOREXT_L4 := e_pred_L4 / Ganancia_L4_usada;
+			'            IF du_HOREXT_L4 > rate_L4 THEN
+			'                du_HOREXT_L4 := rate_L4;
+			'            ELSIF du_HOREXT_L4 < -rate_L4 THEN
+			'                du_HOREXT_L4 := -rate_L4;
+			'            END_IF;
+			'
+			'            HOREXT_LIC_04 := HOREXT_LIC_04_prev + du_HOREXT_L4;
+			'            CV_L4         := HOREXT_LIC_04;
+			'            CV_L4_man     := CV_L4;
+			'
+			'            HOREXT_LIC_04_prev  := HOREXT_LIC_04;
+			'            PID_LIC_04_prev     := CV_L4 - FF_L4;
+			'            Error_L4_prev_prev  := Error_L4_prev;
+			'            Error_L4_prev       := Error_L4;
+			'
+			'        ELSE
+			'            // ===================== PID (formula original, con Tm_efectivo_L4) ===
+			'            du_PID := (Kc_L4*(1.0+(Ki_L4*Tm_efectivo_L4/2.0)+(Kd_L4/Tm_efectivo_L4))*Error_L4)-(Kc_L4*(1.0-(Ki_L4*Tm_efectivo_L4/2.0)+(2.0*Kd_L4/Tm_efectivo_L4))*Error_L4_prev)+(Kc_L4*(Kd_L4/Tm_efectivo_L4)*Error_L4_prev_prev);
+			'
+			'            IF du_PID > rate_L4 THEN
+			'                du_PID := rate_L4;
+			'            ELSIF du_PID < -rate_L4 THEN
+			'                du_PID := -rate_L4;
+			'            END_IF;
+			'
+			'            PID_LIC_04 := PID_LIC_04_prev + du_PID;
+			'
+			'            CV_L4 := PID_LIC_04 + FF_L4;
+			'            CV_L4_man := CV_L4;
+			'
+			'            PID_LIC_04_prev     := PID_LIC_04;
+			'            HOREXT_LIC_04_prev  := CV_L4;
+			'            Error_L4_prev_prev  := Error_L4_prev;
+			'            Error_L4_prev       := Error_L4;
+			'        END_IF;
+			'    END_IF;
+			'
+			'    IF CV_L4 > umax_L4 THEN
+			'        CV_L4 := umax_L4;
+			'        PID_LIC_04_prev    := CV_L4 - FF_L4;
+			'        HOREXT_LIC_04_prev := CV_L4 ;
+			'    ELSIF CV_L4 < umin_L4 THEN
+			'        CV_L4 := umin_L4;
+			'        PID_LIC_04_prev    := CV_L4 - FF_L4;
+			'        HOREXT_LIC_04_prev := CV_L4;
+			'    END_IF;
+			'
+			'    CV_L4_prev := CV_L4;
+			'
+			'END_IF; // Fin de la condición de scans
+		END_ST_ROUTINE
+
+		ST_ROUTINE LIMITES 
+			'// F = asqrt(2qh)
+			'// M = [k1*y1, -k2*(y2 - 1)]
+			'//     [-k1*(y1 - 1),        k2*y2]
+			'// M^-1 [ y2/(k1*y1 - k1 + k1*y2), (y2 - 1)/(k1*y1 - k1 + k1*y2)]
+			'//      [(y1 - 1)/(k2*y1 - k2 + k2*y2),       y1/(k2*y1 - k2 + k2*y2)]
+			'
+			'// ==========================================================================
+			'// 1. CÁLCULO DE FLUJOS REQUERIDOS (P1 y P2) BASADOS EN SETPOINTS (SP_L1, SP_L2)
+			'// ==========================================================================
+			'P1 := a1 * SQRT(2.0 * 9.81 * SP_L1*0.6/100);
+			'P2 := a2 * SQRT(2.0 * 9.81 * SP_L2*0.6/100);
+			'
+			'// ==========================================================================
+			'// 2. ESFUERZO INSTANTÁNEO DEMANDADO A LAS BOMBAS
+			'// ==========================================================================
+			'// ERROR CORREGIDO: Se utilizan P1 y P2 en lugar de SP_F1 y SP_L2
+			'u1_Req := (I11 * P1) + (I12 * P2);
+			'u2_Req := (I21 * P1) + (I22 * P2);
+			'
+			'// Limpieza numérica de ruido digital cerca de cero absoluto
+			'IF ABS(u1_Req) < 0.001 THEN u1_Req := 0.0; END_IF;
+			'IF ABS(u2_Req) < 0.001 THEN u2_Req := 0.0; END_IF;
+			'
+			'// ==========================================================================
+			'// 3. OBTENCIÓN DE LÍMITES REALES DE FLUJO (DESENROLLADO DE PYTHON)
+			'// ==========================================================================
+			'// Inicializamos las variables de búsqueda a extremos absolutos
+			'F1_Min_Allowed := 0.0;
+			'F1_Max_Allowed := 999999.0;
+			'F2_Min_Allowed := 0.0;
+			'F2_Max_Allowed := 999999.0;
+			'
+			'// -----------------------------------------------------------
+			'// A) LÍMITES PARA ESTANQUE 1 (F1) DADO EL FLUJO DEL ESTANQUE 2 (P2)
+			'// -----------------------------------------------------------
+			'// Evaluamos los cortes con U_MIN y U_MAX respecto a la Bomba 1
+			'Val_u1_min_F1 := (U_MIN - (I12 * P2)) / I11;
+			'Val_u1_max_F1 := (U_MAX - (I12 * P2)) / I11;
+			'
+			'// Corrección de desigualdad según el signo de la Matriz Inversa (I11)
+			'IF I11 > 0.0 THEN
+			'    IF Val_u1_min_F1 > F1_Min_Allowed THEN F1_Min_Allowed := Val_u1_min_F1; END_IF;
+			'    IF Val_u1_max_F1 < F1_Max_Allowed THEN F1_Max_Allowed := Val_u1_max_F1; END_IF;
+			'ELSE
+			'    IF Val_u1_min_F1 < F1_Max_Allowed THEN F1_Max_Allowed := Val_u1_min_F1; END_IF;
+			'    IF Val_u1_max_F1 > F1_Min_Allowed THEN F1_Min_Allowed := Val_u1_max_F1; END_IF;
+			'END_IF;
+			'
+			'// Evaluamos los cortes con U_MIN y U_MAX respecto a la Bomba 2
+			'Val_u2_min_F1 := (U_MIN - (I22 * P2)) / I21;
+			'Val_u2_max_F1 := (U_MAX - (I22 * P2)) / I21;
+			'
+			'// Corrección de desigualdad según el signo de la Matriz Inversa (I21)
+			'IF I21 > 0.0 THEN
+			'    IF Val_u2_min_F1 > F1_Min_Allowed THEN F1_Min_Allowed := Val_u2_min_F1; END_IF;
+			'    IF Val_u2_max_F1 < F1_Max_Allowed THEN F1_Max_Allowed := Val_u2_max_F1; END_IF;
+			'ELSE
+			'    IF Val_u2_min_F1 < F1_Max_Allowed THEN F1_Max_Allowed := Val_u2_min_F1; END_IF;
+			'    IF Val_u2_max_F1 > F1_Min_Allowed THEN F1_Min_Allowed := Val_u2_max_F1; END_IF;
+			'END_IF;
+			'
+			'
+			'// -----------------------------------------------------------
+			'// B) LÍMITES PARA ESTANQUE 2 (F2) DADO EL FLUJO DEL ESTANQUE 1 (P1)
+			'// -----------------------------------------------------------
+			'// Evaluamos los cortes con U_MIN y U_MAX respecto a la Bomba 1
+			'Val_u1_min_F2 := (U_MIN - (I11 * P1)) / I12;
+			'Val_u1_max_F2 := (U_MAX - (I11 * P1)) / I12;
+			'
+			'IF I12 > 0.0 THEN
+			'    IF Val_u1_min_F2 > F2_Min_Allowed THEN F2_Min_Allowed := Val_u1_min_F2; END_IF;
+			'    IF Val_u1_max_F2 < F2_Max_Allowed THEN F2_Max_Allowed := Val_u1_max_F2; END_IF;
+			'ELSE
+			'    IF Val_u1_min_F2 < F2_Max_Allowed THEN F2_Max_Allowed := Val_u1_min_F2; END_IF;
+			'    IF Val_u1_max_F2 > F2_Min_Allowed THEN F2_Min_Allowed := Val_u1_max_F2; END_IF;
+			'END_IF;
+			'
+			'// Evaluamos los cortes con U_MIN y U_MAX respecto a la Bomba 2
+			'Val_u2_min_F2 := (U_MIN - (I21 * P1)) / I22;
+			'Val_u2_max_F2 := (U_MAX - (I21 * P1)) / I22;
+			'
+			'IF I22 > 0.0 THEN
+			'    IF Val_u2_min_F2 > F2_Min_Allowed THEN F2_Min_Allowed := Val_u2_min_F2; END_IF;
+			'    IF Val_u2_max_F2 < F2_Max_Allowed THEN F2_Max_Allowed := Val_u2_max_F2; END_IF;
+			'ELSE
+			'    IF Val_u2_min_F2 < F2_Max_Allowed THEN F2_Max_Allowed := Val_u2_min_F2; END_IF;
+			'    IF Val_u2_max_F2 > F2_Min_Allowed THEN F2_Min_Allowed := Val_u2_max_F2; END_IF;
+			'END_IF;
+			'
+			'
+			'// ==========================================================================
+			'// 4. CONVERSIÓN DE FLUJOS A LÍMITES DE ALTURA FÍSICA EN METROS (Torricelli)
+			'// ==========================================================================
+			'
+			'// Para el Estanque 1 (h1)
+			'IF (F1_Max_Allowed >= F1_Min_Allowed) AND (F1_Min_Allowed >= 0.0) THEN
+			'    h1_Min_Limit := (100/h_max)*(F1_Min_Allowed * F1_Min_Allowed) / (2.0 * 9.81 * a1 * a1);
+			'ELSE
+			'    h1_Min_Limit := 0.0;
+			'END_IF;
+			'
+			'IF (F1_Max_Allowed >= F1_Min_Allowed) AND (F1_Max_Allowed > 0.0) THEN
+			'    h1_Max_Limit := (100/h_max)*(F1_Max_Allowed * F1_Max_Allowed) / (2.0 * 9.81 * a1 * a1);
+			'ELSE
+			'    h1_Max_Limit := -1.0; // Estado inalcanzable
+			'END_IF;
+			'
+			'// Para el Estanque 2 (h2)
+			'IF (F2_Max_Allowed >= F2_Min_Allowed) AND (F2_Min_Allowed >= 0.0) THEN
+			'    h2_Min_Limit := (100/h_max)*(F2_Min_Allowed * F2_Min_Allowed) / (2.0 * 9.81 * a2 * a2);
+			'ELSE
+			'    h2_Min_Limit := 0.0;
+			'END_IF;
+			'
+			'IF (F2_Max_Allowed >= F2_Min_Allowed) AND (F2_Max_Allowed > 0.0) THEN
+			'    h2_Max_Limit := (100/h_max)*(F2_Max_Allowed * F2_Max_Allowed) / (2.0 * 9.81 * a2 * a2);
+			'ELSE
+			'    h2_Max_Limit := -1.0; // Estado inalcanzable
+			'END_IF;
+		END_ST_ROUTINE
+
+		ROUTINE MainRoutine 
+				N: XIC(S:FS)JSR(parametros,0);
+				N: XIC(parada)JSR(Parada_de_emergencia,0);
+				N: XIC(inicio)JSR(Inicio_planta,0);
+				N: MUL(Tp_l3,1000,prbs_timer_L3.PRE)MUL(Tp_l4,1000,prbs_timer_L4.PRE);
+				N: XIC(Sw_am_L4)XIC(prbs_L4_on)TON(prbs_timer_L4,?,?)XIO(prbs_timer_L4.DN)JSR(prbs_L4,0);
+				N: [XIO(prbs_L4_on) ,XIC(prbs_timer_L4.DN) ]JSR(PRBS_L4_reset,0);
+				N: JSR(LIC_01,0);
+				N: XIC(Sw_am_L3)XIC(prbs_L3_on)TON(prbs_timer_L3,?,?)XIO(prbs_timer_L3.DN)JSR(prbs_L3,0);
+				N: [XIO(prbs_L3_on) ,XIC(prbs_timer_L3.DN) ]JSR(PRBS_L3_reset,0);
+				N: JSR(LIC_02,0);
+				N: JSR(LIMITES,0);
+				N: JSR(estimador_L3,0);
+				N: JSR(LIC_03,0);
+				N: JSR(estimador_L4,0);
+				N: JSR(LIC_04,0);
+				N: JSR(selector_1,0);
+				N: JSR(selector_2,0);
+				N: MUL(Tp1,1000,prbs_timer_F1.PRE)MUL(Tp2,1000,prbs_timer_F2.PRE);
+				N: XIC(Sw_am_F1)XIC(prbs_F1_on)TON(prbs_timer_F1,?,?)XIO(prbs_timer_F1.DN)JSR(PRBS_1,0);
+				N: [XIO(prbs_F1_on) ,XIC(prbs_timer_F1.DN) ]JSR(pr1_reset,0);
+				N: JSR(estimador_F1,0);
+				N: JSR(FIC_01,0);
+				N: XIC(Sw_am_F2)XIC(prbs_F2_on)TON(prbs_timer_F2,?,?)XIO(prbs_timer_F2.DN)JSR(PRBS_2,0);
+				N: [XIO(prbs_F2_on) ,XIC(prbs_timer_F2.DN) ]JSR(pr2_reset,0);
+				N: JSR(estimador_F2,0);
+				N: JSR(FIC_02,0);
+				N: SSV(Task,ControlProgram,Rate,t_task);
+				N: GSV(Task,ControlProgram,LastScanTime,Scan_Actual_us);
+				N: GSV(Task,ControlProgram,MaxScanTime,Scan_Max_us);
+				N: JSR(scantime,0);
+		END_ROUTINE
+
+		ST_ROUTINE Parada_de_emergencia 
+			'parada :=0;
+			'// Condiciones iniciales
+			'SP_L1 := 0;
+			'SP_L2 := 0;
+			'SP_L4 := 0;
+			'SP_L4 := 0;
+			'SP_F1 := 0;
+			'SP_F2 := 0;
+			'inicio :=0;
+			'dumax_F1 := 1;
+			'dumax_F2 := 1;
+			'dumax_L1 := 1;
+			'dumax_L2 := 1;
+			'umax_F1 := 95;
+			'umin_F1 := 0;
+			'umax_F2 := 95;
+			'umin_F2 := 0;
+			'umax_L1 := 100;
+			'umin_L1 := 0;
+			'umax_L2 := 100;
+			'umin_L2 := 0;
+			'dumax_L3 :=1;
+			'umax_L3 :=100;
+			'umin_L3 :=0;
+			'dumax_L4 :=1;
+			'umax_L4 :=100;
+			'umin_L4 :=0;
+			'Nb_F1 :=0;
+			'Nb_F2 :=0;
+			'Sw_acc_b1 :=0;
+			'sw_acc_b2 :=0;
+			'kff_1 :=0.75;
+			'kw_1 :=0.75;
+			'kff_2 :=1;
+			'kw_2:=1;
+			'kff_3 :=0.75;
+			'kff_4 :=1;
+			'// switches auto / man
+			'Sw_am_F1 :=1;
+			'Sw_am_F2 :=1;
+			'Sw_am_L1 :=1;
+			'Sw_am_L2 :=1;
+			'Sw_am_L3 :=1;
+			'Sw_am_L4 :=1;
+			'Sw_local_F1 :=0;
+			'Sw_local_F2 :=0;
+			'Sel1 :=1;
+			'Sel2 :=1;
+			'bypass_1 :=0;
+			'bypass_2 :=0;
+			'bypass_3 :=0;
+			'bypass_4 :=0;
+			'Sw_acc_b1 :=0;
+			'sw_acc_b2 :=0;
+			'// switches ff
+			'Sw_FF_1 :=1;
+			'Sw_FF_2 :=1;
+			'// setpoint tracking
+			'Sw_SP_track_L1:=1;
+			'Sw_SP_track_L2:=1;
+			'Sw_SP_track_L3:=1;
+			'Sw_SP_track_L4:=1;
+			'Sw_SP_track_F1:=1;
+			'Sw_SP_track_F2:=1;
+			'// bomba inicial
+			'CV_F1 :=0;
+			'CV_F2 :=0;
+			'CV_F1_man :=0;
+			'CV_F2_man :=0;
+			'// ============== PID ==============
+			'// LIC01
+			'Kc_L1 :=5;
+			'Ki_L1 :=0.026;
+			'Kd_L1 :=0;
+			'//LIC02
+			'Kc_L2 :=5;
+			'Ki_L2 :=0.03;
+			'Kd_L2 :=0.0;
+			'//LIC03
+			'Kc_L3 :=6.8;
+			'Ki_L3 :=0.0222;
+			'Kd_L3 :=0;
+			'//LIC04
+			'Kc_L4 :=6.5;
+			'Ki_L4 :=0.022;
+			'Kd_L4 :=0;
+			'// FIC01
+			'Kc_F1 :=1.45;
+			'Ki_F1 :=0.75;
+			'Kd_F1 :=0.0;
+			'//FIC02
+			'Kc_F2 :=1.6;
+			'Ki_F2 :=0.75;
+			'Kd_F2 :=0;
+			'//PRBS
+			'//seeds
+			'sh.1 := 0;
+			'sh.2 := 0;
+			'sh.3 := 1;
+			'sh.4 := 1;
+			'sh.5 := 1;
+			'sh.6 := 0;
+			'sh.7 := 0;
+			'
+			'zh.1 := 0;
+			'zh.2 := 0;
+			'zh.3 := 1;
+			'zh.4 := 1;
+			'zh.5 := 1;
+			'zh.6 := 0;
+			'zh.7 := 0;
+			'
+			'l3.1 := 0;
+			'l3.2 := 0;
+			'l3.3 := 1;
+			'l3.4 := 1;
+			'l3.5 := 1;
+			'l3.6 := 0;
+			'l3.7 := 0;
+			'
+			'l4.1 := 0;
+			'l4.2 := 0;
+			'l4.3 := 1;
+			'l4.4 := 1;
+			'l4.5 := 1;
+			'l4.6 := 0;
+			'l4.7 := 0;
+			'
+			'seed := 1;
+			'seed2 := 1;
+			'seed_L4:=1;
+			'seed_L3:=1;
+			'
+			'//acts
+			'act_prbs_1 := 0;
+			'act_prbs_2 := 0;
+			'act_prbs_L4 := 0;
+			'act_prbs_L3 := 0;
+			'
+			'//switches
+			'prbs_F1_on :=0;
+			'prbs_F2_on :=0;
+			'prbs_L4_on :=0;
+			'prbs_L3_on :=0;
+			'//amps & delta
+			'amp1 := 10.0;
+			'amp2 := 10.0;
+			'ampL3 := 20.0;
+			'ampL4 := 20.0;
+			'delta :=10.0;
+			'delta2 :=10.0;
+			'deltaL4 := 30.0;
+			'deltaL3 := 30.0;
+			'// duracion
+			'Tp1 := 600;
+			'Tp2 := 600;
+			'Tp_l4 := 900;
+			'Tp_l3 := 900;
+			'// estimador
+			'// F1
+			'estimacion_F1 :=0.0;
+			'Sw_horext_F1 :=0;
+			'Ganancia_Min_F1 := 0.01;
+			'estimador_F1_reset :=1;
+			'orden_F1 :=1;
+			'horizonte_F1 := 3;
+			'Sigma_F1 := 20; 
+			'Lambda_F1 := 0.95;
+			'a0_F1 := 0.0;
+			'a1_L3 := 0.0;  a2_L3 := 0.0;
+			'b1_L3 := 0.0;  b2_L3 := 0.0;  b3_L3 := 0.0;  b4_L3 := 0.0;  b5_L3 := 0.0;
+			'b6_L3 := 0.0;  b7_L3 := 0.0;  b8_L3 := 0.0;  b9_L3 := 0.0;  b10_L3 := 0.0;
+			'b11_L3 := 0.0;  b12_L3 := 0.0;  b13_L3 := 0.0;  b14_L3 := 0.0;  b15_L3 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_F1[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_F1[i] :=0;
+			'end_for;
+			'input_scans_F1 := 10;
+			'// F2
+			'estimacion_F2 :=0.0;
+			'Sw_horext_F2 :=0;
+			'Ganancia_Min_F2 := 0.01;
+			'estimador_F2_reset :=1;
+			'orden_F2 :=1;
+			'horizonte_F2 := 3;
+			'Sigma_F2 := 20; 
+			'Lambda_F2 := 0.95;
+			'a0_F2 := 0.0;
+			'a1_F2 := 0.0;
+			'a2_F2 := 0.0;
+			'a3_F2 := 0.0;
+			'b1_F2 := 0.0;
+			'b2_F2 := 0.0;
+			'b3_F2 := 0.0;
+			'b4_F2 := 0.0;
+			'b5_F2 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_F2[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_F2[i] :=0;
+			'end_for;
+			'input_scans_F2 := 10;
+			'// L3
+			'tau_f_L3 := 15.0;
+			'estimacion_L3 :=0.0;
+			'Sw_horext_L3 :=0;
+			'Ganancia_Min_L3 := 0.01;
+			'estimador_L3_reset :=1;
+			'orden_L3 :=1;
+			'horizonte_L3 := 5;
+			'Sigma_L3 := 20; 
+			'Lambda_L3 := 0.95;
+			'a0_L3 := 0.0;
+			'a1_L3 := 0.0;
+			'a2_L3 := 0.0;
+			'b1_L3 := 0.0;
+			'b2_L3 := 0.0;
+			'b3_L3 := 0.0;
+			'b4_L3 := 0.0;
+			'b5_L3 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_L3[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_L3[i] :=0;
+			'end_for;
+			'input_scans_L3 := 40;
+			'umbral_ident_L3 := 3.0;
+			'Sw_identificar_L3 := 0; 
+			'// L4
+			'tau_f_L4 := 15.0;
+			'estimacion_L4 :=0.0;
+			'Sw_horext_L4 :=0;
+			'Ganancia_Min_L4 := 0.01;
+			'estimador_L4_reset :=1;
+			'orden_L4 :=1;
+			'horizonte_L4 := 3;
+			'Sigma_L4 := 200; 
+			'Lambda_L4 := 0.95;
+			'a0_L4 := 0.0;
+			'a1_L4 := 0.0;  a2_L4 := 0.0;
+			'b1_L4 := 0.0;  b2_L4 := 0.0;  b3_L4 := 0.0;  b4_L4 := 0.0;  b5_L4 := 0.0;
+			'b6_L4 := 0.0;  b7_L4 := 0.0;  b8_L4 := 0.0;  b9_L4 := 0.0;  b10_L4 := 0.0;
+			'b11_L4 := 0.0;  b12_L4 := 0.0;  b13_L4 := 0.0;  b14_L4 := 0.0;  b15_L4 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_L4[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_L4[i] :=0;
+			'end_for;
+			'input_scans_L4 := 40;
+			'CV_F2_Prev_Lento_L3:=0.0;
+			'CV_F1_Prev_Lento_L4:=0.0;
+			'Sw_identificar_L4 := 0;  
+			'umbral_ident_L4 := 3.0;
+		END_ST_ROUTINE
+
+		ST_ROUTINE parametros 
+			'// Condiciones iniciales
+			'SP_L1 := 0;
+			'SP_L2 := 0;
+			'SP_L4 := 0;
+			'SP_L4 := 0;
+			'SP_F1 := 0;
+			'SP_F2 := 0;
+			'inicio :=0;
+			'dumax_F1 := 1;
+			'dumax_F2 := 1;
+			'dumax_L1 := 1;
+			'dumax_L2 := 1;
+			'umax_F1 := 95;
+			'umin_F1 := 0;
+			'umax_F2 := 95;
+			'umin_F2 := 0;
+			'umax_L1 := 100;
+			'umin_L1 := 0;
+			'umax_L2 := 100;
+			'umin_L2 := 0;
+			'dumax_L3 :=1;
+			'umax_L3 :=100;
+			'umin_L3 :=0;
+			'dumax_L4 :=1;
+			'umax_L4 :=100;
+			'umin_L4 :=0;
+			'Nb_F1 :=0;
+			'Nb_F2 :=0;
+			'Sw_acc_b1 :=0;
+			'sw_acc_b2 :=0;
+			'kff_1 :=0.75;
+			'kw_1 :=0.75;
+			'kff_2 :=1;
+			'kw_2:=1;
+			'kff_3 :=0.75;
+			'kff_4 :=1;
+			'prbs_enable_F1 :=0;
+			'// Constantes físicas del sistema
+			'g := 9.81;
+			'a1 := 6.1360 / 10000; 
+			'a2 := 5.4678 / 10000;
+			'a3 := 3.5752 / 10000;
+			'a4 := 4.1820 / 10000;
+			'k1 :=0.0017;
+			'k2 := 0.0017;
+			'gamma1 := 0.455; 
+			'gamma2 := 0.4195;
+			'Tm := 0.1;    
+			't_task := Tm*1000000;
+			'h_max := 0.6; //altura del estanque
+			'q_max := 0.0017;
+			'I11 := (gamma2/(k1*gamma1 - k1 + k1*gamma2));
+			'I12 := ((gamma2 - 1)/(k1*gamma1 - k1 + k1*gamma2));
+			'I21 := (gamma1 - 1)/(k2*gamma1 - k2 + k2*gamma2);
+			'I22 := (gamma1/(k2*gamma1 - k2 + k2*gamma2));
+			'U_MAX := 1.0;
+			'U_MIN := 0.26;
+			'// switches auto / man
+			'Sw_am_F1 :=1;
+			'Sw_am_F2 :=1;
+			'Sw_am_L1 :=1;
+			'Sw_am_L2 :=1;
+			'Sw_am_L3 :=1;
+			'Sw_am_L4 :=1;
+			'Sw_local_F1 :=0;
+			'Sw_local_F2 :=0;
+			'Sel1 :=1;
+			'Sel2 :=1;
+			'bypass_1 :=0;
+			'bypass_2 :=0;
+			'bypass_3 :=0;
+			'bypass_4 :=0;
+			'Sw_acc_b1 :=0;
+			'sw_acc_b2 :=0;
+			'// switches ff
+			'Sw_FF_1 :=1;
+			'Sw_FF_2 :=1;
+			'// setpoint tracking
+			'Sw_SP_track_L1:=1;
+			'Sw_SP_track_L2:=1;
+			'Sw_SP_track_L3:=1;
+			'Sw_SP_track_L4:=1;
+			'Sw_SP_track_F1:=1;
+			'Sw_SP_track_F2:=1;
+			'// bomba inicial
+			'CV_F1 :=0;
+			'CV_F1_prev :=0;
+			'CV_F2 :=0;
+			'CV_F2_Prev :=0;
+			'CV_F1_man :=0;
+			'CV_F2_man :=0;
+			'CV_F1_Real :=0;
+			'CV_F2_Real :=0;
+			'// ============== PID ==============
+			'// LIC01
+			'Kc_L1 :=5;
+			'Ki_L1 :=0.026;
+			'Kd_L1 :=0;
+			'//LIC02
+			'Kc_L2 :=5;
+			'Ki_L2 :=0.03;
+			'Kd_L2 :=0.0;
+			'//LIC03
+			'Kc_L3 :=6.8;
+			'Ki_L3 :=0.0222;
+			'Kd_L3 :=0;
+			'//LIC04
+			'Kc_L4 :=6.5;
+			'Ki_L4 :=0.022;
+			'Kd_L4 :=0;
+			'// FIC01
+			'Kc_F1 :=1.45;
+			'Ki_F1 :=0.75;
+			'Kd_F1 :=0.0;
+			'//FIC02
+			'Kc_F2 :=1.6;
+			'Ki_F2 :=0.75;
+			'Kd_F2 :=0;
+			'//PRBS
+			'//seeds
+			'sh.1 := 0;
+			'sh.2 := 0;
+			'sh.3 := 1;
+			'sh.4 := 1;
+			'sh.5 := 1;
+			'sh.6 := 0;
+			'sh.7 := 0;
+			'
+			'zh.1 := 0;
+			'zh.2 := 0;
+			'zh.3 := 1;
+			'zh.4 := 1;
+			'zh.5 := 1;
+			'zh.6 := 0;
+			'zh.7 := 0;
+			'
+			'l3.1 := 0;
+			'l3.2 := 0;
+			'l3.3 := 1;
+			'l3.4 := 1;
+			'l3.5 := 1;
+			'l3.6 := 0;
+			'l3.7 := 0;
+			'
+			'l4.1 := 0;
+			'l4.2 := 0;
+			'l4.3 := 1;
+			'l4.4 := 1;
+			'l4.5 := 1;
+			'l4.6 := 0;
+			'l4.7 := 0;
+			'
+			'seed := 1;
+			'seed2 := 1;
+			'seed_L4:=1;
+			'seed_L3:=1;
+			'
+			'//acts
+			'act_prbs_1 := 0;
+			'act_prbs_2 := 0;
+			'act_prbs_L4 := 0;
+			'act_prbs_L3 := 0;
+			'
+			'//switches
+			'prbs_F1_on :=0;
+			'prbs_F2_on :=0;
+			'prbs_L4_on :=0;
+			'prbs_L3_on :=0;
+			'//amps & delta
+			'amp1 := 10.0;
+			'amp2 := 10.0;
+			'ampL3 := 20.0;
+			'ampL4 := 20.0;
+			'delta :=10.0;
+			'delta2 :=10.0;
+			'deltaL4 := 30.0;
+			'deltaL3 := 30.0;
+			'// duracion
+			'Tp1 := 600;
+			'Tp2 := 600;
+			'Tp_l4 := 900;
+			'Tp_l3 := 900;
+			'// estimador
+			'// F1
+			'estimacion_F1 :=0.0;
+			'Sw_horext_F1 :=0;
+			'Ganancia_Min_F1 := 0.01;
+			'estimador_F1_reset :=1;
+			'orden_F1 :=1;
+			'horizonte_F1 := 3;
+			'Sigma_F1 := 20; 
+			'Lambda_F1 := 0.95;
+			'a0_F1 := 0.0;
+			'a1_L3 := 0.0;  a2_L3 := 0.0;
+			'b1_L3 := 0.0;  b2_L3 := 0.0;  b3_L3 := 0.0;  b4_L3 := 0.0;  b5_L3 := 0.0;
+			'b6_L3 := 0.0;  b7_L3 := 0.0;  b8_L3 := 0.0;  b9_L3 := 0.0;  b10_L3 := 0.0;
+			'b11_L3 := 0.0;  b12_L3 := 0.0;  b13_L3 := 0.0;  b14_L3 := 0.0;  b15_L3 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_F1[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_F1[i] :=0;
+			'end_for;
+			'input_scans_F1 := 10;
+			'// F2
+			'estimacion_F2 :=0.0;
+			'Sw_horext_F2 :=0;
+			'Ganancia_Min_F2 := 0.01;
+			'estimador_F2_reset :=1;
+			'orden_F2 :=1;
+			'horizonte_F2 := 3;
+			'Sigma_F2 := 20; 
+			'Lambda_F2 := 0.95;
+			'a0_F2 := 0.0;
+			'a1_F2 := 0.0;
+			'a2_F2 := 0.0;
+			'a3_F2 := 0.0;
+			'b1_F2 := 0.0;
+			'b2_F2 := 0.0;
+			'b3_F2 := 0.0;
+			'b4_F2 := 0.0;
+			'b5_F2 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_F2[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_F2[i] :=0;
+			'end_for;
+			'input_scans_F2 := 10;
+			'// L3
+			'tau_f_L3 := 15.0;
+			'estimacion_L3 :=0.0;
+			'Sw_horext_L3 :=0;
+			'Ganancia_Min_L3 := 0.01;
+			'estimador_L3_reset :=1;
+			'orden_L3 :=1;
+			'horizonte_L3 := 10;
+			'Sigma_L3 := 20; 
+			'Lambda_L3 := 0.95;
+			'a0_L3 := 0.0;
+			'a1_L3 := 0.0;
+			'a2_L3 := 0.0;
+			'b1_L3 := 0.0;
+			'b2_L3 := 0.0;
+			'b3_L3 := 0.0;
+			'b4_L3 := 0.0;
+			'b5_L3 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_L3[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_L3[i] :=0;
+			'end_for;
+			'input_scans_L3 := 40;
+			'umbral_ident_L3 := 3.0;
+			'Sw_identificar_L3 := 0; 
+			'// L4
+			'tau_f_L4 := 15.0;
+			'estimacion_L4 :=0.0;
+			'Sw_horext_L4 :=0;
+			'Ganancia_Min_L4 := 0.01;
+			'estimador_L4_reset :=1;
+			'orden_L4 :=1;
+			'horizonte_L4 := 10;
+			'Sigma_L4 := 200; 
+			'Lambda_L4 := 0.95;
+			'a0_L4 := 0.0;
+			'a1_L4 := 0.0;  a2_L4 := 0.0;
+			'b1_L4 := 0.0;  b2_L4 := 0.0;  b3_L4 := 0.0;  b4_L4 := 0.0;  b5_L4 := 0.0;
+			'b6_L4 := 0.0;  b7_L4 := 0.0;  b8_L4 := 0.0;  b9_L4 := 0.0;  b10_L4 := 0.0;
+			'b11_L4 := 0.0;  b12_L4 := 0.0;  b13_L4 := 0.0;  b14_L4 := 0.0;  b15_L4 := 0.0;
+			'for i:=0 to 15 do
+			'	du_hist_L4[i] :=0;
+			'end_for;
+			'for i:=0 to 15 do
+			'	dy_hist_L4[i] :=0;
+			'end_for;
+			'input_scans_L4 := 40;
+			'CV_F2_Prev_Lento_L3:=0.0;
+			'CV_F1_Prev_Lento_L4:=0.0;
+			'Sw_identificar_L4 := 0;  
+			'umbral_ident_L4 := 3.0;
+		END_ST_ROUTINE
+
+		ST_ROUTINE pr1_reset 
+			'sh.1 := 0;
+			'sh.2 := 0;
+			'sh.3 := 1;
+			'sh.4 := 1;
+			'sh.5 := 1;
+			'sh.6 := 0;
+			'sh.7 := 0;
+			'
+			'seed := 0;
+			'act_prbs_1 := 0;
+			'prbs_F1_on :=0;
+		END_ST_ROUTINE
+
+		ST_ROUTINE pr2_reset 
+			'zh.1 := 0;
+			'zh.2 := 0;
+			'zh.3 := 1;
+			'zh.4 := 1;
+			'zh.5 := 1;
+			'zh.6 := 0;
+			'zh.7 := 0;
+			'
+			'seed2 := 1;
+			'act_prbs_2 := 0;
+			'prbs_F2_on :=0;
+		END_ST_ROUTINE
+
+		ST_ROUTINE PRBS_1 
+			'IF seed THEN
+			'    // semilla
+			'	sh.1 := 0;
+			'	sh.2 := 0;
+			'	sh.3 := 1;
+			'	sh.4 := 1;
+			'	sh.5 := 1;
+			'	sh.6 := 0;
+			'	sh.7 := 0;
+			'    act_prbs_1 := 0;
+			'	pmax_1 := CV_F1_man+(amp1/2.0);
+			'	if pmax_1 >= 100.0 then
+			'		pmax_1 :=100.0;
+			'	end_if;
+			'	pmin_1 := CV_F1_man-(amp1/2.0);
+			'	if pmin_1 <= 0.0 then
+			'		pmin_1 :=0.0;
+			'	end_if;
+			'    seed := 0;
+			'END_IF;
+			'
+			'// Contador 
+			'act_prbs_1 := act_prbs_1 - 1;
+			'
+			'IF act_prbs_1 <= 0 THEN
+			'    act_prbs_1 := delta/Tm; // recarga el contador
+			'    
+			'    // XOR
+			'    s := sh.6 XOR sh.7;
+			'    
+			'    // desplazamiento (Shift Right)
+			'    FOR i := 6 TO 1 BY -1 DO
+			'        sh.[i+1] := sh.[i];
+			'    END_FOR;
+			'    
+			'    // update del lsb
+			'    sh.1 := s;
+			'    
+			'    // escalimiento de la salida
+			'    IF s THEN
+			'        P1_out := pmax_1;
+			'    ELSE
+			'        P1_out := pmin_1;
+			'    END_IF;
+			'END_IF;
+			'
+			'	
+			'CV_F1_man :=P1_out;
+		END_ST_ROUTINE
+
+		ST_ROUTINE PRBS_2 
+			'IF seed2 THEN
+			'    // semilla
+			'	zh.1 := 0;
+			'	zh.2 := 0;
+			'	zh.3 := 1;
+			'	zh.4 := 1;
+			'	zh.5 := 1;
+			'	zh.6 := 0;
+			'	zh.7 := 0;
+			'    act_prbs_2 := 0;
+			'	pmax_2 := CV_F2_man+(amp2/2.0);
+			'	if pmax_2 >= 100.0 then
+			'		pmax_2 :=100.0;
+			'	end_if;
+			'	pmin_2 := CV_F2_man-(amp2/2.0);
+			'	if pmin_2 <= 0.0 then
+			'		pmin_2 :=0.0;
+			'	end_if;
+			'    seed2 := 0;
+			'END_IF;
+			'
+			'// Contador 
+			'act_prbs_2 := act_prbs_2 - 1;
+			'
+			'IF act_prbs_2 <= 0 THEN
+			'    act_prbs_2 := delta2/Tm; // recarga el contador
+			'    
+			'    // XOR
+			'    s := zh.6 XOR zh.7;
+			'    
+			'    // desplazamiento (Shift Right)
+			'    FOR i := 6 TO 1 BY -1 DO
+			'        zh.[i+1] := zh.[i];
+			'    END_FOR;
+			'    
+			'    // update del lsb
+			'    zh.1 := s;
+			'    
+			'    // escalimiento de la salida
+			'    IF s THEN
+			'        P2_out := pmax_2;
+			'    ELSE
+			'        P2_out := pmin_2;
+			'    END_IF;
+			'END_IF;
+			'
+			'	
+			'CV_F2_man :=P2_out;
+		END_ST_ROUTINE
+
+		ST_ROUTINE prbs_L3 
+			'IF seed_L3 THEN
+			'    // semilla
+			'	l3.1 := 0;
+			'	l3.2 := 0;
+			'	l3.3 := 1;
+			'	l3.4 := 1;
+			'	l3.5 := 1;
+			'	l3.6 := 0;
+			'	l3.7 := 0;
+			'    act_prbs_L3 := 0;
+			'	pmax_L3 := CV_L3_man+(ampL3/2.0);
+			'	if pmax_L3 >= 100.0 then
+			'		pmax_L3 :=100.0;
+			'	end_if;
+			'	pmin_L3 := CV_L3_man-(ampL3/2.0);
+			'	if pmin_L3 <= 0.0 then
+			'		pmin_L3 :=0.0;
+			'	end_if;
+			'	Sw_identificar_L3:=1;
+			'    seed_L3 := 0;
+			'END_IF;
+			'
+			'// Contador 
+			'act_prbs_L3 := act_prbs_L3 - 1;
+			'
+			'IF act_prbs_L3 <= 0 THEN
+			'    act_prbs_L3 := deltaL3/Tm; // recarga el contador
+			'    
+			'    // XOR
+			'    s := l3.6 XOR l3.7;
+			'    
+			'    // desplazamiento (Shift Right)
+			'    FOR i := 6 TO 1 BY -1 DO
+			'        l3.[i+1] := l3.[i];
+			'    END_FOR;
+			'    
+			'    // update del lsb
+			'    l3.1 := s;
+			'    
+			'    // escalimiento de la salida
+			'    IF s THEN
+			'        PL3_out := pmax_L3;
+			'    ELSE
+			'        PL3_out := pmin_L3;
+			'    END_IF;
+			'END_IF;
+			'
+			'	
+			'CV_L3_man :=PL3_out;
+		END_ST_ROUTINE
+
+		ST_ROUTINE PRBS_L3_reset 
+			'l3.1 := 0;
+			'l3.2 := 0;
+			'l3.3 := 1;
+			'l3.4 := 1;
+			'l3.5 := 1;
+			'l3.6 := 0;
+			'l3.7 := 0;
+			'seed_L3 := 1;
+			'act_prbs_L3 := 0;
+			'prbs_L3_on :=0;
+			'Sw_identificar_L3:=0;
+		END_ST_ROUTINE
+
+		ST_ROUTINE prbs_L4 
+			'IF seed_L4 THEN
+			'    // semilla
+			'	l4.1 := 0;
+			'	l4.2 := 0;
+			'	l4.3 := 1;
+			'	l4.4 := 1;
+			'	l4.5 := 1;
+			'	l4.6 := 0;
+			'	l4.7 := 0;
+			'
+			'    act_prbs_L4 := 0;
+			'	pmax_L4 := CV_L4_man+(ampL4/2.0);
+			'	if pmax_L4 >= 100.0 then
+			'		pmax_L4 :=100.0;
+			'	end_if;
+			'	pmin_L4 := CV_L4_man-(ampL4/2.0);
+			'	if pmin_L4 <= 0.0 then
+			'		pmin_L4 :=0.0;
+			'	end_if;
+			'	Sw_identificar_L4:=1;
+			'    seed_L4 := 0;
+			'END_IF;
+			'
+			'// Contador 
+			'act_prbs_L4 := act_prbs_L4 - 1;
+			'
+			'IF act_prbs_L4 <= 0 THEN
+			'    act_prbs_L4 := deltaL4/Tm; // recarga el contador
+			'    
+			'    // XOR
+			'    s := l4.6 XOR l4.7;
+			'    
+			'    // desplazamiento (Shift Right)
+			'    FOR i := 6 TO 1 BY -1 DO
+			'        l4.[i+1] := l4.[i];
+			'    END_FOR;
+			'    
+			'    // update del lsb
+			'    l4.1 := s;
+			'    
+			'    // escalimiento de la salida
+			'    IF s THEN
+			'        PL4_out := pmax_L4;
+			'    ELSE
+			'        PL4_out := pmin_L4;
+			'    END_IF;
+			'END_IF;
+			'
+			'	
+			'CV_L4_man :=PL4_out;
+		END_ST_ROUTINE
+
+		ST_ROUTINE PRBS_L4_reset 
+			'l4.1 := 0;
+			'l4.2 := 0;
+			'l4.3 := 1;
+			'l4.4 := 1;
+			'l4.5 := 1;
+			'l4.6 := 0;
+			'l4.7 := 0;
+			'seed_L4 := 1;
+			'act_prbs_L4 := 0;
+			'prbs_L4_on :=0;
+			'Sw_identificar_L4:=0;
+		END_ST_ROUTINE
+
+		ST_ROUTINE scantime 
+			'// scan time
+			'Scan_Tipico_ms := Scan_Actual_us / 1000.0;
+			'Scan_Maximo_ms := Scan_Max_us / 1000.0;
+			'
+			'
+			'IF (Scan_Tipico_ms > 0.0) AND (Scan_Tipico_ms < Scan_Minimo_ms) THEN
+			'    Scan_Minimo_ms := Scan_Tipico_ms;
+			'END_IF;
+		END_ST_ROUTINE
+
+		ST_ROUTINE selector_1 
+			'// =========================================================================
+			'// RUTINA: SELECTORES_ESTRATEGIA (Competencia por la Bomba 1)
+			'// =========================================================================
+			'
+			'if bypass_1 AND NOT bypass_4 then
+			'	SP_F1_remoto := CV_L1;
+			'elsif bypass_4 and not bypass_1 then 
+			'	SP_F1_remoto := CV_L4;
+			'else
+			'	IF Sel1 THEN
+			'    // ---------------------------------------------------------------------
+			'    // GANA  EL MENOR FLUJO
+			'    // ---------------------------------------------------------------------
+			'	IF CV_L1 > CV_L4 THEN 
+			'		SP_F1_remoto := CV_L4;
+			'		CV_L1_prev := FIT_01;
+			'	ELSE 
+			'		SP_F1_remoto := CV_L1;
+			'		CV_L4_prev := FIT_01;
+			'	END_IF;
+			'
+			'ELSE
+			'    // ---------------------------------------------------------------------
+			'    // GANA EL MAYOR FLUJO
+			'    // ---------------------------------------------------------------------
+			'	IF CV_L1 < CV_L4 THEN 
+			'		SP_F1_remoto := CV_L4;
+			'		CV_L1_prev := FIT_01;
+			'	ELSE 
+			'		SP_F1_remoto := CV_L1;
+			'		CV_L4_prev := FIT_01;
+			'	END_IF;
+			'END_IF;
+			'end_if;
+		END_ST_ROUTINE
+
+		ST_ROUTINE selector_2 
+			'// =========================================================================
+			'// RUTINA: SELECTORES_ESTRATEGIA (Competencia por la Bomba 2)
+			'// =========================================================================
+			'
+			'if bypass_2 AND NOT bypass_3 then
+			'	SP_F2_remoto := CV_L2;
+			'elsif bypass_3 and not bypass_2 then 
+			'	SP_F2_remoto := CV_L3;
+			'else
+			'	IF Sel2 THEN
+			'    // ---------------------------------------------------------------------
+			'    // GANA  EL MENOR FLUJO
+			'    // ---------------------------------------------------------------------
+			'	IF CV_L2 > CV_L3 THEN 
+			'		SP_F2_remoto := CV_L3;
+			'		CV_L2_prev := FIT_02;
+			'	ELSE 
+			'		SP_F2_remoto := CV_L2;
+			'		CV_L3_prev := FIT_02;
+			'	END_IF;
+			'
+			'ELSE
+			'    // ---------------------------------------------------------------------
+			'    // GANA EL MAYOR FLUJO
+			'    // ---------------------------------------------------------------------
+			'	IF CV_L2 < CV_L3 THEN 
+			'		SP_F2_remoto := CV_L3;
+			'		CV_L2_prev := FIT_02;
+			'	ELSE 
+			'		SP_F2_remoto := CV_L2;
+			'		CV_L3_prev := FIT_02;
+			'	END_IF;
+			'END_IF;
+			'
+			'end_if;
+		END_ST_ROUTINE
+
+		CHILD_PROGRAMS
+		END_CHILD_PROGRAMS
+
+	END_PROGRAM
+
+	TASK ContinuousProgram (Type := CONTINUOUS,
+	                        Rate := 10,
+	                        Priority := 10,
+	                        Watchdog := 500,
+	                        DisableUpdateOutputs := No,
+	                        InhibitTask := No)
+			ContinuousProgram;
+	END_TASK
+
+	TASK ControlProgram (Type := PERIODIC,
+	                     Rate := 100,
+	                     Priority := 2,
+	                     Watchdog := 500,
+	                     DisableUpdateOutputs := No,
+	                     InhibitTask := No)
+			ControlProgram;
+	END_TASK
+
+	TREND F1 (SamplePeriod := 10,
+	          NumberOfCaptures := 1,
+	          CaptureSizeType := Samples,
+	          CaptureSize := 60000,
+	          StartTriggerType := No Trigger,
+	          StopTriggerType := No Trigger,
+	          TrendxVersion := "5.2")
+			Template := [208,207,17,224,161,177,26,225,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,0,3,0,254,255,9,0,6,0,0,0,0,0,0,0
+,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,16,0,0,2,0,0,0,1,0,0,0,254,255,255,255,0,0,0,0,0,0,0,0
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,253,255,255,255,254,255,255,255
+,254,255,255,255,4,0,0,0,5,0,0,0,254,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,82,0,111,0,111,0,116,0,32,0,69,0,110,0,116,0
+,114,0,121,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,22,0,5,0,255,255,255,255,255,255,255,255,1,0,0,0,14,52,81,191,9,48,205,65,159,190,222,136,174,167,50,40
+,0,0,0,0,0,0,0,0,0,0,0,0,144,104,66,40,123,252,220,1,3,0,0,0,64,4,0,0,0,0,0,0,67,0,111,0,110,0,116,0
+,101,0,110,0,116,0,115,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,0,2,1,255,255,255,255,255,255,255,255,255,255,255,255,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,4,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255,255,255,255,255,255,255,255,255
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255
+,255,255,255,255,255,255,255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,3,0,0,0,4,0,0,0,5,0,0,0,6,0,0,0
+,7,0,0,0,8,0,0,0,9,0,0,0,10,0,0,0,11,0,0,0,12,0,0,0,13,0,0,0,14,0,0,0,15,0,0,0,16,0,0,0
+,254,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,4,0,0,0,251,134,0,0,236,83,0,0,0,0,0,0,13,0,0,0,255,254,255,2,70,0,49,0,0,0,0,0
+,0,0,0,0,255,255,255,255,200,0,0,0,255,157,3,0,255,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,254,255,0,255,254,255
+,0,1,96,234,0,0,0,0,0,0,255,255,255,0,0,0,0,0,0,0,0,0,0,162,3,0,0,2,0,255,255,1,0,13,0,67,86,105,101,119
+,76,105,110,101,73,110,102,111,3,0,0,0,1,0,0,0,0,0,0,0,0,0,200,66,255,254,255,1,32,0,255,254,255,0,0,0,0,0,0,0
+,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,6,70,0,73,0,84,0,95,0,48,0,49,0,32,1
+,0,0,0,255,254,255,0,255,254,255,0,1,128,3,0,0,0,1,0,0,0,0,0,0,0,0,0,200,66,255,254,255,1,32,0,255,254,255,0,0
+,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,4,86,0,70,0,48,0,49,0,32
+,1,0,0,0,255,254,255,0,255,254,255,0,9,0,0,0,2,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0
+,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,2,0,0,0
+,255,0,0,255,0,0,192,192,192,0,0,0,0,0,4,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,200,66,0,0,0,0,0,0
+,0,0,1,128,0,0,0,0,0,0,1,0,0,0,0,0,0,0,2,0,1,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,2,0
+,1,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,255,255,255,255,0,0,0,0,44,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,132,73,124,23,0,0,0,0,128,128,128,0,128,128,128,0,255,239
+,255,254,255,191,255,247,87,112,47,106,1,0,0,0,17,0,0,0,175,114,47,106,1,0,0,0,17,0,0,0,255,254,255,0,1,0,0,0,1,0
+,0,0,2,0,0,0,0,0,0,0,0,0,2,0,0,0,40,0,0,0,50,0,0,0,0,0,0,0,0,0,0,0,92,0,0,0,245,255,255,255
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,254,255,5,65,0,114,0
+,105,0,97,0,108,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0
+,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,0,32,1,0,0,0,255,254,255,0,255,254,255,0,3,0,0,0,0
+,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,0,32,1,0,0,0,255,254,255,0,255,254,255,0,0,0,0,0,0,0,0,0
+,255,255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0
+,0,0,0,0,0,0,0,0,2,0,255,255,1,0,9,0,67,76,105,110,101,73,110,102,111,3,0,0,0,1,0,0,0,0,0,0,0,0,0,200
+,66,255,254,255,1,32,0,255,254,255,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255
+,254,255,6,70,0,73,0,84,0,95,0,48,0,49,0,32,1,0,0,0,255,254,255,0,255,254,255,0,4,128,3,0,0,0,1,0,0,0,0,0
+,0,0,0,0,200,66,255,254,255,1,32,0,255,254,255,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0
+,255,254,255,0,255,254,255,4,86,0,70,0,48,0,49,0,32,1,0,0,0,255,254,255,0,255,254,255,0,0,0,0,0,0,0,0,0,1,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,136,112,3,0];
+		PEN FIT_01 (Description := " ",
+		            Color := 16#00ff_0000,
+		            Visible := 1,
+		            Style := 0,
+		            Type := Analog,
+		            Width := 1,
+		            Marker := 0,
+		            Min := "0.0",
+		            Max := "100.0")
+		END_PEN
+
+		PEN VF01 (Description := " ",
+		          Color := 16#0000_ff00,
+		          Visible := 1,
+		          Style := 0,
+		          Type := Analog,
+		          Width := 1,
+		          Marker := 0,
+		          Min := "0.0",
+		          Max := "100.0")
+		END_PEN
+
+	END_TREND
+
+	TREND l3 (SamplePeriod := 10,
+	          NumberOfCaptures := 1,
+	          CaptureSizeType := Samples,
+	          CaptureSize := 60000,
+	          StartTriggerType := No Trigger,
+	          StopTriggerType := No Trigger,
+	          TrendxVersion := "5.2")
+			Template := [208,207,17,224,161,177,26,225,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,0,3,0,254,255,9,0,6,0,0,0,0,0,0,0
+,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,16,0,0,2,0,0,0,1,0,0,0,254,255,255,255,0,0,0,0,0,0,0,0
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,253,255,255,255,254,255,255,255
+,254,255,255,255,4,0,0,0,5,0,0,0,254,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,82,0,111,0,111,0,116,0,32,0,69,0,110,0,116,0
+,114,0,121,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,22,0,5,0,255,255,255,255,255,255,255,255,1,0,0,0,14,52,81,191,9,48,205,65,159,190,222,136,174,167,50,40
+,0,0,0,0,0,0,0,0,0,0,0,0,96,213,150,5,232,12,221,1,3,0,0,0,64,4,0,0,0,0,0,0,67,0,111,0,110,0,116,0
+,101,0,110,0,116,0,115,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,0,2,1,255,255,255,255,255,255,255,255,255,255,255,255,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,4,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255,255,255,255,255,255,255,255,255
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,255
+,255,255,255,255,255,255,255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,3,0,0,0,4,0,0,0,5,0,0,0,6,0,0,0
+,7,0,0,0,8,0,0,0,9,0,0,0,10,0,0,0,11,0,0,0,12,0,0,0,13,0,0,0,14,0,0,0,15,0,0,0,16,0,0,0
+,254,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255
+,255,255,255,255,255,255,255,255,4,0,0,0,237,93,0,0,45,62,0,0,0,0,0,0,13,0,0,0,255,254,255,2,108,0,51,0,0,0,0,0
+,0,0,0,0,255,255,255,255,200,0,0,0,255,157,3,0,255,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,254,255,0,255,254,255
+,0,1,96,234,0,0,0,0,0,0,255,255,255,0,0,0,0,0,0,0,0,0,0,166,3,0,0,2,0,255,255,1,0,13,0,67,86,105,101,119
+,76,105,110,101,73,110,102,111,3,0,0,0,1,0,0,0,0,0,0,0,0,0,200,66,255,254,255,1,32,0,255,254,255,0,0,0,0,0,0,0
+,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,5,83,0,80,0,95,0,76,0,51,0,32,1,0,0
+,0,255,254,255,0,255,254,255,0,1,128,3,0,0,0,1,0,0,0,0,0,0,0,0,0,200,66,255,254,255,1,32,0,255,254,255,0,0,0,0
+,0,0,0,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,6,76,0,73,0,84,0,95,0,48,0,51
+,0,32,1,0,0,0,255,254,255,0,255,254,255,0,9,0,0,0,2,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0
+,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,2,0
+,0,0,255,0,0,255,0,0,192,192,192,0,0,0,0,0,4,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,200,66,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,2,0,1,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0
+,2,0,1,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,255,255,255,255,0,0,0,0,44,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,128,128,128,0,128,128,128,0
+,255,239,255,254,255,191,255,247,63,3,75,106,1,0,0,0,117,0,0,0,107,4,75,106,1,0,0,0,117,0,0,0,255,254,255,0,1,0,0,0
+,1,0,0,0,2,0,0,0,0,0,0,0,0,0,2,0,0,0,40,0,0,0,50,0,0,0,0,0,0,0,0,0,0,0,92,0,0,0,243,255
+,255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,254,255,5,65,0
+,114,0,105,0,97,0,108,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,0,32,1,0,0,0,255,254,255,0,255,254,255,0,3,0,0
+,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255,0,255,254,255,0,32,1,0,0,0,255,254,255,0,255,254,255,0,0,0,0,0,0,0
+,0,0,255,255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,2,0,0,0,0,0,0,0,0,0,2,0,0,0
+,0,0,0,0,0,0,0,0,0,0,2,0,255,255,1,0,9,0,67,76,105,110,101,73,110,102,111,3,0,0,0,1,0,0,0,0,0,0,0,0
+,0,200,66,255,254,255,1,32,0,255,254,255,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0,255,254,255
+,0,255,254,255,5,83,0,80,0,95,0,76,0,51,0,32,1,0,0,0,255,254,255,0,255,254,255,0,4,128,3,0,0,0,1,0,0,0,0,0
+,0,0,0,0,200,66,255,254,255,1,32,0,255,254,255,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,255,254,255,0,255,254,255,0
+,255,254,255,0,255,254,255,6,76,0,73,0,84,0,95,0,48,0,51,0,32,1,0,0,0,255,254,255,0,255,254,255,0,0,0,0,0,0,0,59
+,153,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,128,51,3,0];
+		PEN SP_L3 (Description := " ",
+		           Color := 16#00ff_0000,
+		           Visible := 1,
+		           Style := 0,
+		           Type := Analog,
+		           Width := 1,
+		           Marker := 0,
+		           Min := "0.0",
+		           Max := "100.0")
+		END_PEN
+
+		PEN LIT_03 (Description := " ",
+		            Color := 16#0000_ff00,
+		            Visible := 1,
+		            Style := 0,
+		            Type := Analog,
+		            Width := 1,
+		            Marker := 0,
+		            Min := "0.0",
+		            Max := "100.0")
+		END_PEN
+
+	END_TREND
+
+CONFIG ASCII(XONXOFFEnable := 0,
+	             DeleteMode := 0,
+	             EchoMode := 0,
+	             TerminationChars := 65293,
+	             AppendChars := 2573,
+	             BufferSize := 82) END_CONFIG
+
+CONFIG CST(SystemTimeMasterID := 0) END_CONFIG
+
+CONFIG DF1(DuplicateDetection := 1,
+	           ErrorDetection := BCC Error,
+	           EmbeddedResponseEnable := 0,
+	           DF1Mode := Pt to Pt,
+	           ACKTimeout := 50,
+	           NAKReceiveLimit := 3,
+	           ENQTransmitLimit := 3,
+	           TransmitRetries := 3,
+	           StationAddress := 0,
+	           ReplyMessageWait := 5,
+	           PollingMode := 1,
+	           MasterMessageTransmit := 0,
+	           NormalPollNodeFile := "<NA>",
+	           NormalPollGroupSize := 0,
+	           PriorityPollNodeFile := "<NA>",
+	           ActiveStationFile := "<NA>",
+	           SlavePollTimeout := 3000,
+	           EOTSuppression := 0,
+	           MaxStationAddress := 31,
+	           TokenHoldFactor := 1,
+	           EnableStoreFwd := 0,
+	           StoreFwdFile := "<NA>") END_CONFIG
+
+CONFIG SerialPort(BaudRate := 19200,
+	                  Parity := No Parity,
+	                  DataBits := 8 Bits of Data,
+	                  StopBits := 1 Stop Bit,
+	                  ComDriverId := DF1,
+	                  PendingComDriverId := DF1,
+	                  RTSOffDelay := 0,
+	                  RTSSendDelay := 0,
+	                  ControlLine := No Handshake,
+	                  PendingControlLine := No Handshake,
+	                  RemoteModeChangeFlag := 0,
+	                  PendingRemoteModeChangeFlag := 0,
+	                  ModeChangeAttentionChar := 27,
+	                  PendingModeChangeAttentionChar := 27,
+	                  SystemModeCharacter := 83,
+	                  PendingSystemModeCharacter := 83,
+	                  UserModeCharacter := 85,
+	                  PendingUserModeCharacter := 85,
+	                  DCDWaitDelay := 0) END_CONFIG
+
+CONFIG TimeSynchronize(Priority1 := 128,
+	                                 Priority2 := 128,
+	                                 PTPEnable := 0) END_CONFIG
+
+CONFIG WallClockTime(LocalTimeAdjustment := 0,
+	                     TimeZone := 0) END_CONFIG
+
+END_CONTROLLER
+

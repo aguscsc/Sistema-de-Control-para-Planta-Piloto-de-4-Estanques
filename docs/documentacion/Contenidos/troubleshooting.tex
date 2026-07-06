@@ -1,0 +1,119 @@
+\clearpage
+\section{Diagnóstico y Resolución de Problemas en la Puesta en Marcha}
+
+La implementación del controlador de horizonte extendido (HOREXT) sobre la planta real presentó una discrepancia sistemática respecto a su comportamiento en simulación: mientras que en el entorno emulado la respuesta era limpia, en la planta física la identificación entregaba parámetros no físicos y el lazo cerrado oscilaba de forma persistente. Esta sección documenta el proceso de diagnóstico, los problemas encontrados, sus causas raíz y las soluciones aplicadas, junto con las métricas obtenidas en cada etapa. El hilo conductor del diagnóstico fue un principio metodológico: \textit{una simulación es fiel a lo que se modela y ciega a lo que se omite}; cada falla resultó ser una imperfección real de la planta ausente en el modelo ideal.
+
+\subsection{Problema 1: Sesgo en la Identificación de Parámetros}
+
+\subsubsection{Síntoma}
+La identificación en lazo abierto mediante PRBS entregaba de forma reproducible un coeficiente autorregresivo $a_0 \approx 0{,}33$--$0{,}50$, equivalente a una constante de tiempo $\tau \approx 4$--$6\,$s. Este valor es físicamente incompatible con la dinámica del estanque, cuya constante de tiempo teórica (Torricelli) se sitúa en el rango $\tau \approx 40$--$60\,$s (es decir, $a_0 \approx 0{,}90$--$0{,}93$ a un tiempo de muestreo de $4\,$s).
+
+\subsubsection{Causa raíz}
+El análisis sobre los datos crudos de la planta reveló que la señal de nivel contiene una \textbf{perturbación de banda ancha} —de magnitud cercana al $46\%$ de la señal de incremento $\Delta y$— no correlacionada con el flujo de entrada, atribuible a turbulencia superficial y ondas en el estanque. Al construir el estimador RLS sobre incrementos ($\Delta y = y_k - y_{k-1}$), la operación de diferenciación amplifica esta perturbación de alta frecuencia. Dado que el regresor del lado autorregresivo contiene $-\Delta y_{k-1}$, el ruido diferenciado —con autocorrelación negativa a un paso— introduce un sesgo sistemático que arrastra $a_0$ hacia abajo (fenómeno de errores en las variables, \textit{errors-in-variables}). Se verificó que este sesgo es estructural y no de varianza: no disminuye con mayor duración del experimento, sólo con mayor rechazo del ruido.
+
+\subsubsection{Solución}
+Se incorporó un \textbf{prefiltro pasa-bajos idéntico} sobre la salida ($\Delta y$) y la entrada ($\Delta u$) antes de alimentar al estimador. El filtrado idéntico de ambas señales preserva la función de transferencia identificada (el filtro se cancela algebraicamente) pero elimina la banda de frecuencia donde domina la perturbación, concentrando el ajuste de mínimos cuadrados en la dinámica lenta real del tanque. Se implementó en forma de Euler para evitar la función exponencial (no disponible en el texto estructurado del PLC) y para que el coeficiente se adapte automáticamente al tiempo de muestreo:
+\[
+\beta_f = \frac{T_s}{\tau_f}, \qquad \Delta y_f[k] = \Delta y_f[k-1] + \beta_f\left(\Delta y[k] - \Delta y_f[k-1]\right)
+\]
+con una constante de tiempo de filtro $\tau_f = 15\,$s.
+
+\subsubsection{Métricas}
+La validación se realizó por tres métodos independientes sobre el mismo conjunto de datos, obteniendo resultados coincidentes:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Método} & $a_0$ & $\sum b_i$ \\
+\midrule
+Batch LS puro (ecuación normal) & $0{,}916$ & $0{,}050$ \\
+RLS-Fortescue (réplica offline) & $0{,}904$ & $0{,}050$ \\
+HMI (planta real, en línea) & $0{,}901$ & $0{,}054$ \\
+\bottomrule
+\end{tabular}
+\caption{Convergencia de tres métodos independientes tras aplicar el prefiltro. El valor de $a_0$ pasó de $\approx 0{,}33$ (sin filtro) a $\approx 0{,}90$, consistente con la constante de tiempo física verificada por prueba escalón directa ($\tau \approx 52\,$s).}
+\end{table}
+
+\subsection{Problema 2: Deriva del Estimador en Lazo Cerrado}
+
+\subsubsection{Síntoma}
+Aun con la identificación corregida, el lazo cerrado no se estabilizaba. Se observó que los parámetros estimados continuaban variando durante la operación automática.
+
+\subsubsection{Causa raíz}
+Durante el PRBS, la señal de entrada es exógena y el estimador es insesgado. Al cerrar el lazo con el estimador activo, la entrada $\Delta u$ pasa a ser generada por el propio controlador reaccionando a la salida ruidosa, violando la condición de independencia entrada-ruido necesaria para la estimación insesgada. Esto corresponde al \textbf{sesgo de identificación en lazo cerrado} descrito en la literatura de identificación de sistemas \cite{ljung1999system}: la estimación directa por mínimos cuadrados en lazo cerrado es sesgada salvo que se adopten precauciones específicas. El mecanismo es distinto del \textit{covariance windup} —la traza de la matriz de covarianza permanecía baja— pero produce igualmente una deriva silenciosa de los parámetros.
+
+\subsubsection{Solución}
+Se adoptó la estrategia \textbf{identificar-y-congelar}, práctica estándar en reguladores autoajustables \cite{astrom1995adaptive}. El bloque de actualización RLS se condiciona a una compuerta que sólo permite la adaptación durante la excitación por PRBS o ante un error de gran magnitud (reaprendizaje por cambio de zona de operación):
+\[
+\texttt{IF (Sw\_identificar OR |SP - PV| > umbral) THEN } \{\text{actualizar } \theta, P\}
+\]
+Tras la identificación, el modelo se congela y el control opera con parámetros fijos. Esta técnica es reconocida como \textit{modificación de zona muerta} del estimador, empleada precisamente para lidiar con la falta de excitación persistente en lazo cerrado.
+
+\subsection{Problema 3: Oscilación de Lazo Cerrado (Ciclo Límite)}
+
+\subsubsection{Síntoma}
+Con el modelo congelado y correcto, el nivel presentaba una oscilación sostenida de amplitud considerable (recorriendo casi todo el rango de la variable manipulada), con un período de aproximadamente $144\,$s y con la señal de control saturada en su limitador de velocidad durante gran parte del ciclo.
+
+\subsubsection{Causa raíz}
+La planta de nivel es un \textbf{cuasi-integrador} ($a_0 \approx 0{,}90$, polo cercano a la unidad), y la ley de control HOREXT es \textbf{incremental} (contiene un integrador propio). La combinación de dos integradores en serie aporta $180^\circ$ de retraso de fase, dejando el lazo en el límite de estabilidad. A esto se suma un \textbf{tiempo muerto de transporte} de $\sim 6$--$8\,$s (verificado por la respuesta impulso reconstruida por FIR, cuyo primer coeficiente resultó $\approx 0$), que aporta retraso de fase adicional. El horizonte de predicción $T=5$ en uso resultaba insuficiente para otorgar el margen de fase requerido.
+
+\subsubsection{Solución}
+Se aumentó el horizonte de predicción a $T=10$. En HOREXT, la ganancia acumulada del predictor (denominador de la ley de control) crece de forma aproximadamente cuadrática con $T$, reduciendo la agresividad de la acción de control por unidad de error y restaurando el margen de fase frente al retardo. Un análisis de estabilidad lineal del lazo cerrado, empleando la respuesta impulso real de la planta identificada, confirmó que el módulo del polo dominante pasa de valores $>1$ (inestable) para $T \le 5$ a valores $<1$ (estable) para $T \ge 8$. Se seleccionó $T=10$ como valor máximo compatible con el dimensionamiento de los vectores de historial existentes.
+
+\subsubsection{Métricas}
+La respuesta al escalón en la planta real pasó de una oscilación sostenida (sin asentamiento) a una oscilación \textbf{decreciente} que converge a la referencia. Se midió la amplitud pico a pico en ventanas sucesivas: $6{,}57\% \rightarrow 3{,}99\% \rightarrow 1{,}90\%$, evidenciando un decaimiento monótono característico de un lazo estable.
+
+\subsection{Problema 4: Interacción del Feed-Forward con HOREXT}
+
+\subsubsection{Síntoma}
+Ante un cambio de setpoint, la respuesta presentaba un sobrepaso apreciable, presente incluso con el modelo correcto y el horizonte adecuado.
+
+\subsubsection{Causa raíz}
+El feed-forward de estado estacionario ($FF$, basado en Torricelli) se sumaba a la salida incremental de HOREXT: $CV = HOREXT + FF$. Dado que HOREXT posee acción integral propia y trabaja sobre el error completo, el $FF$ resulta redundante para el seguimiento de referencia. Peor aún, al producirse un cambio de setpoint el $FF$ salta de forma instantánea (por ser una función estática del SP, no incremental), mientras que la acción integral de HOREXT tarda en retroceder para acomodarlo. Durante la ventana de tiempo muerto —en la que el nivel aún no responde— ambas acciones empujan simultáneamente sin percibir el aporte de la otra, produciendo un exceso transitorio de flujo y el consecuente sobrepaso. Se verificó que este efecto sólo se manifiesta en presencia de tiempo muerto (por ello ausente en el entorno emulado ideal), y sólo cuando el $FF$ no está perfectamente calibrado a la planta.
+
+\subsubsection{Solución}
+Se reestructuró la ley de control para que \textbf{el feed-forward no afecte a HOREXT}, manteniéndolo únicamente para el modo PID. HOREXT opera en el espacio de flujo completo ($CV = HOREXT$, sin $FF$), mientras que el PID conserva su estructura ($CV = PID + FF$). La transferencia sin salto (\textit{bumpless}) entre modos se preserva mediante la regla de sincronización: la variable de estado de HOREXT se inicializa siempre a $CV$, y la del PID a $CV - FF$. Con ello, HOREXT vuelve a operar en el mismo espacio en que fue identificado (sin $FF$), eliminando el doble conteo transitorio.
+
+\subsection{Problema 5: Filtrado del Término Predictivo del Controlador}
+
+\subsubsection{Síntoma}
+En simulación de alta fidelidad (planta emulada, sin ruido), el lazo cerrado seguía presentando una oscilación de baja amplitud que no se asentaba, con la señal de control oscilando. El fenómeno persistía con el estimador congelado, descartando la deriva de parámetros.
+
+\subsubsection{Causa raíz}
+El término de respuesta libre del predictor, $h_{\text{libre}} = y_k + \alpha_{0,\text{usado}}\,\Delta y_f$, constituye una \textbf{acción derivativa}: desarrollando la expresión, $\Delta u$ contiene un término proporcional a $\alpha_{0,\text{usado}}\cdot(y_k - y_{k-1})$, con una ganancia derivativa elevada ($\alpha_{0,\text{usado}} \approx 7{,}6$ para $a_0=0{,}95$, $T=10$). El controlador reutilizaba para esta predicción la señal $\Delta y_f$ filtrada con $\tau_f = 15\,$s, valor apropiado para la \textit{identificación} (rechazo de perturbación) pero excesivo para el \textit{control}: el filtro introduce un retraso de fase que, amplificado por la gran ganancia derivativa, genera oscilación. Es el error clásico de una acción derivativa mal filtrada. Una misma variable ($\Delta y_f$) alimentaba dos funciones con requisitos de filtrado opuestos.
+
+\subsubsection{Solución}
+Se separó la señal de velocidad empleada por el controlador de la empleada por el estimador. El controlador utiliza $\Delta y$ (el incremento del nivel \textbf{promediado por ventana}, calculado sobre \texttt{LIT\_03\_filt}) en lugar de $\Delta y_f$ (adicionalmente filtrado por el pasa-bajos de identificación). El promediado por ventana de $40$ muestras ya provee el suavizado de alta frecuencia necesario (reducción de ruido por $\sqrt{40}$) sin introducir el retraso de fase adicional del pasa-bajos. Se determinó que, en la planta real, el tiempo muerto de transporte cumple por sí solo la función de amortiguamiento que en la planta ideal requería el filtro, por lo que no se requiere filtrado adicional sobre el término de control.
+
+\subsubsection{Métricas}
+En simulación, el uso de $\Delta y$ (promediado por ventana) en el término predictivo del controlador eliminó la oscilación residual, recuperando una respuesta de primer orden limpia con asentamiento a la referencia.
+
+\subsection{Resumen de Soluciones}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Problema} & \textbf{Causa raíz} & \textbf{Solución} \\
+\midrule
+Sesgo en identificación ($a_0$ bajo) & Perturbación de banda ancha amplificada por la diferenciación & Prefiltro pasa-bajos idéntico en $\Delta y$ y $\Delta u$ ($\tau_f = 15\,$s) \\
+\addlinespace
+Deriva de parámetros & Sesgo de identificación en lazo cerrado (entrada no exógena) & Estrategia identificar-y-congelar (compuerta de adaptación) \\
+\addlinespace
+Oscilación sostenida & Dos integradores en serie + tiempo muerto $\Rightarrow$ margen de fase insuficiente & Aumento del horizonte de predicción a $T=10$ \\
+\addlinespace
+Sobrepaso en cambio de SP & Doble conteo transitorio entre FF instantáneo y HOREXT incremental durante el tiempo muerto & Exclusión del FF de la salida de HOREXT (arquitectura mixta con \textit{bumpless}) \\
+\addlinespace
+Oscilación residual de baja amplitud & Acción derivativa del predictor con exceso de retraso de fase por el filtro de identificación & Uso de $\Delta y$ promediado por ventana (sin filtro de control adicional) \\
+\bottomrule
+\end{tabularx}
+\caption{Síntesis del proceso de diagnóstico y las soluciones aplicadas.}
+\end{table}
+
+\subsection{Validación en Planta Real}
+
+% ============================================================
+% ESPACIO PARA COMPLETAR CON LOS RESULTADOS DE LA SESIÓN FINAL
+% ============================================================
+\textit{[Esta subsección se completará con las métricas medidas en la sesión final sobre la planta física: respuesta al escalón de setpoint, sobrepaso final, tiempo de asentamiento y comportamiento en rechazo de perturbación, empleando la configuración final del controlador ($a_0 \approx 0{,}90$ identificado con prefiltro y congelado, $T=10$, sin feed-forward sobre HOREXT, término predictivo con $\Delta y$ promediado por ventana).]}

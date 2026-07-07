@@ -10,7 +10,10 @@
 This repository documents the design, simulation, and implementation of an automatic control system for a 4-tank pilot plant. The project spans mathematical modeling and discretization of continuous systems, through the synthesis of advanced control algorithms, all the way to direct deployment on industrial hardware.
 
 ▶️ **Demo Videos:** 
+
 [Watch the PID Control loop + Feedforward applied on the real plant](https://youtu.be/Ni7OxD4VFhw)
+
+
 [Watch the PRBS identification and closed-loop HOREXT control running on the real plant](https://youtu.be/QE6KxWTnEUY)
 
 📄 **Full Technical Report:** [Technical Report (PDF)](docs/documentacion/main.pdf) — mathematical modeling, controller synthesis, and a full real-time troubleshooting log.

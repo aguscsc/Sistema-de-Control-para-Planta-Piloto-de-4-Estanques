@@ -1,45 +1,49 @@
-# Sistema de Control para Planta Piloto de 4 Estanques
+# Control System for a 4-Tank Pilot Plant
 
-![Status](https://img.shields.io/badge/Status-En_Desarrollo-blue)
-![Universidad](https://img.shields.io/badge/UdeC-Ingenier%C3%ADa_Civil_Electr%C3%B3nica-orange)
-![Curso](https://img.shields.io/badge/Curso-547507_Control_de_Procesos-lightgrey)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![University](https://img.shields.io/badge/UdeC-Electronic_Civil_Engineering-orange)
+![Course](https://img.shields.io/badge/Course-547507_Computer_Process_Control-lightgrey)
 
-## Descripción General
-Este repositorio documenta el diseño, simulación e implementación de un sistema de control automático para una planta piloto de 4 estanques. El proyecto abarca desde el modelado matemático y la discretización de sistemas continuos, hasta la síntesis de algoritmos de control avanzado, llevando la teoría rigurosa hacia su aplicación directa en hardware industrial.
+🇪🇸 [Versión en Español](README.es.md)
 
-📄 **Desarrollo Matemático:** Para ver el desarrollo completo del sistema de control y modelación matemática del la planta favor referirse a **[Reporte Técnico](docs/documentacion/main.pdf)**.
+## Overview
+This repository documents the design, simulation, and implementation of an automatic control system for a 4-tank pilot plant. The project spans mathematical modeling and discretization of continuous systems, through the synthesis of advanced control algorithms, all the way to direct deployment on industrial hardware.
 
-### Simulación de Restricciones MIMO
-> **Simulador De Puntos de Operación** [Simulador interactivo [click aquí]](https://aguscsc.github.io/Sistema-de-Control-para-Planta-Piloto-de-4-Estanques/simulaciones/index.html)
+▶️ **Demo Videos:** 
+[Watch the PID Control loop + Feedforward applied on the real plant](https://youtu.be/Ni7OxD4VFhw)
+[Watch the PRBS identification and closed-loop HOREXT control running on the real plant](https://youtu.be/QE6KxWTnEUY)
 
-## HMI 
+📄 **Full Technical Report:** [Technical Report (PDF)](docs/documentacion/main.pdf) — mathematical modeling, controller synthesis, and a full real-time troubleshooting log.
+
+### MIMO Operating-Point Simulator
+> [Interactive simulator — click here](https://aguscsc.github.io/Sistema-de-Control-para-Planta-Piloto-de-4-Estanques/simulaciones/index.html)
+
+## HMI
 ![HMI](pics/planta.gif)
 
-*Interfaz Humano Máquina diseñada bajo ISA 101*
+*Human-Machine Interface designed under the ISA-101 standard.*
 
-
-## Arquitectura de Control y P&ID
+## Control Architecture & P&ID
 ![P&ID](pics/instrumentacion/planta_4_estanques_P&ID.png)
-*Diagrama de Instrumentación basado en la norma ISA-5.1, detallando los lazos de control de nivel (LIC) y flujo (FIC).*
+*Instrumentation diagram based on ISA-5.1, detailing the level (LIC) and flow (FIC) control loops.*
 
+## Technical Scope
+* **Real-Time Control:** Design and tuning of discrete single-loop controllers for the tank cascade dynamics.
+* **Adaptive Predictive Control:** Extended-Horizon Self-Tuning Control (HOREXT), derived independently from Ydstie, Kershenbaum & Sargent (1985) — online RLS identification with Fortescue's variable forgetting factor, extrapolated to a multi-step predictor, tuned and validated in closed loop on the physical plant.
+* **Industrial Communications:** Data transmission protocols for robust synchronization between instrumentation, PLC, and computing equipment.
+* **HMI Design:** Graphical interfaces for operation and monitoring, structured under the high-performance **ISA-101** standard.
 
-## Alcance Técnico del Proyecto
-* **Control en Tiempo Real:** Implementación y sintonización de controladores discretos monovariables aplicados a la dinámica de los estanques.
-* **Control Predictivo Adaptativo:** Desarrollo de estrategias de control estocástico e implícito para mitigar perturbaciones, minimizar la varianza y optimizar el rendimiento del sistema.
-* **Comunicaciones Industriales:** Configuración de protocolos de transmisión de datos para la sincronización robusta entre instrumentación, PLC y equipos computacionales.
-* **Diseño de Interfaz (HMI):** Desarrollo de interfaces gráficas para operación y monitoreo estructuradas bajo el estándar **ISA-101** de alto desempeño visual.
-
-## Tecnologías y Herramientas Utilizadas
-* **Hardware de Control:** Allen-Bradley ControlLogix 1756-L81E.
-* **Programación PLC:** Studio 5000 (Rockwell Automation).
-* **Desarrollo HMI:** FactoryTalk (Rockwell Automation).
-* **Comunicación:** Protocolo EtherNet/IP y servidor OPC UA (FactoryTalk Gateway) para integración con Matlab/Simulink.
-* **Simulación y Análisis:** Matlab / Simulink, python.
+## Tools & Technologies
+* **Control Hardware:** Allen-Bradley ControlLogix 1756-L81E.
+* **PLC Programming:** Studio 5000 (Rockwell Automation), Structured Text (IEC 61131-3).
+* **HMI Development:** FactoryTalk (Rockwell Automation).
+* **Communications:** EtherNet/IP and an OPC UA server (FactoryTalk Gateway) for integration with MATLAB/Simulink.
+* **Simulation & Analysis:** MATLAB / Simulink, Python.
 
 ---
-## Ingenieros
-- **[Agustín Torres](https://github.com/aguscsc)**  
-- **[Ignacio Cerda](https://github.com/LovesCharlie)**  
-- **[Leví Sojos](https://github.com/gadivalr)**  
+## Engineers
+- **[Agustín Torres](https://github.com/aguscsc)**
+- **[Ignacio Cerda](https://github.com/LovesCharlie)**
+- **[Leví Sojos](https://github.com/gadivalr)**
 
 ---

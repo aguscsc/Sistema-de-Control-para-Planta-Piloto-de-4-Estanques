@@ -9,13 +9,14 @@ Este repositorio documenta el diseño, simulación e implementación de un siste
 
 📄 **Desarrollo Matemático:** Para ver el desarrollo completo del sistema de control y modelación matemática del la planta favor referirse a **[Reporte Técnico](docs/documentacion/main.pdf)**.
 
+### Simulación de Restricciones MIMO
+> **Simulador De Puntos de Operación** [Simulador interactivo [click aquí]](https://aguscsc.github.io/Sistema-de-Control-para-Planta-Piloto-de-4-Estanques/simulaciones/index.html)
+
 ## HMI 
 ![HMI](pics/planta.gif)
 
 *Interfaz Humano Máquina diseñada bajo ISA 101*
 
-### Simulación de Restricciones MIMO
-> **Simulador De Puntos de Operación** [Simulador interactivo [click aquí]](https://aguscsc.github.io/Sistema-de-Control-para-Planta-Piloto-de-4-Estanques/simulaciones/index.html)
 
 ## Arquitectura de Control y P&ID
 ![P&ID](pics/instrumentacion/planta_4_estanques_P&ID.png)

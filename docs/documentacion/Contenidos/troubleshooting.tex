@@ -1,5 +1,5 @@
 \clearpage
-\section{Diagnóstico y Resolución de Problemas en la Puesta en Marcha}
+\section{Diagnóstico y Resolución de Problemas en la Puesta en Marcha (HOREXT)}
 
 La implementación del controlador de horizonte extendido (HOREXT) sobre la planta real presentó una discrepancia sistemática respecto a su comportamiento en simulación: mientras que en el entorno emulado la respuesta era limpia, en la planta física la identificación entregaba parámetros no físicos y el lazo cerrado oscilaba de forma persistente. Esta sección documenta el proceso de diagnóstico, los problemas encontrados, sus causas raíz y las soluciones aplicadas, junto con las métricas obtenidas en cada etapa. El hilo conductor del diagnóstico fue un principio metodológico: \textit{una simulación es fiel a lo que se modela y ciega a lo que se omite}; cada falla resultó ser una imperfección real de la planta ausente en el modelo ideal.
 

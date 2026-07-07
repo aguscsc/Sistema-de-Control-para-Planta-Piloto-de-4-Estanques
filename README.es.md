@@ -10,7 +10,10 @@
 Este repositorio documenta el diseño, simulación e implementación de un sistema de control automático para una planta piloto de 4 estanques. El proyecto abarca desde el modelado matemático y la discretización de sistemas continuos, hasta la síntesis de algoritmos de control avanzado, llevando la teoría rigurosa hacia su aplicación directa en hardware industrial.
 
 ▶️ **Videos Demostrativos:** 
+
 [Control PID con Feedforward](https://youtu.be/Ni7OxD4VFhw)
+
+
 [Control Predictivo Adaptativo con horizonte extendido](https://youtu.be/QE6KxWTnEUY)
 
 📄 **Reporte Técnico Completo:** [Reporte Técnico (PDF)](docs/documentacion/main.pdf) — desarrollo matemático, síntesis del controlador, y el registro completo de troubleshooting en tiempo real sobre la planta.

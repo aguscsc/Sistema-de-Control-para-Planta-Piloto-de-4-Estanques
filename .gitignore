@@ -47,3 +47,18 @@ codegen/
 Thumbs.db
 desktop.ini
 *~
+
+# Virtual environment
+.venv/
+
+# Jupyter autosaves
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Editor / OS clutter
+.vscode/
+.idea/
+.DS_Store

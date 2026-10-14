@@ -18,3 +18,5 @@ q_max = 0.0017; % caudal máximo supuesto (m^3 / s)
 h_max = 0.6; % estanque de 60cm
 k1 = q_max;
 k2 = q_max;
+fis = readfis("claude_fic01.fis");
+b01 = readfis("fis_Pflujo_1.fis");

@@ -1,0 +1,41 @@
+[System]
+Name='fis_flujo_1'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=3
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='sum'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='in1'
+Range=[50.833023 90.180099]
+NumMFs=3
+MF1='in1cluster1':'gaussmf',[8.6951343563131 51.9423309226166]
+MF2='in1cluster2':'gaussmf',[8.0930709273024 82.3567408252169]
+MF3='in1cluster3':'gaussmf',[5.77269366899518 67.3190899722244]
+
+[Input2]
+Name='in2'
+Range=[50.833023 90.180099]
+NumMFs=3
+MF1='in2cluster1':'gaussmf',[8.69346963623327 51.9422301835291]
+MF2='in2cluster2':'gaussmf',[8.09226135590677 82.3570723092924]
+MF3='in2cluster3':'gaussmf',[5.77157202968524 67.3189020599921]
+
+[Output1]
+Name='out1'
+Range=[39.409241 98.168152]
+NumMFs=3
+MF1='out1cluster1':'linear',[-1.06271153453737 2.51781534782161 -32.6023547483504]
+MF2='out1cluster2':'linear',[-1.06271153453737 2.51781534782161 -32.6023547483504]
+MF3='out1cluster3':'linear',[-1.06271153453737 2.51781534782161 -32.6023547483504]
+
+[Rules]
+1 1, 1 (1) : 1
+2 2, 2 (1) : 1
+3 3, 3 (1) : 1

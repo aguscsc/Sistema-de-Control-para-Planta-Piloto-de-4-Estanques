@@ -19,4 +19,23 @@ h_max = 0.6; % estanque de 60cm
 k1 = q_max;
 k2 = q_max;
 fis = readfis("claude_fic01.fis");
-b01 = readfis("fis_Pflujo_1.fis");
+fic02 = readfis("Fuzzy_FIC01V2.fis");
+db = readfis("FLC_deadbeat_pump2.fis");
+%b01 = readfis("fis_tuned_flujo_1.fis");
+b02 = readfis("fis_tuned_flujo_2f.fis");
+L3 = readfis("fis_tank_3.fis");
+L1 = readfis("fis_tuned_tank_1.fis");
+L4 = readfis("fis_tuned_tank_4.fis");
+lic03 = readfis("Fuzzy_LIC03.fis");
+lic01 = readfis("Fuzzy_LIC01.fis");
+lic04 = readfis("Fuzzy_LIC04.fis");
+%% FIS inverso
+fis = readfis('fis_tuned_flujo_2f.fis');
+us = 40:1:85;  qss = nan(size(us));
+for j = 1:numel(us)
+    h = @(q) evalfis(fis,[q us(j)]) - q;
+    qss(j) = fzero(h, us(j));      % start near q≈u, inside the data
+end
+% inverse = swap the axes:
+u_of_q = @(q) interp1(qss, us, q, 'linear');
+plot(u_of_q(us))

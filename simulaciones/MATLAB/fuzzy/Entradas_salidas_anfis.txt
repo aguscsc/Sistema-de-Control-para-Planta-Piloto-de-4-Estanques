@@ -1,0 +1,60 @@
+Nivel 1:
+
+Entradas:
+FIT_01_k (actual)
+FIT_01_k1 (anterior)
+LIT_01_k1 
+LIT_03_k1
+
+Salida:
+LIT_01_k
+
+
+Nivel 2:
+
+Entradas:
+FIT_02_k (actual)
+FIT_02_k1 (anterior)
+LIT_02_k1 
+LIT_04_k1
+
+Salida:
+LIT_02_k
+
+Nivel 3:
+
+FIT_02_k
+FIT_02_k1
+LIT_03_k1
+
+Salida:
+
+LIT_03_k
+
+Nivel 4:
+
+FIT_01_k
+FIT_01_k1
+LIT_04_k1
+
+Salida:
+
+LIT_04_k
+
+
+FLujo 1:
+
+Entradas:
+VF_k
+VF_k1
+
+Salida:
+FIT_k
+
+FLujo 2:
+
+VF_k
+VF_k1
+
+Salida;
+FIT_k

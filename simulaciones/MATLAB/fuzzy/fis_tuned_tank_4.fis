@@ -1,0 +1,54 @@
+[System]
+Name='fis_tuned_tank_4'
+Type='sugeno'
+Version=2.0
+NumInputs=3
+NumOutputs=1
+NumRules=4
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='sum'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='in1'
+Range=[39.56369326 98.00443234]
+NumMFs=4
+MF1='in1cluster1':'gaussmf',[11.0058855851543 80.5450656809978]
+MF2='in1cluster2':'gaussmf',[15.2401119556974 43.8339636926481]
+MF3='in1cluster3':'gaussmf',[10.9153178202973 71.4145969627303]
+MF4='in1cluster4':'gaussmf',[7.19748043219311 52.5458679635258]
+
+[Input2]
+Name='in2'
+Range=[39.56369326 98.00443234]
+NumMFs=4
+MF1='in2cluster1':'gaussmf',[8.88750243750848 81.2786020221384]
+MF2='in2cluster2':'gaussmf',[2.13376393311386 35.756344919314]
+MF3='in2cluster3':'gaussmf',[6.70904371751342 71.7382345770887]
+MF4='in2cluster4':'gaussmf',[10.4585651974404 55.4288354251117]
+
+[Input3]
+Name='in3'
+Range=[7.55491514 92.35520388]
+NumMFs=4
+MF1='in3cluster1':'gaussmf',[14.8288541763826 78.667933458908]
+MF2='in3cluster2':'gaussmf',[13.9751456561213 9.0689720815873]
+MF3='in3cluster3':'gaussmf',[14.4984670002173 29.5526488286562]
+MF4='in3cluster4':'gaussmf',[18.7014981953175 56.1187821837834]
+
+[Output1]
+Name='out1'
+Range=[7.55491514 92.35520388]
+NumMFs=4
+MF1='out1cluster1':'linear',[-0.00423535504347804 0.0563332074903242 0.985913560493211 -2.89874843090837]
+MF2='out1cluster2':'linear',[0.563157165092054 -0.213126160414017 0.888017692037561 -13.5076508422424]
+MF3='out1cluster3':'linear',[0.030833067775885 0.0271619711227072 0.975600409447286 -3.05766682528748]
+MF4='out1cluster4':'linear',[-0.00935297000894927 0.055144873382895 0.980973425316679 -2.27488564794111]
+
+[Rules]
+1 1 1, 1 (1) : 1
+2 2 2, 2 (1) : 1
+3 3 3, 3 (1) : 1
+4 4 4, 4 (1) : 1

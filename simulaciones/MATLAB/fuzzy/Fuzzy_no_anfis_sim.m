@@ -1,4 +1,5 @@
-
+clear;
+clc;
 % Constante de Gravedad
 g = 9.81; % [m/s^2]
 
@@ -17,6 +18,13 @@ q_max = 0.0017; % caudal máximo supuesto (m^3 / s)
 h_max = 0.6; % estanque de 60cm
 k1 = q_max;
 k2 = q_max;
-%fic01 = readfis("data/FLC_F1_anfis.fis");
 Ts = 0.1;
-dumax = 2;
+dumax = 1;
+
+% load controllers
+FLC_F1 = readfis("FLC/FLC_F1.fis");
+FLC_F2 = readfis("FLC/FLC_F2.fis");
+FLC_L1 = readfis("FLC/FLC_L1_single.fis");
+FLC_L2 = readfis("FLC_L2_single.fis");
+FLC_L3 = readfis("FLC/FLC_L3_single.fis");
+FLC_L4 = readfis("FLC/FLC_L4_single.fis");

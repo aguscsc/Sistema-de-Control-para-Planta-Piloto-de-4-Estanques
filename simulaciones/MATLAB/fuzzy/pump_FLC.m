@@ -17,11 +17,11 @@
 clear; clc; close all;
 
 %% ================= USER SETTINGS =================
-PUMP   = 1;                      % 1 or 2
+PUMP   = 2;                      % 1 or 2
 nMF    = 3;                      % triangles per input
 nOut   = 5;                      % shared singletons after training (0 = keep one per rule)
 
-tauP   = [1.3776, NaN];          % slowest time constant of each pump [s]  <-- fill pump 2
+tauP   = [1.3776, 1.8];          % slowest time constant of each pump [s]  <-- fill pump 2
 
 %% ================= Parameters =================
 P.Ts     = 0.1;                  % [s]   PLC sample time

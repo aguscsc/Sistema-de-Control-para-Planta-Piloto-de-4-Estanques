@@ -13,6 +13,7 @@ This repository documents the design, simulation, and implementation of an autom
 
 [Watch the PID Control loop + Feedforward applied on the real plant](https://youtu.be/Ni7OxD4VFhw)
 
+[Watch the Fuzzy Logic control running on the real plant](https://www.youtube.com/watch?v=sVEbcEPLVCs)
 
 [Watch the PRBS identification and closed-loop HOREXT control running on the real plant](https://youtu.be/QE6KxWTnEUY)
 
